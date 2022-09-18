@@ -1,6 +1,11 @@
-# demo-repo3
-An example flask rest API server, for SE Fall 2022.
+# SWE-Project for team AptGet
+Team members: Oliver Li, Leo Li, Alex Yan, Tom Zhang
 
-To build production, type `make prod`.
+## Project Description
+A online trading platform for buying and selling items between apartment residents in New York.
 
-To create the env for a new developer, run `make dev_env`.
+## Tech Stack
+- Design: Figma
+- Backend: Flask
+- Frontend: React.js
+- Database: MongoDB
