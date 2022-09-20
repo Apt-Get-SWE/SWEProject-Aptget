@@ -13,3 +13,9 @@ A online trading platform for buying and selling items between apartment residen
 ## Endpoints
 - Log in to post item
 - Clicking into item shows more details
+- Dashboard for customers to view items
+- Dashboard for seller to...
+   - post item
+   - edit item
+   - delete item
+   - post item
