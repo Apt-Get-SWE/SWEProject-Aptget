@@ -9,3 +9,7 @@ A online trading platform for buying and selling items between apartment residen
 - Backend: Flask
 - Frontend: React.js
 - Database: MongoDB
+
+## Endpoints
+- Log in to post item
+- Clicking into item shows more details
