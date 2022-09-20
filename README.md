@@ -19,3 +19,5 @@ A online trading platform for buying and selling items between apartment residen
    - edit item
    - delete item
    - post item
+- Buying out / bidding buttons on item page
+- Search by building address
