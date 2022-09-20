@@ -6,6 +6,7 @@ A online trading platform for buying and selling items between apartment residen
 
 ## Tech Stack
 - Design: Figma
+   - https://www.figma.com/file/KXnCAjAzVFg10HBzwQb6TN/AptGet?node-id=0%3A1
 - Backend: Flask
 - Frontend: React.js
 - Database: MongoDB
