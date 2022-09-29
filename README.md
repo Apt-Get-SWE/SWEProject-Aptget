@@ -26,3 +26,8 @@ A online trading platform for buying and selling items between apartment residen
 - Post commenting
 - User profile pages
 - Post requests for items
+
+# Changelog
+## 2022.09.29
+Kanban: https://trello.com/b/0wRC1BG3/kanban
+
