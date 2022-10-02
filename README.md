@@ -2,7 +2,7 @@
 Team members: Oliver Li, Leo Li, Alex Yan, Tom Zhang
 
 ## Project Description
-A online trading platform for buying and selling items between apartment residents in New York. The furniture turnover rate in New York is high, with people frequently moving, and leaving furnitures in good condition out on the street or in trash rooms. A marketplace for these furnitures with a building/neighborhood approach makes it easy for new and old residents to buy and sell furnitures. 
+A online trading platform for buying and selling items between apartment residents in New York. The furniture turnover rate in New York is high, with people frequently moving, and leaving furnitures in good condition out on the street or in trash rooms. A marketplace for these furnitures with a building/neighborhood approach makes it easy for new and old residents to buy and sell furnitures.
 
 ## Tech Stack
 - Design: Figma
@@ -32,3 +32,5 @@ A online trading platform for buying and selling items between apartment residen
 ## 2022.09.29
 Kanban: https://trello.com/b/0wRC1BG3/kanban
 
+## 2022.10.02
+Initial dashboard, login page design on Figma
