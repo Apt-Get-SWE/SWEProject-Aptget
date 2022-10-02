@@ -13,7 +13,8 @@ A online trading platform for buying and selling items between apartment residen
    - Dashboard: https://charts.mongodb.com/charts-project-0-huvbr/public/dashboards/63308fe7-4a00-4965-8f95-d76dd99cb888
 
 ## Endpoints
-- Log in to post item
+- Log in & register account to post item
+   - Use google-auth, log in and register with google accounts
 - Clicking into item shows more details
 - Dashboard for customers to view items
 - Dashboard for seller to...
