@@ -24,7 +24,7 @@ class User:
         [self.building, self.city, self.state, self.zip] = [x.strip() for x in address]
 
 class Post:
-    def __init__(self, title=None, details='', condition=None, price=None):
+    def __init__(self, title=None, details='', condition=None, list_date=None, price=None, sold=None):
         if title is None:
             raise ValueError('ValueError: Title not set')
 
@@ -35,13 +35,17 @@ class Post:
 
         if condition is None:
             raise ValueError('ValueError: Condition not specified')
+        if list_date is None:
+            raise ValueError('ValueError: List date not specified')
+        if sold is None:
+            raise ValueError('ValueError: Sold status not specified')
 
         self.title = title
         self.details = details
         self.condition = condition
-        self.list_date = date.today()
-        self.price=price
-        self.sold=False
+        self.list_date = list_date
+        self.price = price
+        self.sold = sold
 
     
 
