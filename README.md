@@ -29,6 +29,8 @@ A online trading platform for buying and selling items between apartment residen
 - Post requests for items
 
 # Changelog
+## 2022.10.01
+Updated login page design on Figma
 ## 2022.09.29
 Kanban: https://trello.com/b/0wRC1BG3/kanban
 
