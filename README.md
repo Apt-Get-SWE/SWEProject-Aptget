@@ -30,10 +30,11 @@ A online trading platform for buying and selling items between apartment residen
 
 # Changelog
 ## 2022.10.02
-Initial dashboard design on Figma
+- Initial dashboard design on Figma
+- Added new db & collections to MongoDB cluster
 
 ## 2022.10.01
-Initial login page design on Figma
+- Initial login page design on Figma
 
 ## 2022.09.29
-Kanban: https://trello.com/b/0wRC1BG3/kanban
+- Kanban: https://trello.com/b/0wRC1BG3/kanban
