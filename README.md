@@ -35,11 +35,14 @@ To start the entire webserver, run `gunicorn server.app:app`
 
 # Changelog
 ## 2022.10.05
+### Added
 - React frontend setup
 - Home page initial impl done (buttons and search bar static atm)
-- Using `react-restful` instead of `react-restx`. Not sure why `restx` is unable to return frontend `index.html`.
 - Heroku setup done. Master will automatically be deployed to https://apt-get-swe.herokuapp.com/
 - Set up domain aptget.nyc and Cloudflare
+- Using `autopep8` in `make lint` to auto fix linting issues.
+### Changed
+- Using `react-restful` instead of `react-restx`. Not sure why `restx` is unable to return frontend `index.html`.
 
 ## 2022.10.02
 - Initial dashboard design on Figma

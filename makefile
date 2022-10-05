@@ -18,6 +18,7 @@ unit: FORCE
 	cd $(API_DIR); pytest $(PYTESTFLAGS)
 
 lint: FORCE
+	autopep8 --in-place server/*.py
 	$(LINTER) $(API_DIR)/*.py
 	$(LINTER) $(DB_DIR)/*.py
 
