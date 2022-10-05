@@ -4,6 +4,11 @@ Team members: Oliver Li, Leo Li, Alex Yan, Tom Zhang
 ## Project Description
 A online trading platform for buying and selling items between apartment residents in New York. The furniture turnover rate in New York is high, with people frequently moving, and leaving furnitures in good condition out on the street or in trash rooms. A marketplace for these furnitures with a building/neighborhood approach makes it easy for new and old residents to buy and sell furnitures.
 
+## How to run
+To tune and view the frontend, cd into the frontend folder and run `npm start`
+
+To start the entire webserver, run `gunicorn server.app:app`
+
 ## Tech Stack
 - Design: Figma
    - https://www.figma.com/file/KXnCAjAzVFg10HBzwQb6TN/AptGet?node-id=0%3A1
@@ -33,6 +38,8 @@ A online trading platform for buying and selling items between apartment residen
 - React frontend setup
 - Home page initial impl done (buttons and search bar static atm)
 - Using `react-restful` instead of `react-restx`. Not sure why `restx` is unable to return frontend `index.html`.
+- Heroku setup done. Master will automatically be deployed to https://apt-get-swe.herokuapp.com/
+- Set up domain aptget.nyc and Cloudflare
 
 ## 2022.10.02
 - Initial dashboard design on Figma

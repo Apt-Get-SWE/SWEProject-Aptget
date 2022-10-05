@@ -1,0 +1,7 @@
+{
+  "name": "AptGet",
+  "version": "0.1.0",
+  "scripts": {
+    "postinstall": "cd server && npm install --prefix frontend && cd frontend && npm run build"
+  }
+}
