@@ -1,17 +1,5 @@
-"""
-This is the file containing all of the endpoints for our flask app.
-The endpoint called `endpoints` will return all available endpoints.
-"""
+from flask_restx import Resource
 
-from flask import Flask
-from flask_restx import Resource, Api
-# import db.db as db
-
-app = Flask(__name__)
-api = Api(app)
-
-
-@api.route('/hello')
 class HelloWorld(Resource):
     """
     The purpose of the HelloWorld class is to have a simple test to see if the
@@ -24,8 +12,6 @@ class HelloWorld(Resource):
         """
         return {'hello': 'world'}
 
-
-@api.route('/endpoints')
 class Endpoints(Resource):
     """
     This class will serve as live, fetchable documentation of what endpoints
