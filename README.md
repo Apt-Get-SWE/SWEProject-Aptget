@@ -29,6 +29,11 @@ A online trading platform for buying and selling items between apartment residen
 - Post requests for items
 
 # Changelog
+## 2022.10.05
+- React frontend setup
+- Home page initial impl done (buttons and search bar static atm)
+- Using `react-restful` instead of `react-restx`. Not sure why `restx` is unable to return frontend `index.html`.
+
 ## 2022.10.02
 - Initial dashboard design on Figma
 - Added new db & collections to MongoDB cluster
