@@ -1,6 +1,5 @@
-import pytest, os
-print(os.getcwd())
-from ..src import endpoints
+import pytest
+from ..src.endpoints import endpoints
 
 def test_hello():
     assert True
