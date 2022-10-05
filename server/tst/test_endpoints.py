@@ -1,6 +1,6 @@
 import pytest, sys
 sys.path.append('../src/endpoints')
-import server.endpoints.endpoints as ep
+import endpoints as ep
 
 
 def test_hello():
