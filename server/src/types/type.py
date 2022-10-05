@@ -1,5 +1,3 @@
-from datetime import date
-
 class User:
     def __init__(self, fname=None, lname=None, phone=None, address=None):
         if fname is None:
@@ -11,17 +9,30 @@ class User:
         if address is None:
             raise ValueError('ValueError: Address not specified')
 
-        self.fname = fname.strip().lower()
-        self.lname = lname.strip().lower()
+        self.fname = fname
+        self.lname = lname
         self.phone = phone
         self.posts = {}
 
         """
-            address format: building,city,state,zip
-                i.e. 370 Jay Street,Brooklyn,NY,11201
+        address -> dict
+
+        keys:
+            building -> str
+            city     -> str
+            state    -> str
+            zip      -> int
+
+        address = {
+            'building': '370 Jay Street',
+            'city':     'Brooklyn',
+            'state':    'NY',
+            'zip':      11217,
+        }
+
         """
-        address = address.lower().split()
-        [self.building, self.city, self.state, self.zip] = [x.strip() for x in address]
+
+        self.address = address
 
 class Post:
     def __init__(self, title=None, details='', condition=None, list_date=None, price=None, sold=None):

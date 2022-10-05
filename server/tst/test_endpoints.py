@@ -1,5 +1,7 @@
 import pytest
-from ..src import *
+from ..src.endpoints import endpoints
 
 def test_hello():
     assert True
+
+
