@@ -1,8 +1,5 @@
-
 import pytest
-
-import server.endpoints as ep
-
+from ..src import *
 
 def test_hello():
     assert True
