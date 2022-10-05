@@ -34,6 +34,7 @@ class User:
 
         self.address = address
 
+
 class Post:
     def __init__(self, title=None, details='', condition=None, list_date=None, price=None, sold=None):
         if title is None:
@@ -57,9 +58,3 @@ class Post:
         self.list_date = list_date
         self.price = price
         self.sold = sold
-
-    
-
-
-
-    
