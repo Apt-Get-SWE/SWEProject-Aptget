@@ -1,6 +1,5 @@
-import pytest, sys
-sys.path.insert(0, 'server/src/endpoints')
-import endpoints as ep
+import pytest
+from ..src import endpoints
 
 def test_hello():
     assert True
