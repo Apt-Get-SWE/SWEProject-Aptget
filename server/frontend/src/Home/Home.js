@@ -8,7 +8,7 @@ function Home() {
       <div className="Navbar">
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <div className="Login">
-        <a href="/login"> <button>Login</button> </a>
+          <a className="LoginLink" href="/login"> <span className="link"> </span>Login</a>
         </div>
       </div>
 
