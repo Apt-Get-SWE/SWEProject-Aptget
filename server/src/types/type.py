@@ -1,60 +1,50 @@
+from json import loads
+from types import SimpleNamespace
+from pymongo import MongoClient
+
+def json_to_object(data):
+    return loads(data, object_hook=lambda d: SimpleNamespace(**d))
+
+def get_collection(dbname, cname):
+    CONNECTION_STRING = "SECRET"
+    client = MongoClient(CONNECTION_STRING)
+    return client[dbname][cname]
+
 class User:
-    def __init__(self, fname=None, lname=None, phone=None, address=None):
-        if fname is None:
-            raise ValueError('ValueError: First name not specified')
-        if lname is None:
-            raise ValueError('ValueError: Last name not specified')
-        if phone is None:
-            raise ValueError('ValueError: Phone number not specified')
-        if address is None:
-            raise ValueError('ValueError: Address not specified')
+    def __init__(self, data=None):
+        self.data = json_to_object(data)
+        self.raw_data = data
 
-        self.fname = fname
-        self.lname = lname
-        self.phone = phone
-        self.posts = {}
-
-        """
-        address -> dict
-
-        keys:
-            building -> str
-            city     -> str
-            state    -> str
-            zip      -> int
-
-        address = {
-            'building': '370 Jay Street',
-            'city':     'Brooklyn',
-            'state':    'NY',
-            'zip':      11217,
-        }
-
-        """
-
-        self.address = address
-
+    def insert(fname='', lname='', phone='', building='', city='', state='', zipcode=''):
+        users = get_collection('apt-get', 'users')
+        users.insert_one({
+            'uid': users.count_documents({}),
+            'fname'   : fname,
+            'lname'   : lname,
+            'phone'   : phone,
+            'address' : {
+                'building' : building,
+                'city'     : city,
+                'state'    : state,
+                'zip'      : zipcode
+            }
+        })
 
 class Post:
-    def __init__(self, title=None, details='', condition=None, list_date=None, price=None, sold=None):
-        if title is None:
-            raise ValueError('ValueError: Title not set')
+    def __init__(self, data=None):
+        self.data = json_to_object(data)
+        self.raw_data = data
 
-        if price is None:
-            raise ValueError('ValueError: Price not set')
-        elif type(price) != int:
-            raise ValueError('ValueError: Invalid price')
+    def insert(title, details, condition, list_date, price, sold):
+        posts = get_collection('apt-get', 'posts')
+        posts.insert_one({
+            'pid': posts.count_documents({}),
+            'title'     : title,
+            'details'   : details,
+            'condition' : condition,
+            'list_date' : list_date,
+            'price'     : price,
+            'sold'      : sold
+        })
 
-        if condition is None:
-            raise ValueError('ValueError: Condition not specified')
-        if list_date is None:
-            raise ValueError('ValueError: List date not specified')
-        if sold is None:
-            raise ValueError('ValueError: Sold status not specified')
-
-        self.title = title
-        self.details = details
-        self.condition = condition
-        self.list_date = list_date
-        self.price = price
-        self.sold = sold
+    
