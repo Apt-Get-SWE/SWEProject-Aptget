@@ -34,6 +34,8 @@ To start the entire webserver, run `gunicorn server.app:app`
 - Post requests for items
 
 # Changelog
+## 2022.10.09
+- Updated user info collection page on figma
 ## 2022.10.05
 ### Added
 - React frontend setup
