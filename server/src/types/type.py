@@ -6,7 +6,7 @@ def json_to_object(data):
     return loads(data, object_hook=lambda d: SimpleNamespace(**d))
 
 def get_collection(dbname, cname):
-    CONNECTION_STRING = "mongodb+srv://swe:swe123@cluster0.os9dia2.mongodb.net/test"
+    CONNECTION_STRING = "SECRET"
     client = MongoClient(CONNECTION_STRING)
     return client[dbname][cname]
 
