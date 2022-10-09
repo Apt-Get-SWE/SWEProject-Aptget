@@ -45,7 +45,7 @@ To start the entire webserver, run `gunicorn server.app:app`
 - New `items` collection in MongoDB database
 ### Changed
 - Using `react-restful` instead of `react-restx`. Not sure why `restx` is unable to return frontend `index.html`.
-- Restructured data types
+- Restructured `user` and `post` object types
 
 ## 2022.10.02
 - Initial dashboard design on Figma
