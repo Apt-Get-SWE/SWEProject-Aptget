@@ -6,45 +6,55 @@ def json_to_object(data):
     return loads(data, object_hook=lambda d: SimpleNamespace(**d))
 
 def get_collection(dbname, cname):
-    CONNECTION_STRING = "SECRET"
-    client = MongoClient(CONNECTION_STRING)
+    uri = "SECRET"
+    client = MongoClient(uri)
     return client[dbname][cname]
 
 class User:
+    """
+    Insert data to 'users' collection
+
+    data format: {
+        'uid'     : int,
+        'fname'   : str,
+        'lname'   : str,
+        'phone'   : str,
+        'address' : {
+            'building' : str,
+            'city'     : str,
+            'state'    : str,
+            'zip'      : int
+        }
+    }
+    """
+
+    def insert(data):
+        users = get_collection('apt-get', 'users')
+        users.insert_one(data)
+
     def __init__(self, data=None):
         self.data = json_to_object(data)
         self.raw_data = data
-
-    def insert(fname='', lname='', phone='', building='', city='', state='', zipcode=''):
-        users = get_collection('apt-get', 'users')
-        users.insert_one({
-            'uid': users.count_documents({}),
-            'fname'   : fname,
-            'lname'   : lname,
-            'phone'   : phone,
-            'address' : {
-                'building' : building,
-                'city'     : city,
-                'state'    : state,
-                'zip'      : zipcode
-            }
-        })
 
 class Post:
+    """
+    Insert data to 'posts' collection
+
+    data format: {
+        'pid'       : int,
+        'title'     : str,
+        'details'   : str,
+        'condition' : str,
+        'list_date' : str,
+        'price'     : int,
+        'sold'      : boolean
+    """
+    def insert(data):
+        posts = get_collection('apt-get', 'posts')
+        posts.insert_one(data)
+
     def __init__(self, data=None):
         self.data = json_to_object(data)
         self.raw_data = data
-
-    def insert(title, details, condition, list_date, price, sold):
-        posts = get_collection('apt-get', 'posts')
-        posts.insert_one({
-            'pid': posts.count_documents({}),
-            'title'     : title,
-            'details'   : details,
-            'condition' : condition,
-            'list_date' : list_date,
-            'price'     : price,
-            'sold'      : sold
-        })
 
     
