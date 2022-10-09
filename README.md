@@ -41,8 +41,11 @@ To start the entire webserver, run `gunicorn server.app:app`
 - Heroku setup done. Master will automatically be deployed to https://apt-get-swe.herokuapp.com/
 - Set up domain aptget.nyc and Cloudflare
 - Using `autopep8` in `make lint` to auto fix linting issues.
+- Using `PyMongo` to query MongoDB collections
+- New `items` collection in MongoDB database
 ### Changed
 - Using `react-restful` instead of `react-restx`. Not sure why `restx` is unable to return frontend `index.html`.
+- Restructured data types
 
 ## 2022.10.02
 - Initial dashboard design on Figma
