@@ -16,5 +16,4 @@ def insert(collection_name: str, data: dict) -> None:
     collection = get_collection('apt-get', collection_name)
     collection.insert_one(data)
 
-
     

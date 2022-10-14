@@ -1,9 +1,6 @@
-
-import sys
 import json
 from types import SimpleNamespace
-sys.path.insert(0, "../")
-from db import query
+from ..db import query
 
 def json_to_object(data):
     return json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
