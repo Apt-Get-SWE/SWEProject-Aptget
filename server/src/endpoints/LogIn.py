@@ -9,7 +9,7 @@ CLIENT_SECRET_FILE = os.path.join(pathlib.Path(__file__).parents[2], "client_sec
 flow = Flow.from_client_secrets_file(
     client_secrets_file=CLIENT_SECRET_FILE,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="http://127.0.0.1:5000/loggedin"
+    redirect_uri="http://127.0.0.1:8000/loggedin"
     )
 
 class GoogleLogIn(Resource):

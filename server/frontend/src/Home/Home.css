@@ -46,6 +46,22 @@ body {
   flex: none;
   order: 0;
   flex-grow: 0;
+  text-decoration: none;
+}
+
+.LoginLink{
+  text-decoration: none;
+  font-size: 24px;
+  font-style: normal;
+}
+
+.link{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
 .login-text {
