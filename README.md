@@ -34,6 +34,11 @@ To start the entire webserver, run `gunicorn server.app:app`
 - Post requests for items
 
 # Changelog
+## 2022.10.09
+- Updated user info collection page on figma
+- Using `PyMongo` to query MongoDB collections
+- New `items` collection in MongoDB database
+- Restructured `user` and `post` object types
 ## 2022.10.05
 ### Added
 - React frontend setup

@@ -1,2 +1,3 @@
 from .endpoints import endpoints
-from .types import type
+from .types import types
+from .db import query
