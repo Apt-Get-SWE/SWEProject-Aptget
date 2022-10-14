@@ -22,6 +22,12 @@ class User:
             raise ValueError(f'Cannot insert data of type{type(data)}')
         query.insert('users', data)
 
+    def find_all(filters={}) -> list:
+        return query.find_all('users', filters)
+
+    def find_one(filters={}) -> dict:
+        return query.find_one('users', filters)
+
     # NON-STATIC METHODS
     def __init__(self, data: dict):
         obj = json_to_object(data)
@@ -46,6 +52,12 @@ class Address:
         if type(data) != dict:
             raise ValueError(f'Cannot insert data of type{type(data)}')
         query.insert('addresses', data)
+
+    def find_all(filters={}) -> list:
+        return query.find_all('addresses', filters)
+
+    def find_one(filters={}) -> dict:
+        return query.find_one('addresses', filters)
 
     # NON-STATIC METHODS
     def __init__(self, data: dict):
@@ -73,6 +85,12 @@ class Post:
         if type(data) != dict:
             raise ValueError(f'Cannot insert data of type{type(data)}')
         query.insert('posts', data)
+    
+    def find_all(filters={}) -> list:
+        return query.find_all('posts', filters)
+
+    def find_one(filters={}) -> dict:
+        return query.find_one('posts', filters)
     
     # NON-STATIC METHODS
     def __init__(self, data: dict):

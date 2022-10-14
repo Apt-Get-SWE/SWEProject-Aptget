@@ -16,4 +16,15 @@ def insert(collection_name: str, data: dict) -> None:
     collection = get_collection('apt-get', collection_name)
     collection.insert_one(data)
 
+def find_all(collection_name: str, filters={}) -> list:
+    if collection_name.lower() not in COLLECTIONS:
+        raise Exception(f"Cannot retrieve from '{collection_name}'")
+    collection = get_collection('apt-get', collection_name)
+    return list(collection.find(filters))
+
+def find_one(collection_name: str, filters={}) -> dict:
+    if collection_name.lower() not in COLLECTIONS:
+        raise Exception(f"Cannot retrieve from '{collection_name}'")
+    collection = get_collection('apt-get', collection_name)
+    return collection.find_one(filters)
     
