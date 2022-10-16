@@ -1,11 +1,17 @@
 import os
 import pathlib
+import requests
+import google.auth.transport.requests
 from flask import redirect, request, url_for
 from flask_restx import Resource
 from google_auth_oauthlib.flow import Flow
+from google.oauth2 import id_token
+from pip._vendor import cachecontrol
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #only for local testing
 
 GOOGLE_CLIENT_ID_TEST = "497541279341-qtudp4uvo0g39s0o4ops0mr2dsvemnp5.apps.googleusercontent.com"
-CLIENT_SECRET_FILE = os.path.join(pathlib.Path(__file__).parents[2], "client_secret_test.json")
+CLIENT_SECRET_FILE = os.path.join(pathlib.Path(__file__).parents[2], "CLIENT_CREDENTIALS_TEST.json")
 flow = Flow.from_client_secrets_file(
     client_secrets_file=CLIENT_SECRET_FILE,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
@@ -34,9 +40,25 @@ class VerifyUserLogin(Resource):
     
     def get(self):
         """
-        Call back, verify if users exists. Prompt for new user to register
+        Call back, grab user google_id and name. The google_id can be used as our user_id. 
         """
-        return {"verify":"stuff"}
+        flow.fetch_token(authorization_response=request.url)
+        credentials = flow.credentials
+        request_session = requests.session()
+        cached_session = cachecontrol.CacheControl(request_session)
+        token_request = google.auth.transport.requests.Request(session=cached_session)
+
+        id_info = id_token.verify_oauth2_token(
+            id_token=credentials._id_token,
+            request=token_request,
+            audience=GOOGLE_CLIENT_ID_TEST
+        )
+
+        google_id = id_info.get("sub")
+        name = id_info.get("name")
+
+        # TODO: redirect to register or load existing user data. 
+        return {google_id:name}
     
 
 class LogInSuccessPage(Resource):
