@@ -1,6 +1,6 @@
 import json
 from types import SimpleNamespace
-from ..db import query
+from server.src.db import query
 
 def json_to_object(data):
     return json.loads(data, object_hook=lambda d: SimpleNamespace(**d))

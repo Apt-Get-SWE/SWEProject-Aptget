@@ -44,3 +44,19 @@ def find_one(collection_name: str, filters={}, local=False) -> dict:
     # fetch collection from db & return first instance of desired document
     collection = get_collection('apt-get', collection_name, local)
     return collection.find_one(filters)
+
+# TODO
+def exists():
+    ...
+
+# TODO
+def count():
+    ...
+
+# TODO
+def delete_one():
+    ...
+
+# TODO
+def delete_all():
+    ...
