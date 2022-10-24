@@ -22,6 +22,18 @@ class TestUser:
     # Test to_json_str
     def test_to_json_str(self):
         # Test with a valid user
-        user = User("123", "netid@nyu.edu", "John", "Doe", "1234567890", "https://www.google.com")
+        user = User("123", "netid@nyu.edu", "John", "Doe",
+                    "1234567890", "https://www.google.com")
         json_str = user.to_json_str()
         assert json_str == '{"email": "netid@nyu.edu", "fname": "John", "lname": "Doe", "pfp": "https://www.google.com", "phone": "1234567890", "uid": "123"}'
+
+    def test_db(self):
+        return  # CI/CD test don't work w/ localdb
+
+        User.insert({'test': 'user'}, True)
+
+        res = User.find_all({}, True)
+        assert type(res) == list
+
+        res = User.find_one({}, True)
+        assert type(res) == dict
