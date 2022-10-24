@@ -14,7 +14,9 @@ api = Api(app)
 session = {}
 
 logging.basicConfig(level=logging.INFO,
-                    format='[%(levelname)s] %(asctime)s - %(filename)s:%(lineno)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+                    format='[%(levelname)s] %(asctime)s - " \
+                    "%(filename)s:%(lineno)s - %(message)s',
+                    datefmt='%d-%b-%y %H:%M:%S')
 
 
 class Index(Resource):
