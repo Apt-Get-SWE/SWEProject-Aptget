@@ -18,6 +18,10 @@ ROOT_URL = "http://localhost:8000" if ENV == 'local' else "https://www.aptget.ny
 
 GOOGLE_CLIENT_ID_TEST = "497541279341-qtudp4uvo0g39s0o4ops0mr2dsvemnp5.apps.googleusercontent.com"
 CLIENT_SECRET_FILE = os.path.join(pathlib.Path(__file__).parents[2], "CLIENT_CREDENTIALS_TEST.json")
+flow = Flow.from_client_secrets_file(
+            client_secrets_file=CLIENT_SECRET_FILE,
+            scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+            redirect_uri=f"{ROOT_URL}/callback")
 
 class GoogleLogIn(Resource):
     def __init__(self, api=None, *args, **kwargs):
@@ -43,11 +47,6 @@ class VerifyUserLogin(Resource):
         """
         Call back, grab user google_id and name. The google_id can be used as our user_id. 
         """
-        flow = Flow.from_client_secrets_file(
-            client_secrets_file=CLIENT_SECRET_FILE,
-            scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-            redirect_uri=f"{ROOT_URL}/callback")
-
         flow.fetch_token(authorization_response=request.url)
         credentials = flow.credentials
         request_session = requests.session()
