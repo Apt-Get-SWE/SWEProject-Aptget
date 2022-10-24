@@ -14,12 +14,13 @@ Post format
 }
 """
 class Post:
+    # STATIC METHODS
     @staticmethod
     def insert(data: dict, local=False) -> None:
         if type(data) != dict:
             raise ValueError(f'Cannot insert data of type{type(data)}')
         query.insert('posts', data, local)
-    
+
     @staticmethod
     def find_all(filters={}, local=False) -> list:
         return query.find_all('posts', filters, local)
@@ -27,7 +28,8 @@ class Post:
     @staticmethod
     def find_one(filters={}, local=False) -> dict:
         return query.find_one('posts', filters, local)
-    
+
+    # NON-STATIC METHODS
     def __init__(self, data: dict):
         obj = json_to_object(data)
         self.pid       = obj.pid

@@ -1,8 +1,9 @@
-from server.src.types import post
+import pytest
+from ...src.types.post import Post
 
 class TestPost:
-    def test_post(self):
-        return # CI/CD tests don't work w/ localdb
+    def test_db(self):
+        return  # CI/CD test don't work w/ localdb
 
         Post.insert({'test': 'post'}, True)
 
@@ -11,3 +12,4 @@ class TestPost:
 
         res = Post.find_one({}, True)
         assert type(res) == dict
+

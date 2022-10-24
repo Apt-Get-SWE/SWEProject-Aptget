@@ -7,16 +7,21 @@ from flask_restx import Resource
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
 from pip._vendor import cachecontrol
+import logging
+
+from ..types.user import User
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #only for local testing
+
+ENV = os.environ.get('ENV', 'local') # default local, or else production
+ROOT_URL = "http://localhost:8000" if ENV == 'local' else "https://www.aptget.nyc"
 
 GOOGLE_CLIENT_ID_TEST = "497541279341-qtudp4uvo0g39s0o4ops0mr2dsvemnp5.apps.googleusercontent.com"
 CLIENT_SECRET_FILE = os.path.join(pathlib.Path(__file__).parents[2], "CLIENT_CREDENTIALS_TEST.json")
 flow = Flow.from_client_secrets_file(
-    client_secrets_file=CLIENT_SECRET_FILE,
-    scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="http://127.0.0.1:8000/callback"
-    )
+            client_secrets_file=CLIENT_SECRET_FILE,
+            scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+            redirect_uri=f"{ROOT_URL}/callback")
 
 class GoogleLogIn(Resource):
     def __init__(self, api=None, *args, **kwargs):
@@ -34,7 +39,7 @@ class GoogleLogIn(Resource):
         if state: # check
             return redirect(authorizationUrl)
         else:
-            return redirect("http://127.0.0.1:8000/endpoints")
+            return redirect(f"{ROOT_URL}/endpoints")
 
 class VerifyUserLogin(Resource):
     
@@ -55,10 +60,16 @@ class VerifyUserLogin(Resource):
         )
 
         google_id = id_info.get("sub")
-        name = id_info.get("name")
+        email = id_info.get("email")
+        fname, lname = id_info.get("given_name"), id_info.get("family_name")
+        pfp = id_info.get("picture")
+
+        # Insert user in DB if not already there
+        user = User(google_id, email, fname=fname, lname=lname, pfp=pfp)
+        user.save()
 
         # TODO: redirect to register or load existing user data. 
-        return {google_id:name}
+        return user.to_dict()
     
 
 class LogInSuccessPage(Resource):
@@ -66,5 +77,5 @@ class LogInSuccessPage(Resource):
     Place holder for the page to jump to after log in is successful.
     """
     def get(self):
-        print(request.args["user"])
+        # TODO: implement page
         return {"Login": "Successful"}

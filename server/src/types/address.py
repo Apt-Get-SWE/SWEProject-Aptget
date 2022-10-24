@@ -12,6 +12,7 @@ Address format
 """
 class Address:
     @staticmethod
+    # STATIC METHODS
     def insert(data: dict, local=False) -> None:
         if type(data) != dict:
             raise ValueError(f'Cannot insert data of type{type(data)}')
@@ -25,6 +26,7 @@ class Address:
     def find_one(filters={}, local=False) -> dict:
         return query.find_one('addresses', filters, local)
 
+    # NON-STATIC METHODS
     def __init__(self, data: dict):
         obj = json_to_object(data)
         self.building = obj.building
