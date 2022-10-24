@@ -57,8 +57,6 @@ class VerifyUserLogin(Resource):
             audience=GOOGLE_CLIENT_ID_TEST
         )
 
-        logging.info(id_info)
-
         google_id = id_info.get("sub")
         email = id_info.get("email")
         fname, lname = id_info.get("given_name"), id_info.get("family_name")

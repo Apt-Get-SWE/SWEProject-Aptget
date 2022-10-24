@@ -1,4 +1,5 @@
 import logging
+import pymongo
 from ..db import query
 from .utils import json_to_object, object_to_json_str
 
@@ -33,8 +34,13 @@ class User:
         if 'email' not in data or 'uid' not in data:
             raise ValueError('Cannot insert user without an email or uid')
 
-        logging.info("result is ", query.insert('users', data))
-        logging.info(f'Inserted user {data} into database')
+        logging.info(f'Inserting user {data}')
+
+        try:
+            query.insert('users', data)
+            logging.info(f'Inserted user {data} into database')
+        except pymongo.errors.DuplicateKeyError:
+            logging.info(f'User with uid {data["uid"]} already exists')
 
     @staticmethod
     def find_all(filters={}) -> list:
@@ -60,6 +66,9 @@ class User:
         self.pfp   = pfp
 
     def to_dict(self):
+        # If has an ObjectId, convert to string
+        if '_id' in self.__dict__:
+            self.__dict__['_id'] = str(self.__dict__['_id'])
         return self.__dict__
 
     def to_json_str(self):
