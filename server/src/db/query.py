@@ -14,7 +14,7 @@ def insert(collection_name: str, data: dict) -> None:
     if collection_name.lower() not in COLLECTIONS:
         raise Exception(f"Cannot insert to '{collection_name}'")
     collection = get_collection('apt-get', collection_name)
-    collection.insert_one(data)
+    return collection.insert_one(data)
 
 def find_all(collection_name: str, filters={}) -> list:
     if collection_name.lower() not in COLLECTIONS:
