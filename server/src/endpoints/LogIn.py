@@ -7,6 +7,9 @@ from flask_restx import Resource
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
 from pip._vendor import cachecontrol
+import logging
+
+from ..types.user import User
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #only for local testing
 
@@ -55,10 +58,16 @@ class VerifyUserLogin(Resource):
         )
 
         google_id = id_info.get("sub")
-        name = id_info.get("name")
+        email = id_info.get("email")
+        fname, lname = id_info.get("given_name"), id_info.get("family_name")
+        pfp = id_info.get("picture")
+
+        # Insert user in DB if not already there
+        user = User(google_id, email, fname=fname, lname=lname, pfp=pfp)
+        user.save()
 
         # TODO: redirect to register or load existing user data. 
-        return {google_id:name}
+        return user.to_dict()
     
 
 class LogInSuccessPage(Resource):
@@ -66,5 +75,5 @@ class LogInSuccessPage(Resource):
     Place holder for the page to jump to after log in is successful.
     """
     def get(self):
-        print(request.args["user"])
+        # TODO: implement page
         return {"Login": "Successful"}

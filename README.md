@@ -37,6 +37,7 @@ To start the entire webserver, run `gunicorn server.app:app`
 ## 2022.10.23
 - Set up local MongoDB instance for testing
 - Implement Tailwind CSS
+- Insert user data to MongoDB for new users
 ## 2022.10.16
 - Create listing page figma design
 - Update Google login Auth
