@@ -12,19 +12,20 @@ User format
 }
 """
 class User:
-    # STATIC METHODS
+    @staticmethod
     def insert(data: dict, local=False) -> None:
         if type(data) != dict:
             raise ValueError(f'Cannot insert data of type{type(data)}')
         query.insert('users', data, local)
 
+    @staticmethod
     def find_all(filters={}, local=False) -> list:
         return query.find_all('users', filters, local)
 
+    @staticmethod
     def find_one(filters={}, local=False) -> dict:
         return query.find_one('users', filters, local)
 
-    # NON-STATIC METHODS
     def __init__(self, data: dict):
         obj = json_to_object(data)
         self.uid   = obj.uid
