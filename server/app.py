@@ -13,7 +13,9 @@ app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 api = Api(app)
 session = {}
 
-logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(asctime)s - %(filename)s:%(lineno)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(level=logging.INFO,
+                    format='[%(levelname)s] %(asctime)s - %(filename)s:%(lineno)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+
 
 class Index(Resource):
     def get(self):
