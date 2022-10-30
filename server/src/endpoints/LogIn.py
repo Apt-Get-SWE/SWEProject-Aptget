@@ -8,6 +8,9 @@ from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
 from pip._vendor import cachecontrol
 
+from ..types.user import User
+
+
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #only for local testing
 
 GOOGLE_CLIENT_ID_TEST = "497541279341-qtudp4uvo0g39s0o4ops0mr2dsvemnp5.apps.googleusercontent.com"
