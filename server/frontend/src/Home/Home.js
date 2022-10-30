@@ -7,9 +7,11 @@ function Home() {
 
       <div className="Navbar">
         <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <div className="Login">
-          <a className="LoginLink" href="/login"> <span className="login-text">Login</span></a>
-        </div>
+        <a className="LoginLink" href="/login">
+          <div className="Login">
+             <span className="login-text">Login</span>
+          </div>
+        </a>
       </div>
 
       <div className="Body">
