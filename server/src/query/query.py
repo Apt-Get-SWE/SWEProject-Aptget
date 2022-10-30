@@ -1,10 +1,11 @@
 import os
-from pymongo import MongoClient, collection
+from pymongo import MongoClient, collection, results
 
 COLLECTIONS = ['posts', 'items', 'users', 'addresses']
 ENV = os.getenv('ENV') # get local environemnt variable
 
 def get_collection(dbname: str, collection_name: str) -> collection.Collection:
+    validate(collection_name)
     client = None # to be connect to local/remote MongoDB
 
     # if local is True, connect to local db, otherwise connect to remote db
@@ -19,17 +20,19 @@ def get_collection(dbname: str, collection_name: str) -> collection.Collection:
     # get db and specified collection
     return client[dbname][collection_name]
 
-# insert document / JSON object to specified collection
-def insert(collection_name: str, data: dict) -> None:
+def validate(collection_name):
     if collection_name.lower() not in COLLECTIONS:
         raise Exception(f"Cannot insert to '{collection_name}'")
+
+# insert document / JSON object to specified collection
+def insert(collection_name: str, data: dict) -> None:
+    validate(collection_name)
     collection = get_collection('apt-get', collection_name)
     return collection.insert_one(data)
 
 # find all instances of document / JSON object in specified collection
 def find_all(collection_name: str, filters) -> list:
-    if collection_name.lower() not in COLLECTIONS:
-        raise Exception(f"Cannot retrieve from '{collection_name}'")
+    validate(collection_name)
 
     # fetch collcction from db & return all desired documents in a list
     collection = get_collection('apt-get', collection_name)
@@ -37,25 +40,27 @@ def find_all(collection_name: str, filters) -> list:
 
 # find one instance of document / JSON object in specified collection
 def find_one(collection_name: str, filters={}) -> dict:
-    if collection_name.lower() not in COLLECTIONS:
-        raise Exception(f"Cannot retrieve from '{collection_name}'")
+    validate(collection_name)
 
     # fetch collection from db & return first instance of desired document
     collection = get_collection('apt-get', collection_name)
     return collection.find_one(filters)
 
-# TODO
-def exists():
-    ...
+def exists(collection_name: str, filters={}) -> bool:
+    validate(collection_name)
+    return find_one('users', filters) is not None
 
-# TODO
-def count():
-    ...
+def count(collection_name: str, filters={}) -> int:
+    validate(collection_name)
+    collection = get_collection('apt-get', 'users')
+    return collection.count_documents(filters)
 
-# TODO
-def delete_one():
-    ...
+def delete_one(collection_name: str, filters={}) -> results.DeleteResult:
+    validate(collection_name)
+    collection = get_collection('apt-get', 'users')
+    return collection.delete_one(filters)
 
-# TODO
-def delete_all():
-    ...
+def delete_all(collection_name: str, filters={}) -> results.DeleteResult:
+    validate(collection_name)
+    collection = get_collection('apt-get', 'users')
+    return collection.delete_many(filters)
