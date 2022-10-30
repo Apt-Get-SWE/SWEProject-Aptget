@@ -1,6 +1,6 @@
 import logging
 import pymongo
-from ..db import query
+from ..query import query
 from .utils import json_to_object, object_to_json_str
 
 """
@@ -10,7 +10,8 @@ User format
     fname : str,
     lname : str,
     phone : str,
-    email : str
+    email : str,
+    pfp   : str
 }
 UID is the google_id of the user
 Email is required for every user
