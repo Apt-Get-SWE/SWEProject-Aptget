@@ -11,6 +11,9 @@ import logging
 
 from ..types.user import User
 
+from ..types.user import User
+
+
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #only for local testing
 
 ENV = os.environ.get('ENV', 'local') # default local, or else production
