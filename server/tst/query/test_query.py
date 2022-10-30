@@ -1,10 +1,11 @@
 from server.src.query import query as q
 from pymongo import collection, results
 import os
-import logging
+# import logging
 
 os.environ['ENV'] = 'local'
-LOGGER = logging.getLogger(__name__)
+# LOGGER = logging.getLogger(__name__)
+# LOGGER.setLevel(logging.INFO)
 TEST_USER = {'test':'user'}
 
 class TestClass:

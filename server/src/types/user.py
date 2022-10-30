@@ -10,7 +10,8 @@ User format
     fname : str,
     lname : str,
     phone : str,
-    email : str
+    email : str,
+    pfp   : str
 }
 UID is the google_id of the user
 Email is required for every user

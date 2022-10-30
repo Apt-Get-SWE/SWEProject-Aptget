@@ -1,16 +1,18 @@
 from ..query import query
-from .utils import json_to_object
+from .utils import json_to_object, object_to_json_str
 
 """
 Post format
 {
-    pid       : int,
-    title     : str,
-    details   : str,
-    condition : str,
-    list_date : str,
-    price     : int,
-    sold      : boolean
+    pid         : str,
+    uid         : str
+    aid         : str,
+    title       : str,
+    descr       : str
+    condition   : str,
+    list_dt     : str (%m/%d/%Y %H:%M:%S),
+    price       : str,
+    sold        : str
 }
 """
 class Post:
@@ -28,14 +30,33 @@ class Post:
     @staticmethod
     def find_one(filters={}) -> dict:
         return query.find_one('posts', filters)
+
+    # CLASS METHODS
+    @classmethod
+    def from_json(cls, data: str):
+        obj = json_to_object(data)
+        return cls(obj.pid, obj.uid, obj.aid, obj.title, obj.descr, obj.condition, obj.list_dt, obj.price, obj.sold)
     
     # NON-STATIC METHODS
-    def __init__(self, data: dict):
-        obj = json_to_object(data)
-        self.pid       = obj.pid
-        self.title     = obj.title
-        self.details   = obj.details
-        self.condition = obj.condition
-        self.list_date = obj.list_date
-        self.price     = obj.price
-        self.sold      = obj.sold
+    def __init__(self, pid: str, uid: str, aid: str, title: str=None, descr: str=None, condition: str=None, list_dt: str=None, price: str="0", sold: str="False"):
+        self.pid       = pid
+        self.uid       = uid
+        self.aid       = aid
+        self.title     = title
+        self.descr     = descr
+        self.condition = condition
+        self.list_dt   = list_dt
+        self.price     = price
+        self.sold      = sold
+
+    def to_dict(self):
+        # If has an ObjectId, convert to string
+        if '_id' in self.__dict__:
+            self.__dict__['_id'] = str(self.__dict__['_id'])
+        return self.__dict__
+
+    def to_json_str(self):
+        return object_to_json_str(self)
+
+    def save(self):
+        self.insert(self.__dict__)
