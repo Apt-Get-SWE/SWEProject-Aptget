@@ -1,6 +1,6 @@
 import logging
 import pymongo
-from ..db import query
+from ..query import query
 from .utils import json_to_object, object_to_json_str
 
 """
