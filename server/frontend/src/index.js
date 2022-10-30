@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import Home from './Home/Home';
 import reportWebVitals from './reportWebVitals';
-import NavBar from './Components/NavBar/Navbar';
+import UserInfoForm from './Pages/UserInfoForm';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Home />
+    <UserInfoForm />
   </React.StrictMode>
 );
 
