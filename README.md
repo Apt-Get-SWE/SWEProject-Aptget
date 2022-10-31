@@ -34,6 +34,8 @@ To start the entire webserver, run `gunicorn server.app:app`
 - Post requests for items
 
 # Changelog
+## 2022.10.30
+- Create user info collection form
 ## 2022.10.23
 - Set up local MongoDB instance for testing
 - Implement Tailwind CSS
