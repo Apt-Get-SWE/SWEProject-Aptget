@@ -7,10 +7,6 @@ from flask_restx import Resource
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
 from pip._vendor import cachecontrol
-import logging
-
-from ..types.user import User
-
 from ..types.user import User
 
 
