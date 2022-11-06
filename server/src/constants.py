@@ -29,7 +29,7 @@ class Constants:
                     TEXT: "Continue displaying menu"
                 },
                 LOGIN: {
-                    URL: '/login',
+                    URL: '/loggedin',
                     METHOD: 'get',
                     TEXT: "Login with google"
                 },

@@ -77,4 +77,8 @@ class LogInSuccessPage(Resource):
     """
     def get(self):
         # TODO: implement page
-        return {"Login": "Successful"}
+        return {
+            'Type' : 'Data',
+            'Data' : {'Login Status' : {'Login Status' : 'Successful'}},
+            'Title' : 'Login Successful Page'
+        }
