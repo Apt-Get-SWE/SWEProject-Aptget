@@ -16,6 +16,7 @@ class Constants:
         CHOICES = 'Choices'
         CONTINUE = '0'
         EXIT = 'X'
+        LOGIN = "1"
 
         TEST_MENU = {
             TYPE: MENU,
@@ -26,6 +27,11 @@ class Constants:
                     URL: '/main_menu',
                     METHOD: 'GET',
                     TEXT: "Continue displaying menu"
+                },
+                LOGIN: {
+                    URL: '/login',
+                    METHOD: 'GET',
+                    TEXT: "Login with google"
                 },
                 EXIT: {
                     METHOD: 'GET',
