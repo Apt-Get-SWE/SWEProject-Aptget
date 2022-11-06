@@ -13,7 +13,7 @@ from ..types.user import User
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #only for local testing
 
 ENV = os.environ.get('ENV', 'local') # default local, or else production
-ROOT_URL = "http://localhost:8000" if ENV == 'local' else "https://www.aptget.nyc"
+ROOT_URL = "http://127.0.0.1:8000" if ENV == 'local' else "https://www.aptget.nyc"
 
 GOOGLE_CLIENT_ID_TEST = "497541279341-qtudp4uvo0g39s0o4ops0mr2dsvemnp5.apps.googleusercontent.com"
 CLIENT_SECRET_FILE = os.path.join(pathlib.Path(__file__).parents[2], "CLIENT_CREDENTIALS_TEST.json")
