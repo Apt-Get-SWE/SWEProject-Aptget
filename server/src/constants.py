@@ -25,16 +25,16 @@ class Constants:
             CHOICES: {
                 CONTINUE: {
                     URL: '/main_menu',
-                    METHOD: 'GET',
+                    METHOD: 'get',
                     TEXT: "Continue displaying menu"
                 },
                 LOGIN: {
                     URL: '/login',
-                    METHOD: 'GET',
+                    METHOD: 'get',
                     TEXT: "Login with google"
                 },
                 EXIT: {
-                    METHOD: 'GET',
+                    METHOD: 'get',
                     TEXT: "Exit"
                 }
             }
