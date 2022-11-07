@@ -1,15 +1,10 @@
 from flask_restful import Resource
 from ..types.user import User
-import json
-from bson import json_util
-
-def parse_json(data):
-    return json.loads(json_util.dumps(data))
+from ..types.utils import parse_json
 
 class Users(Resource):
     def get(self):
-        raw = User.find_all()
-        data = json.loads(json_util.dumps(raw))
+        data = parse_json(User.find_all())
         return {
             'Type' : 'Data',
             'Title' : 'List of users',
