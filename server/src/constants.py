@@ -17,6 +17,7 @@ class Constants:
         CONTINUE = '0'
         EXIT = 'X'
         LOGIN = "1"
+        USERS = '2'
 
         TEST_MENU = {
             TYPE: MENU,
@@ -32,6 +33,11 @@ class Constants:
                     URL: '/loggedin',
                     METHOD: 'get',
                     TEXT: "Login with google"
+                },
+                USERS : {
+                    URL: '/users',
+                    METHOD: 'get',
+                    TEXT: "Get all users"
                 },
                 EXIT: {
                     METHOD: 'get',

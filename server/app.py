@@ -10,6 +10,7 @@ from .src.endpoints.login import GoogleLogIn, LogInSuccessPage, VerifyUserLogin
 from .src.constants import Constants
 from .src.endpoints.index import Index
 from .src.endpoints.menu import Menu
+from .src.endpoints.users import Users
 
 app = Flask(__name__, static_url_path='',
             static_folder=Constants.STATIC_FOLDER)
@@ -27,6 +28,7 @@ api.add_resource(GoogleLogIn, "/login", resource_class_kwargs={})
 api.add_resource(LogInSuccessPage, "/loggedin")
 api.add_resource(VerifyUserLogin, "/callback")
 api.add_resource(Menu, "/main_menu")
+api.add_resource(Users, "/users")
 
 if __name__ == "__main__":
     app.run(debug=True)
