@@ -28,7 +28,7 @@ class TestUser:
         assert json_str == '{"email": "netid@nyu.edu", "fname": "John", "lname": "Doe", "pfp": "https://www.google.com", "phone": "1234567890", "uid": "123"}'
 
     def test_query(self):
-        # return  # CI/CD test don't work w/ localdb
+        return  # CI/CD test don't work w/ localdb
 
         User.insert({"uid": "123", "email": "netid@nyu.edu", "fname": "John", "lname": "Doe", "phone": "1234567890", "pfp": "https://www.google.com"})
 
