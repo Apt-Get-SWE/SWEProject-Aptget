@@ -17,7 +17,7 @@ class Constants:
         CONTINUE = '0'
         EXIT = 'X'
         LOGIN = "1"
-        USERS = '2'
+        POSTS = '2'
 
         TEST_MENU = {
             TYPE: MENU,
@@ -34,10 +34,10 @@ class Constants:
                     METHOD: 'get',
                     TEXT: "Login with google"
                 },
-                USERS : {
-                    URL: '/users',
+                POSTS: {
+                    URL: '/posts',
                     METHOD: 'get',
-                    TEXT: "Get all users"
+                    TEXT: "Get all posts"
                 },
                 EXIT: {
                     METHOD: 'get',

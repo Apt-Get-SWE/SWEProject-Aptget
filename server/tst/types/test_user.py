@@ -1,7 +1,6 @@
 import pytest
 from ...src.types.user import User
 
-
 class TestUser:
     # Test from_json
     def test_from_json(self):
@@ -26,16 +25,3 @@ class TestUser:
                     "1234567890", "https://www.google.com")
         json_str = user.to_json_str()
         assert json_str == '{"email": "netid@nyu.edu", "fname": "John", "lname": "Doe", "pfp": "https://www.google.com", "phone": "1234567890", "uid": "123"}'
-
-    def test_query(self):
-        return  # CI/CD test don't work w/ localdb
-
-        User.insert({"uid": "123", "email": "netid@nyu.edu", "fname": "John", "lname": "Doe", "phone": "1234567890", "pfp": "https://www.google.com"})
-
-        res = User.find_all({})
-        assert type(res) == list
-        if len(res) > 0:
-            assert type(res[0]) == dict
-
-        res = User.find_one({})
-        assert type(res) == dict
