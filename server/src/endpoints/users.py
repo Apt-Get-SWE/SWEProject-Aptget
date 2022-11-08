@@ -8,5 +8,5 @@ class Users(Resource):
         return {
             'Type' : 'Data',
             'Title' : 'List of users',
-            'Data' : data # TODO filter out sensitive data
+            'Data' : {'Users' : {'Data' : data}} # TODO filter out sensitive data
         }
