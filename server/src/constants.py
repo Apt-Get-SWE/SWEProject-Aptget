@@ -18,6 +18,7 @@ class Constants:
         EXIT = 'X'
         LOGIN = "1"
         POSTS = '2'
+        ADDR = '3'
 
         TEST_MENU = {
             TYPE: MENU,
@@ -38,6 +39,11 @@ class Constants:
                     URL: '/posts',
                     METHOD: 'get',
                     TEXT: "Get all posts"
+                },
+                ADDR: {
+                    URL: '/addr',
+                    METHOD: 'get',
+                    TEXT: "Get all addresses"
                 },
                 EXIT: {
                     METHOD: 'get',
