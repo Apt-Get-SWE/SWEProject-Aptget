@@ -1,4 +1,4 @@
-from ...src.endpoints.posts import Addresses
+from ...src.endpoints.addresses import Addresses
 
 class TestPosts:
     def test_query(self):
