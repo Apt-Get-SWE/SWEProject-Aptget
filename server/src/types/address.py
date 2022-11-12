@@ -30,10 +30,11 @@ class Address:
     @classmethod
     def from_json(cls, data: str):
         obj = json_to_object(data)
-        return cls(obj.building, obj.city, obj.state, obj.zipcode)
+        return cls(obj.aid, obj.building, obj.city, obj.state, obj.zipcode)
 
     # NON-STATIC METHODS
-    def __init__(self, building: str, city: str, state: str, zipcode: str):
+    def __init__(self, aid: str,building: str, city: str, state: str, zipcode: str):
+        self.aid      = aid
         self.building = building
         self.city     = city
         self.state    = state
