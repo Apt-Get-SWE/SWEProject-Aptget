@@ -27,11 +27,11 @@ def serializeParameters(parameters):
     serializedParam = {}
     for key, value in parameters.items():
         if isinstance(value, bool):
-            serializeParameters[key] = 'true' if value else 'false'
+            serializedParam[key] = 'true' if value else 'false'
         elif isinstance(value, dict):
             serializedParam[key] = "|".join(("%s:%s" % (k, v) for k, v in value.items()))
         elif isinstance(value, (list, tuple)):
-            parameters[key] = "|".join(value)
+            serializedParam[key] = "|".join(value)
     return serializedParam
 
 def encodeAddress(address: str):
