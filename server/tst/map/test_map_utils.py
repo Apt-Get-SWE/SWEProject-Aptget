@@ -8,9 +8,9 @@ class TestMapUtils:
                 "testkey3": ["1", "2", "3"]
                 }
         serializeParam = serializeParameters(param)
-        assert serializeParameters["testkey1"] == "true"
-        assert serializeParameters["testkey2"] == "false"
-        assert serializeParameters["testkey3"] == "1|2|3"
+        assert serializeParam["testkey1"] == "true"
+        assert serializeParam["testkey2"] == "false"
+        assert serializeParam["testkey3"] == "1|2|3"
 
     def test_calc_distance(self):
         return # FIXME: this test is failing
