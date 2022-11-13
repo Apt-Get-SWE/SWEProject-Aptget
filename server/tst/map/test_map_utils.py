@@ -1,6 +1,17 @@
-from ...src.map.map_utils import encodeAddress, calcDistance, findNearbyAddress
+from ...src.map.map_utils import encodeAddress, calcDistance, findNearbyAddress, serializeParameters
 
 class TestMapUtils:
+    def test_serialize_parameters(sef):
+        param = {
+                "testkey1": True,
+                "testkey2": False,
+                "testkey3": ["1", "2", "3"]
+                }
+        serializeParam = serializeParameters(param)
+        assert serializeParam["testkey1"] == "true"
+        assert serializeParam["testkey2"] == "false"
+        assert serializeParam["testkey3"] == "1|2|3"
+
     def test_calc_distance(self):
         return # FIXME: this test is failing
         addr1 = (823.12, 923.17)
