@@ -12,6 +12,13 @@ class TestAddress:
         assert addr.state    == "NY"
         assert addr.zipcode  == "11201"
 
+    def test_from_raw_addr(self):
+        addr = Address.from_json(Address.process_raw_addr("370 Jay St, Brooklyn, NY, 11201"))
+        assert addr.building == "370 Jay St"
+        assert addr.city     == "Brooklyn"
+        assert addr.state    == "NY"
+        assert addr.zipcode  == "11201"
+
     # Test to_dict
     def test_to_dict(self):
         # Test with a valid address

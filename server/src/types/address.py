@@ -1,5 +1,6 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
+import usaddress, json
 
 """
 Address format
@@ -26,6 +27,17 @@ class Address:
     @staticmethod
     def find_one(filters={}) -> dict:
         return query.find_one('addresses', filters)
+
+    @staticmethod
+    def process_raw_addr(raw: str):
+        processed = usaddress.tag(raw)[0]
+        addr = {}
+        addr["aid"] = ""  # TBD
+        addr["building"] = f"{processed['AddressNumber']} {processed['StreetName']} {processed['StreetNamePostType']}"
+        addr["city"] = processed['PlaceName']
+        addr["state"] = processed['StateName']
+        addr["zipcode"] = processed['ZipCode']
+        return json.dumps(addr)
 
     @classmethod
     def from_json(cls, data: str):
