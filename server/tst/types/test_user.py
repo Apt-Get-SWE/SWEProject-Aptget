@@ -1,5 +1,8 @@
 import pytest
+import os
 from ...src.types.user import User
+
+ENV = os.getenv('ENV')
 
 class TestUser:
     # Test from_json
@@ -21,7 +24,9 @@ class TestUser:
     # Test to_json_str
     def test_to_json_str(self):
         # Test with a valid user
-        user = User("123", "netid@nyu.edu", "John", "Doe",
-                    "1234567890", "https://www.google.com")
+        user = User("123", "netid@nyu.edu", "John", "Doe", "1234567890", "https://www.google.com")
         json_str = user.to_json_str()
         assert json_str == '{"email": "netid@nyu.edu", "fname": "John", "lname": "Doe", "pfp": "https://www.google.com", "phone": "1234567890", "uid": "123"}'
+
+
+

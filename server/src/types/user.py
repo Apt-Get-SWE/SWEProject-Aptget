@@ -1,5 +1,5 @@
 import logging
-import pymongo
+from pymongo import results, errors
 from ..query import query
 from .utils import json_to_object, object_to_json_str
 
@@ -40,7 +40,7 @@ class User:
         try:
             query.insert('users', data)
             logging.info(f'Inserted user {data} into database')
-        except pymongo.errors.DuplicateKeyError:
+        except errors.DuplicateKeyError:
             logging.info(f'User with uid {data["uid"]} already exists')
 
     @staticmethod
@@ -50,6 +50,22 @@ class User:
     @staticmethod
     def find_one(filters={}) -> dict:
         return query.find_one('users', filters)
+
+    @staticmethod
+    def exists(filters={}) -> bool:
+        return query.users('users', filters)
+
+    @staticmethod
+    def count(filters={}) -> int:
+        return query.count('users', filters)
+
+    @staticmethod
+    def delete_one(filters={}) -> results.DeleteResult:
+        return query.delete_one('users', filters)
+
+    @staticmethod
+    def delete_all(filters={}) -> results.DeleteResult:
+        return query.delete_all('users', filters)
 
     # CLASS METHODS
     @classmethod
