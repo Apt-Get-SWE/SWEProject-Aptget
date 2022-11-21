@@ -16,7 +16,7 @@ def get_collection(dbname: str, collection_name: str) -> collection.Collection:
     else:
         uri = os.getenv('DB_URI') # get remote db URI
         if uri is None:
-            raise ValueError('DB_URI environemnt variable not set!')
+            raise ValueError('DB_URI environment variable not set!')
         client = MongoClient(uri) # connect to remote db
     
     # get db and specified collection
