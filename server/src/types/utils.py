@@ -6,6 +6,8 @@ def parse_json(data):
     return json.loads(json_util.dumps(data))
 
 def json_to_object(data):
+    if isinstance(data, dict):
+        data = json.dumps(data)
     return json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
 
 def object_to_json_str(obj):
