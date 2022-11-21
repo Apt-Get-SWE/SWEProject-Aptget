@@ -28,5 +28,29 @@ class TestUser:
         json_str = user.to_json_str()
         assert json_str == '{"email": "netid@nyu.edu", "fname": "John", "lname": "Doe", "pfp": "https://www.google.com", "phone": "1234567890", "uid": "123"}'
 
+    def test_insert_find(self):
+        if ENV != 'local': return
+
+        user = User("123", "netid@nyu.edu", "John", "Doe", "1234567890", "https://www.google.com")
+        user.save()
+
+        data = User.find_one({'uid' : '123'})
+        assert data['email'] == 'netid@nyu.edu'
+
+        data = User.find_all({'uid' : '123'})
+        assert type(data) == list
+        assert type(data[0]) == dict
+
+        found = User.exists({'uid' : '123'})
+        assert found == True
+
+        count = User.count({'uid' : '123'})
+        assert type(count) == int
+
+        User.delete_one({'uid' : '123'})
+        assert User.count({'uid' : '123'}) == count - 1
+
+        User.delete_all({'uid' : '123'})
+        assert User.count({'uid' : '123'}) == 0
 
 
