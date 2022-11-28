@@ -1,4 +1,5 @@
 from ...src.map.map_utils import encodeAddress, calcDistance, findNearbyAddress, serializeParameters
+import pytest
 
 class TestMapUtils:
     def test_serialize_parameters(sef):
@@ -19,9 +20,8 @@ class TestMapUtils:
         result = calcDistance(addr1, addr2)
         assert result == 1384.557572078532
 
+    @pytest.mark.skip(reason="Billing not enabled for api key yet")
     def test_encode_address(self):
-        return # TODO: need to enable Billing on Google Cloud Platform
-
         address = "1600 Amphitheatre Parkway, Mountain View, CA"
         result = encodeAddress(address)
         assert result[0]['formatted_address'] == address
