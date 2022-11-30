@@ -1,7 +1,12 @@
+import pytest
 from ...src.endpoints.menu import Menu
 from ...src.constants import Constants
 
 class TestMenu:
-    def test_get(self):
+    @pytest.fixture
+    def get_test_menu(self):
+        return Constants.Menu.TEST_MENU
+
+    def test_get(self, get_test_menu):
         menu = Menu()
-        assert menu.get() == Constants.Menu.TEST_MENU
+        assert menu.get() == get_test_menu
