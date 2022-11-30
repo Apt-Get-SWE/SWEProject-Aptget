@@ -6,7 +6,6 @@ class TestTimeUtils:
         timestampEpoch2 = get_current_epoch()
         assert timestampEpoch1 <= timestampEpoch2
 
-    @pytest.mark.skip(reason="This test is failing")
     def test_epoch_to_datetime(self):
         timestampEpoch = 40246871
         date_time = epoch_to_datetime(timestampEpoch)

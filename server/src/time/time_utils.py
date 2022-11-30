@@ -9,4 +9,4 @@ def get_current_epoch():
     return int(time.time())
 
 def epoch_to_datetime(timestampEpoch):
-    return datetime.datetime.fromtimestamp(timestampEpoch)
+    return datetime.datetime.utcfromtimestamp(timestampEpoch)
