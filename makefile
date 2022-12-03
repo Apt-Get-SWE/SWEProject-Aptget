@@ -4,26 +4,37 @@ DB_DIR = db
 REQ_DIR = .
 PYTESTFLAGS = -vv --verbose --tb=short
 
-FORCE:
+.PHONY: build run clean prod github all_tests unit lint dev_env docs 
+
+build:
+	cd $(API_DIR) && npm install --prefix frontend && cd frontend && npm run build
+
+run:
+	gunicorn server.app:app
+
+clean:
+	rm -rf $(API_DIR)/frontend/build
 
 prod: all_tests github
 
-github: FORCE
+github:
 	- git commit -a
 	git push origin master
 
 all_tests: lint unit
 
-unit: FORCE
+unit:
 	cd $(API_DIR); pytest $(PYTESTFLAGS)
 
-lint: FORCE
+lint:
 	autopep8 --in-place server/*.py
 	$(LINTER) $(API_DIR)/*.py
 	$(LINTER) $(DB_DIR)/*.py
 
-dev_env: FORCE
+dev_env:
 	pip install -r $(REQ_DIR)/requirements-dev.txt
 
-docs: FORCE
+docs:
 	cd $(API_DIR); make docs
+
+all: dev_env build
