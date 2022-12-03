@@ -4,6 +4,8 @@ DB_DIR = db
 REQ_DIR = .
 PYTESTFLAGS = -vv --verbose --tb=short
 
+.DEFAULT_GOAL := all
+
 .PHONY: build run clean prod github all_tests unit lint dev_env docs 
 
 all: dev_env build
