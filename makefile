@@ -31,7 +31,8 @@ unit:
 	cd $(API_DIR); pytest $(PYTESTFLAGS)
 
 lint:
-	autopep8 --in-place server/*.py
+	autopep8 --in-place --recursive $(API_DIR)/.
+	autopep8 --in-place --recursive $(DB_DIR)/.
 	$(LINTER) $(API_DIR)/*.py
 	$(LINTER) $(DB_DIR)/*.py
 

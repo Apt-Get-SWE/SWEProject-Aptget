@@ -1,6 +1,7 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
-import usaddress, json
+import usaddress
+import json
 
 """
 Address format
@@ -12,6 +13,8 @@ Address format
     zipcode  : str,
 }
 """
+
+
 class Address:
     # STATIC METHODS
     @staticmethod
@@ -45,12 +48,12 @@ class Address:
         return cls(obj.aid, obj.building, obj.city, obj.state, obj.zipcode)
 
     # NON-STATIC METHODS
-    def __init__(self, aid: str,building: str, city: str, state: str, zipcode: str):
-        self.aid      = aid
+    def __init__(self, aid: str, building: str, city: str, state: str, zipcode: str):
+        self.aid = aid
         self.building = building
-        self.city     = city
-        self.state    = state
-        self.zipcode  = zipcode
+        self.city = city
+        self.state = state
+        self.zipcode = zipcode
 
     def to_dict(self):
         # If has an ObjectId, convert to string

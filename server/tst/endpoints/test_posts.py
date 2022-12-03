@@ -1,8 +1,9 @@
 from ...src.endpoints.posts import Posts
 
+
 class TestPosts:
     def test_query(self):
-        return # TODO: setup testing local db
+        return  # TODO: setup testing local db
         # Test with a valid query
         posts = Posts()
         response = posts.get()
@@ -11,7 +12,7 @@ class TestPosts:
         assert response['Data'] != None
 
     def test_post(self):
-        return # TODO: setup testing local db
+        return  # TODO: setup testing local db
 
         json_data = {
             'pid': '1',
