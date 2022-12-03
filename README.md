@@ -8,9 +8,9 @@ https://www.aptget.nyc/
 A online trading platform for buying and selling items between apartment residents in New York. The furniture turnover rate in New York is high, with people frequently moving, and leaving furnitures in good condition out on the street or in trash rooms. A marketplace for these furnitures with a building/neighborhood approach makes it easy for new and old residents to buy and sell furnitures.
 
 ## How to run
-To tune and view the frontend, cd into the frontend folder and run `npm start`
-
-To start the entire webserver, run `gunicorn server.app:app`
+1. You need npm installed
+2. `make`
+3. `make run`
 
 ## Tech Stack
 - Design: Figma
