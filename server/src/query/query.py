@@ -3,22 +3,23 @@ from pymongo import MongoClient, collection, results
 
 
 COLLECTIONS = ['posts', 'items', 'users', 'addresses']
-ENV = os.getenv('ENV') # get local environemnt variable
+ENV = os.getenv('ENV')  # get local environemnt variable
 
 
 def get_collection(dbname: str, collection_name: str) -> collection.Collection:
     validate(collection_name)
-    client = None # to be connect to local/remote MongoDB
+    client = None  # to be connect to local/remote MongoDB
 
     # if local is True, connect to local db, otherwise connect to remote db
-    if ENV=='local':
-        client = MongoClient('localhost', 27017) # connect to local db on port 27017
+    if ENV == 'local':
+        # connect to local db on port 27017
+        client = MongoClient('localhost', 27017)
     else:
-        uri = os.getenv('DB_URI') # get remote db URI
+        uri = os.getenv('DB_URI')  # get remote db URI
         if uri is None:
             raise ValueError('DB_URI environment variable not set!')
-        client = MongoClient(uri) # connect to remote db
-    
+        client = MongoClient(uri)  # connect to remote db
+
     # get db and specified collection
     return client[dbname][collection_name]
 
@@ -28,6 +29,8 @@ def validate(collection_name):
         raise Exception(f"Cannot insert to '{collection_name}'")
 
 # insert document / JSON object to specified collection
+
+
 def insert(collection_name: str, data: dict) -> None:
     validate(collection_name)
     collection = get_collection('apt-get', collection_name)

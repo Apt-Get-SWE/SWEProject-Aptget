@@ -16,6 +16,8 @@ User format
 UID is the google_id of the user
 Email is required for every user
 """
+
+
 class User:
     # STATIC METHODS
     @staticmethod
@@ -72,15 +74,15 @@ class User:
     def from_json(cls, data: str):
         obj = json_to_object(data)
         return cls(obj.uid, obj.email, obj.fname, obj.lname, obj.phone, obj.pfp)
-    
+
     # NON-STATIC METHODS
-    def __init__(self, uid: str, email: str, fname: str=None, lname: str=None, phone: str=None, pfp=None):
-        self.uid   = uid
+    def __init__(self, uid: str, email: str, fname: str = None, lname: str = None, phone: str = None, pfp=None):
+        self.uid = uid
         self.fname = fname
         self.lname = lname
         self.phone = phone
         self.email = email
-        self.pfp   = pfp
+        self.pfp = pfp
 
     def to_dict(self):
         # If has an ObjectId, convert to string
