@@ -1,4 +1,3 @@
-import pytest
 from ...src.types.address import Address
 
 

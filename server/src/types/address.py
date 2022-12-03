@@ -5,7 +5,7 @@ import json
 
 """
 Address format
-{   
+{
     aid      : str,
     building : str,
     city     : str,

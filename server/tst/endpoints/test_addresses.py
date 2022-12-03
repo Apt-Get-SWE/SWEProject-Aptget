@@ -13,7 +13,7 @@ class TestPosts:
             response = addr.get()
             assert response['Type'] == 'Data'
             assert response['Title'] == 'List of addresses'
-            assert response['Data'] != None
+            assert response['Data'] is not None
 
             # Assert zip code is correct
             for aid, addr in response['Data'].items():

@@ -2,7 +2,7 @@ import os
 import pathlib
 import requests
 import google.auth.transport.requests
-from flask import redirect, request, url_for
+from flask import redirect, request
 from flask_restx import Resource
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
@@ -30,13 +30,13 @@ class GoogleLogIn(Resource):
         super().__init__(api, *args, **kwargs)
         self.session = {}
     """
-    Calls google auth api to authenticate google user log in 
+    Calls google auth api to authenticate google user log in
     """
 
     def get(self):
         """
-        The url to jump to needs to be manually added to the google credentials. 
-        #TODO: store state in sessions to track logged in users and parse user info to store to db. Verify if 
+        The url to jump to needs to be manually added to the google credentials.
+        #TODO: store state in sessions to track logged in users and parse user info to store to db. Verify if
         """
         authorizationUrl, state = flow.authorization_url()
         if state:  # check
@@ -49,7 +49,7 @@ class VerifyUserLogin(Resource):
 
     def get(self):
         """
-        Call back, grab user google_id and name. The google_id can be used as our user_id. 
+        Call back, grab user google_id and name. The google_id can be used as our user_id.
         """
         flow.fetch_token(authorization_response=request.url)
         credentials = flow.credentials

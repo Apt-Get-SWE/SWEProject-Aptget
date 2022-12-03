@@ -1,4 +1,3 @@
-import pytest
 import os
 from ...src.types.user import User
 
@@ -48,7 +47,7 @@ class TestUser:
         assert type(data[0]) == dict
 
         found = User.exists({'uid': '123'})
-        assert found == True
+        assert found
 
         count = User.count({'uid': '123'})
         assert type(count) == int

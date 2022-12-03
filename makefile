@@ -33,8 +33,8 @@ unit:
 lint:
 	autopep8 --in-place --recursive $(API_DIR)/.
 	autopep8 --in-place --recursive $(DB_DIR)/.
-	$(LINTER) $(API_DIR)/*.py
-	$(LINTER) $(DB_DIR)/*.py
+	$(LINTER) --ignore=E501 $(API_DIR)/
+	$(LINTER) --ignore=E501 $(DB_DIR)/
 
 dev_env:
 	pip install -r $(REQ_DIR)/requirements-dev.txt
