@@ -6,6 +6,8 @@ PYTESTFLAGS = -vv --verbose --tb=short
 
 .PHONY: build run clean prod github all_tests unit lint dev_env docs 
 
+all: dev_env build
+
 build:
 	cd $(API_DIR) && npm install --prefix frontend && cd frontend && npm run build
 
@@ -36,5 +38,3 @@ dev_env:
 
 docs:
 	cd $(API_DIR); make docs
-
-all: dev_env build
