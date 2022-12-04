@@ -6,7 +6,10 @@ class TestPost:
     def test_from_json(self):
         # Test with a valid json string
         post = Post.from_json(
-            '{"pid": "123", "uid": "234", "aid": "345", "title": "Selling chairs!", "descr": "willing to negotiate", "condition": "new", "list_dt": "10/29/2022 10:11:53", "price": "24.99", "sold": "False"}')
+            '{"pid": "123", "uid": "234", "aid": "345", \
+            "title": "Selling chairs!", "descr": "willing to negotiate", \
+                 "condition": "new", "list_dt": "10/29/2022 10:11:53", \
+                    "price": "24.99", "sold": "False"}')
         assert post.pid == "123"
         assert post.uid == "234"
         assert post.aid == "345"
@@ -24,9 +27,13 @@ class TestPost:
     def test_to_json_str(self):
         # Test with a valid post
         post = Post('123', '234', '345', 'Selling chairs!',
-                    'willing to negotiate', 'new', '10/29/2022 10:11:53', "24.99", "False")
+                    'willing to negotiate', 'new',
+                    '10/29/2022 10:11:53', "24.99", "False")
         data = post.to_json_str()
-        assert data == '{"aid": "345", "condition": "new", "descr": "willing to negotiate", "list_dt": "10/29/2022 10:11:53", "pid": "123", "price": "24.99", "sold": "False", "title": "Selling chairs!", "uid": "234"}'
+        assert data == '{"aid": "345", "condition": "new",\
+             "descr": "willing to negotiate", "list_dt": "10/29/2022 10:11:53",\
+                 "pid": "123", "price": "24.99", "sold": "False", \
+                    "title": "Selling chairs!", "uid": "234"}'
 
     def test_query(self):
         return  # CI/CD test don't work w/ localdb
