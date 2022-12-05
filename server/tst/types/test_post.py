@@ -31,7 +31,8 @@ class TestPost:
                     '10/29/2022 10:11:53', "24.99", "False")
         data = post.to_json_str()
         assert data == '{"aid": "345", "condition": "new", ' + \
-            '"descr": "willing to negotiate", "list_dt": "10/29/2022 10:11:53", ' + \
+            '"descr": "willing to negotiate", \
+            "list_dt": "10/29/2022 10:11:53", ' + \
             '"pid": "123", "price": "24.99", "sold": "False", ' + \
             '"title": "Selling chairs!", "uid": "234"}'
 

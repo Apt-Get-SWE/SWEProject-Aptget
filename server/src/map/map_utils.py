@@ -23,7 +23,8 @@ def makeRequest():
 
 def serializeParameters(parameters):
     """
-    Serialize parameters from python native types to match that specified in google api docs
+    Serialize parameters from python native types to match that specified in
+    google api docs
 
     parameters: dictionary of query parameters
     """

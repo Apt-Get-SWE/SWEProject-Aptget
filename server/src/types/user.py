@@ -28,7 +28,8 @@ class User:
             data (dict): A dictionary containing the user's information
 
         Raises:
-            ValueError: If given data is not a dictionary, or if the dictionary does not contain all the required fields
+            ValueError: If given data is not a dictionary, or if the
+                        dictionary does not contain all the required fields
         """
         if type(data) != dict:
             raise ValueError(f'Cannot insert data of type{type(data)}')
