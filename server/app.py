@@ -4,7 +4,7 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 
 from flask import Flask
-from flask_restful import Api
+from flask_restx import Api
 import logging
 from .src.endpoints.login import GoogleLogIn, LogInSuccessPage, VerifyUserLogin
 from .src.constants import Constants
@@ -15,7 +15,7 @@ from .src.endpoints.addresses import Addresses
 
 app = Flask(__name__, static_url_path='',
             static_folder=Constants.STATIC_FOLDER)
-api = Api(app)
+api = Api(app, no_doc=True)
 session = {}
 
 logging.basicConfig(level=logging.INFO,
