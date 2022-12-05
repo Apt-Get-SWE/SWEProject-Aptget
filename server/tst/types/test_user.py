@@ -9,7 +9,8 @@ class TestUser:
     def test_from_json(self):
         # Test with a valid json string
         json_str = '{"uid": "123", "email": "netid@nyu.edu", "fname": "John", \
-        "lname": "Doe", "phone": "1234567890", "pfp": "https://www.google.com"}'
+            "lname": "Doe", "phone": "1234567890", \
+            "pfp": "https://www.google.com"}'
         user = User.from_json(json_str)
         assert user.uid == "123"
         assert user.email == "netid@nyu.edu"

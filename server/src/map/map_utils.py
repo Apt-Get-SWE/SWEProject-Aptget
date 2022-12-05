@@ -23,7 +23,8 @@ def makeRequest():
 
 def serializeParameters(parameters):
     """
-    Serialize parameters from python native types to match that specified in google api docs
+    Serialize parameters from python native types to match that specified in
+    google api docs
 
     parameters: dictionary of query parameters
     """
@@ -46,7 +47,7 @@ def encodeAddress(address: str):
 
 
 def calcDistance(geocode1, geocode2):
-    return sqrt((geocode1[0] - geocode2[0]) ** 2 + (geocode1[1] - geocode2[1]) ** 2)
+    return sqrt((geocode1[0] - geocode2[0]) ** 2 + (geocode1[1] - geocode2[1]) ** 2) # noqa
 
 
 def findNearbyAddress(geocode, geocodeList, distance):
