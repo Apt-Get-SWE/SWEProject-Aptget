@@ -36,9 +36,7 @@ class Address:
         processed = usaddress.tag(raw)[0]
         addr = {}
         addr["aid"] = ""  # TBD
-        addr["building"] = f"{processed['AddressNumber']}\
-                             {processed['StreetName']}\
-                             {processed['StreetNamePostType']}"
+        addr["building"] = f"{processed['AddressNumber']} {processed['StreetName']} {processed['StreetNamePostType']}" # noqa
         addr["city"] = processed['PlaceName']
         addr["state"] = processed['StateName']
         addr["zipcode"] = processed['ZipCode']

@@ -47,7 +47,6 @@ def encodeAddress(address: str):
 
 
 def calcDistance(geocode1, geocode2):
-    
     return sqrt((geocode1[0] - geocode2[0]) ** 2 + (geocode1[1] - geocode2[1]) ** 2) # noqa
 
 
