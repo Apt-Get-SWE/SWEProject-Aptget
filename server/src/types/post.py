@@ -40,7 +40,9 @@ class Post:
         return cls(obj.pid, obj.uid, obj.aid, obj.title, obj.descr, obj.condition, obj.list_dt, obj.price, obj.sold)
 
     # NON-STATIC METHODS
-    def __init__(self, pid: str, uid: str, aid: str, title: str = None, descr: str = None, condition: str = None, list_dt: str = None, price: str = "0", sold: str = "False"):
+    def __init__(self, pid: str, uid: str, aid: str, title: str = None,
+                 descr: str = None, condition: str = None, list_dt: str = None,
+                 price: str = "0", sold: str = "False"):
         self.pid = pid
         self.uid = uid
         self.aid = aid

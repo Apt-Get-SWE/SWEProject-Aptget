@@ -8,7 +8,8 @@ class TestUser:
     # Test from_json
     def test_from_json(self):
         # Test with a valid json string
-        json_str = '{"uid": "123", "email": "netid@nyu.edu", "fname": "John", "lname": "Doe", "phone": "1234567890", "pfp": "https://www.google.com"}'
+        json_str = '{"uid": "123", "email": "netid@nyu.edu", "fname": "John", \
+        "lname": "Doe", "phone": "1234567890", "pfp": "https://www.google.com"}'
         user = User.from_json(json_str)
         assert user.uid == "123"
         assert user.email == "netid@nyu.edu"
@@ -27,7 +28,9 @@ class TestUser:
         user = User("123", "netid@nyu.edu", "John", "Doe",
                     "1234567890", "https://www.google.com")
         json_str = user.to_json_str()
-        assert json_str == '{"email": "netid@nyu.edu", "fname": "John", "lname": "Doe", "pfp": "https://www.google.com", "phone": "1234567890", "uid": "123"}'
+        assert json_str == '{"email": "netid@nyu.edu", "fname": "John", ' + \
+            '"lname": "Doe", "pfp": "https://www.google.com", ' + \
+            '"phone": "1234567890", "uid": "123"}'
 
     def test_insert_find(self):
         return  # avoid in CI/CD
