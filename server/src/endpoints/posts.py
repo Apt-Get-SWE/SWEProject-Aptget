@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from flask_restx import Resource
 from flask import request
 from ..types.post import Post
 from ..types.utils import parse_json
