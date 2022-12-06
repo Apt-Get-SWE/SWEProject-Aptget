@@ -33,7 +33,6 @@ class GoogleLogIn(Resource):
     """
     Calls google auth api to authenticate google user log in
     """
-
     def get(self):
         """
         The url to jump to needs to be manually added to the google
@@ -44,7 +43,8 @@ class GoogleLogIn(Resource):
         """
         authorizationUrl, state = flow.authorization_url()
         if state:  # check
-            return redirect(authorizationUrl)
+            # return redirect(authorizationUrl)
+            return {"Redirect URL" : authorizationUrl}
         else:
             return redirect(f"{ROOT_URL}/endpoints")
 
