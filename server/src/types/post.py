@@ -37,7 +37,7 @@ class Post:
     @classmethod
     def from_json(cls, data: str):
         obj = json_to_object(data)
-        return cls(obj.pid, obj.uid, obj.aid, obj.title, obj.descr, obj.condition, obj.list_dt, obj.price, obj.sold) # noqa
+        return cls(obj.pid, obj.uid, obj.aid, obj.title, obj.descr, obj.condition, obj.list_dt, obj.price, obj.sold)  # noqa
 
     # NON-STATIC METHODS
     def __init__(self, pid: str, uid: str, aid: str, title: str = None,

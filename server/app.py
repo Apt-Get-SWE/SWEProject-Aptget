@@ -15,7 +15,7 @@ from .src.endpoints.addresses import Addresses
 
 app = Flask(__name__, static_url_path='',
             static_folder=Constants.STATIC_FOLDER)
-api = Api(app, no_doc=True)
+api = Api(app)
 session = {}
 
 logging.basicConfig(level=logging.INFO,

@@ -8,7 +8,7 @@ Follow the instructions @ https://www.prisma.io/dataguide/mongodb/setting-up-a-l
 
 ## Environment Setup
 - For local connection, use `export ENV=local`
-- For remote connection, use `export DB_URI=CONNECTION_URI`
+- For remote connection, use `export DB_URI=SECRET_URI`
 
 - To run the local database, enter:
     `cd mongodb_local`

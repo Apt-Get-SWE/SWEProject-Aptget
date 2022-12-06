@@ -9,4 +9,4 @@ mongod --dbpath /usr/local/var/mongodb --logpath /usr/local/var/log/mongodb/mong
 # to quit local MongoDB process, enter 'pkill mongod'
 
 # REMOTE INSTANCE
-# export DB_URI = CONNECTION_URI
+# export DB_URI = SECRET_URI
