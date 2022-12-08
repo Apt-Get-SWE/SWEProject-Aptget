@@ -30,6 +30,7 @@ class GoogleLogIn(Resource):
     def __init__(self, api=None, *args, **kwargs):
         super().__init__(api, *args, **kwargs)
         self.session = {}
+        self.flow = flow
     """
     Calls google auth api to authenticate google user log in
     """
