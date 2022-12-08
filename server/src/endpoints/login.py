@@ -29,7 +29,8 @@ flow = Flow.from_client_secrets_file(
 class GoogleLogIn(Resource):
     def __init__(self, api=None, *args, **kwargs):
         super().__init__(api, *args, **kwargs)
-        self.session = {}
+        self.session = {'users': []}
+        self.flow = flow
     """
     Calls google auth api to authenticate google user log in
     """
@@ -42,10 +43,14 @@ class GoogleLogIn(Resource):
         #TODO: store state in sessions to track logged in users and parse user
         #      info to store to db. Verify if
         """
-        authorizationUrl, state = flow.authorization_url()
+
+        authorizationUrl, state = self.flow.authorization_url()
+
         if state:  # check
-            return redirect(authorizationUrl)
+            # return redirect(authorizationUrl)
+            return {"Redirect URL": authorizationUrl, "state": state}
         else:
+            # return {"Main menu" : f"{ROOT_URL}/"}
             return redirect(f"{ROOT_URL}/endpoints")
 
 
