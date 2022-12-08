@@ -74,10 +74,10 @@ class User:
     @classmethod
     def from_json(cls, data: str):
         obj = json_to_object(data)
-        return cls(obj.uid, obj.email, obj.fname, obj.lname, obj.phone, obj.pfp) # noqa
+        return cls(obj.uid, obj.email, obj.fname, obj.lname, obj.phone, obj.pfp)  # noqa
 
     # NON-STATIC METHODS
-    def __init__(self, uid: str, email: str, fname: str = None, lname: str = None, phone: str = None, pfp=None): # noqa
+    def __init__(self, uid: str, email: str, fname: str = None, lname: str = None, phone: str = None, pfp=None):  # noqa
         self.uid = uid
         self.fname = fname
         self.lname = lname
