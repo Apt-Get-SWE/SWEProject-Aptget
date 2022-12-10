@@ -4,7 +4,7 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 
 from flask import Flask
-from flask_restx import Api
+from flask_restx import Api, Namespace
 import logging
 from .src.endpoints.login import GoogleLogIn, LogInSuccessPage, VerifyUserLogin
 from .src.constants import Constants
@@ -23,14 +23,20 @@ logging.basicConfig(level=logging.INFO,
                     '%(filename)s:%(lineno)s - %(message)s',
                     datefmt='%d-%b-%y %H:%M:%S')
 
+login = Namespace("login")
+post = Namespace("post")
+addr = Namespace("address")
+api.add_namespace(login)
+api.add_namespace(post)
+api.add_namespace(addr)
 
 api.add_resource(Index, "/")
-api.add_resource(GoogleLogIn, "/login", resource_class_kwargs={})
-api.add_resource(LogInSuccessPage, "/loggedin")
-api.add_resource(VerifyUserLogin, "/callback")
 api.add_resource(Menu, "/main_menu")
-api.add_resource(Posts, "/posts")
-api.add_resource(Addresses, "/addr")
+login.add_resource(GoogleLogIn, "/login", resource_class_kwargs={})
+login.add_resource(LogInSuccessPage, "/loggedin")
+login.add_resource(VerifyUserLogin, "/callback")
+post.add_resource(Posts, "/posts")
+addr.add_resource(Addresses, "/addr")
 
 if __name__ == "__main__":
     app.run(debug=True)
