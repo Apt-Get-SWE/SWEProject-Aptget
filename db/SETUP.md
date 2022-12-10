@@ -1,20 +1,27 @@
-# Local MongoDB Database Setup
-Steps:
-1. Install MongoDB instance
-2. Install MongoDB Shell
+# Setting up a local MongoDB database
 
-## How to install MongoDB Database
-Follow the instructions @ https://www.prisma.io/dataguide/mongodb/setting-up-a-local-mongodb-database#setting-up-mongodb-on-macos
+To install a local MongoDB database, follow the instructions here: https://www.prisma.io/dataguide/mongodb/setting-up-a-local-mongodb-database
 
 ## Environment Setup
-- For local connection, use `export ENV=local`
-- For remote connection, use `export DB_URI=SECRET_URI`
 
-- To run the local database, enter:
-    `cd mongodb_local`
-    `mongod --dbpath /usr/local/var/mongodb --logpath /usr/local/var/log/mongodb/mongo.log --fork`
+For <b>local</b> connections, run `export LOCAL=0`
 
-- To terminate the database process, enter:
-    `pkill mongod`
+For <b>remote</b> connections, run
+
+- `export CLOUD=1`
+- `export USER=USERNAME`
+- `export PASS=PASSWORD`
+
+where `USER` is the URI username and `PASS` is the URI password. 
+
+In the event where both `LOCAL` and `CLOUD` environment variables are exported, priority is given to `LOCAL`. See `connect_db()` in `server/src/query/query.py` for details.
+
+To run the local database on a <b>UNIX</b> system, run:
+- `cd PATH_TO_DB_DIRECTORY`
+- `mongod --dbpath /usr/local/var/mongodb --logpath /usr/local/var/log/mongodb/mongo.log --fork`
+
+To run the local database on Windows or Linux, follow the instructions in the link above.
+
+To terminate the local database process, run `pkill mongod`
 
 
