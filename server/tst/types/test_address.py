@@ -1,4 +1,6 @@
 from ...src.types.address import Address
+from server.src.query import query as q
+import os
 
 
 class TestAddress:
@@ -39,13 +41,13 @@ class TestAddress:
         assert data == '{"aid": "123", "building": "370 Jay St", "city": "Brooklyn", "state": "NY", "zipcode": "11201"}'  # noqa
 
     def test_query(self):
-        return  # CI/CD test don't work w/ localdb
+        if os.getenv('LOCAL') == q.LOCAL:
+            Address.insert({"aid": "123", "building": "370 Jay St",
+                            "city": "Brooklyn", "state": "NY",
+                            "zipcode": "11201"})
 
-        Address.insert({"aid": "123", "building": "370 Jay St",
-                       "city": "Brooklyn", "state": "NY", "zipcode": "11201"})
+            res = Address.find_all({})
+            assert type(res) == list
 
-        res = Address.find_all({})
-        assert type(res) == list
-
-        res = Address.find_one({})
-        assert type(res) == dict
+            res = Address.find_one({})
+            assert type(res) == dict

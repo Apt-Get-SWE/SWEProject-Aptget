@@ -1,4 +1,6 @@
 from ...src.types.post import Post
+from server.src.query import query as q
+import os
 
 
 class TestPost:
@@ -33,12 +35,12 @@ class TestPost:
         assert data == '{"aid": "345", "condition": "new", "descr": "willing to negotiate", "list_dt": "10/29/2022 10:11:53", "pid": "123", "price": "24.99", "sold": "False", "title": "Selling chairs!", "uid": "234"}'  # noqa
 
     def test_query(self):
-        return  # CI/CD test don't work w/ localdb
+        if os.getenv('LOCAL') == q.LOCAL:
 
-        # post.insert({'test': 'post'}, True)
+            # post.insert({'test': 'post'}, True)
 
-        res = Post.find_all({}, True)
-        assert type(res) == list
+            res = Post.find_all({}, True)
+            assert type(res) == list
 
-        res = Post.find_one({}, True)
-        assert type(res) == dict
+            res = Post.find_one({}, True)
+            assert type(res) == dict

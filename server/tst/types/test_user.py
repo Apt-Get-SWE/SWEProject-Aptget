@@ -1,7 +1,6 @@
 import os
 from ...src.types.user import User
-
-ENV = os.getenv('ENV')
+from server.src.query import query as q
 
 
 class TestUser:
@@ -34,30 +33,27 @@ class TestUser:
             '"phone": "1234567890", "uid": "123"}'
 
     def test_insert_find(self):
-        return  # avoid in CI/CD
+        if os.getenv('LOCAL') == q.LOCAL:
 
-        if ENV != 'local':
-            return
+            user = User("123", "netid@nyu.edu", "John", "Doe",
+                        "1234567890", "https://www.google.com")
+            user.save()
 
-        user = User("123", "netid@nyu.edu", "John", "Doe",
-                    "1234567890", "https://www.google.com")
-        user.save()
+            data = User.find_one({'uid': '123'})
+            assert data['email'] == 'netid@nyu.edu'
 
-        data = User.find_one({'uid': '123'})
-        assert data['email'] == 'netid@nyu.edu'
+            data = User.find_all({'uid': '123'})
+            assert type(data) == list
+            assert type(data[0]) == dict
 
-        data = User.find_all({'uid': '123'})
-        assert type(data) == list
-        assert type(data[0]) == dict
+            found = User.exists({'uid': '123'})
+            assert found
 
-        found = User.exists({'uid': '123'})
-        assert found
+            count = User.count({'uid': '123'})
+            assert type(count) == int
 
-        count = User.count({'uid': '123'})
-        assert type(count) == int
+            User.delete_one({'uid': '123'})
+            assert User.count({'uid': '123'}) == count - 1
 
-        User.delete_one({'uid': '123'})
-        assert User.count({'uid': '123'}) == count - 1
-
-        User.delete_all({'uid': '123'})
-        assert User.count({'uid': '123'}) == 0
+            User.delete_all({'uid': '123'})
+            assert User.count({'uid': '123'}) == 0

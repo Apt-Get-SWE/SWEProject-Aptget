@@ -3,60 +3,60 @@ from pymongo import collection, results
 import os
 # import logging
 
-os.environ['ENV'] = 'local'
 # LOGGER = logging.getLogger(__name__)
 # LOGGER.setLevel(logging.INFO)
 TEST_USER = {'test': 'user'}
+COLLECTION = 'users'
 
 
 class TestClass:
     def test_getcollection(self):
-        return  # CI/CD test don't work w/ localdb
-        users = q.get_collection('apt-get', 'users')
-        assert type(users) == collection.Collection
+        if os.environ.get('LOCAL') == q.LOCAL:
+            collec = q.get_collection(COLLECTION)
+            assert type(collec) == collection.Collection
 
     def test_insert(self, data=TEST_USER):
-        return  # CI/CD test don't work w/ localdb
-        q.insert('users', data)
+        if os.environ.get('LOCAL') == q.LOCAL:
+            q.insert(COLLECTION, data)
 
     def test_findone(self):
-        return  # CI/CD test don't work w/ localdb
-        if not q.exists('users', TEST_USER):
-            self.test_insert(TEST_USER)
-        result = q.find_one('users', TEST_USER)
-        assert type(result) == dict
+        if os.environ.get('LOCAL') == q.LOCAL:
+            if not q.exists(COLLECTION, TEST_USER):
+                self.test_insert(TEST_USER)
+            result = q.find_one(COLLECTION, TEST_USER)
+            assert type(result) == dict
 
     def test_findall(self):
-        return  # CI/CD test don't work w/ localdb
-        if not q.exists('users', TEST_USER):
-            self.test_insert(TEST_USER)
-        result = q.find_all('users', {})
-        assert type(result) == list
+        if os.environ.get('LOCAL') == q.LOCAL:
+            if not q.exists(COLLECTION, TEST_USER):
+                self.test_insert(TEST_USER)
+            result = q.find_all(COLLECTION)
+            assert type(result) == list
 
     def test_exists(self):
-        return  # CI/CD test don't work w/ localdb
-        if not q.exists('users', TEST_USER):
-            self.test_insert(TEST_USER)
-        return type(q.exists('users', TEST_USER))
+        if os.environ.get('LOCAL') == q.LOCAL:
+            if not q.exists(COLLECTION, TEST_USER):
+                self.test_insert(TEST_USER)
+            return type(q.exists(COLLECTION, TEST_USER))
 
     def test_count(self):
-        return  # CI/CD test don't work w/ localdb
-        if not q.exists('users', TEST_USER):
-            self.test_insert(TEST_USER)
-        result = q.count('users', TEST_USER)
-        assert type(result) == int
+        if os.environ.get('LOCAL') == q.LOCAL:
+            if not q.exists(COLLECTION, TEST_USER):
+                self.test_insert(TEST_USER)
+            result = q.count(COLLECTION, TEST_USER)
+            assert type(result) == int
 
     def test_delete_one(self):
-        return  # CI/CD test don't work w/ localdb
-        if not q.exists('users', TEST_USER):
-            self.test_insert(TEST_USER)
-        result = q.delete_one('users', TEST_USER)
-        # LOGGER.warning(result.raw_result)
-        assert type(result) == results.DeleteResult
+        if os.environ.get('LOCAL') == q.LOCAL:
+            if not q.exists(COLLECTION, TEST_USER):
+                self.test_insert(TEST_USER)
+            result = q.delete_one(COLLECTION, TEST_USER)
+            # LOGGER.warning(result.raw_result)
+            assert type(result) == results.DeleteResult
 
     def test_delete_all(self):
-        return  # CI/CD test don't work w/ localdb
-        if not q.exists('users', TEST_USER):
-            self.test_insert(TEST_USER)
-        result = q.delete_all('users', TEST_USER)
-        assert type(result) == results.DeleteResult
+        if os.environ.get('LOCAL') == q.LOCAL:
+            if not q.exists(COLLECTION, TEST_USER):
+                self.test_insert(TEST_USER)
+            result = q.delete_all(COLLECTION, {'test': 'user'})
+            assert type(result) == results.DeleteResult
