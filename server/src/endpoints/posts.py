@@ -1,7 +1,9 @@
-from flask_restx import Resource
+from flask_restx import Resource, Namespace
 from flask import request
 from ..types.post import Post
 from ..types.utils import parse_json
+
+api = Namespace("posts", "Operations related to item posts")
 
 
 class Posts(Resource):

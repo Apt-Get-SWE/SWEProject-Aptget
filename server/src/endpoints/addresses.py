@@ -1,8 +1,18 @@
-from flask_restx import Resource
+from flask_restx import Resource, Namespace, fields
 from flask import request
 from ..types.address import Address
 from ..types.utils import parse_json
 
+api = Namespace("addresses", "Operations related to addresses")
+
+
+addresses_field = api.model('NewAddress', {
+    "aid": fields.String,
+    "building" : fields.String,
+    "city"     : fields.String,
+    "state"    : fields.String,
+    "zipcode"  : fields.String,
+})
 
 class Addresses(Resource):
     def get(self):
@@ -26,6 +36,7 @@ class Addresses(Resource):
             'Data': formatted_data
         }
 
+    @api.expect(addresses_field)
     def post(self):
         '''
         Add a new address
