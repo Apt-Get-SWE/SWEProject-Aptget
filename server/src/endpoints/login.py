@@ -37,8 +37,7 @@ class GoogleLogIn(Resource):
 
     def get(self):
         """
-        The url to jump to needs to be manually added to the google
-        credentials.
+        Redirects user to google server for google account login authentication
 
         #TODO: store state in sessions to track logged in users and parse user
         #      info to store to db. Verify if
@@ -87,12 +86,14 @@ class VerifyUserLogin(Resource):
 
 
 class LogInSuccessPage(Resource):
-    """
-    Place holder for the page to jump to after log in is successful.
-    """
-
     def get(self):
-        # TODO: implement page
+        """
+        Check user login status.
+
+        This returns a static json to suit the swagger ui. The google authentication relies on redirecting to a
+        google link, which cannot be done in swagger ui. So the implementation in callback only works with our
+        react front end.
+        """
         return {
             'Type': 'Data',
             'Data': {'Login Status': {'Login Status': 'Successful'}},
