@@ -21,7 +21,7 @@ def connect_db():
         return MongoClient(f'mongodb+srv://{user}:{password}@cluster0.os9dia2.mongodb.net/apt-get')  # noqa
 
     raise Exception('Connection unable to be established!')
-    
+
 
 def get_collection(collection_name: str) -> collection.Collection:
     validate(collection_name)

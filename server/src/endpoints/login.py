@@ -38,10 +38,8 @@ class GoogleLogIn(Resource):
     def get(self):
         """
         Redirects user to google server for google account login authentication
-
-        #TODO: store state in sessions to track logged in users and parse user
-        #      info to store to db. Verify if
         """
+        # TODO: store state in sessions to track logged in users and parse user
 
         authorizationUrl, state = self.flow.authorization_url()
 
@@ -86,6 +84,10 @@ class VerifyUserLogin(Resource):
 
 
 class LogInSuccessPage(Resource):
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
+        self.ids = []
+
     def get(self):
         """
         Check user login status.
