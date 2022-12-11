@@ -1,4 +1,4 @@
-from ...src.endpoints.login import GoogleLogIn
+from ...src.endpoints.login import GoogleLogIn, LogInSuccessPage
 from google_auth_oauthlib.flow import Flow
 
 
@@ -23,3 +23,12 @@ class TestLogin:
             assert False
         except FileNotFoundError:
             assert True
+
+    def test_loggedin_endpoint(self):
+        p = LogInSuccessPage()
+        val = p.get()
+        assert val['Data']['Login Status'] == {'Login Status': 'Successful'}
+
+    def test_loggedin_failed(self):
+        p = LogInSuccessPage()
+        assert len(p.ids) == 0

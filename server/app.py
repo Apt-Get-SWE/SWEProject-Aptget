@@ -6,7 +6,7 @@ The endpoint called `endpoints` will return all available endpoints.
 from flask import Flask
 from flask_restx import Api, Namespace
 import logging
-from .src.endpoints.login import GoogleLogIn, LogInSuccessPage, VerifyUserLogin
+from .src.endpoints.login import GoogleLogIn, LogInSuccessPage
 from .src.constants import Constants
 from .src.endpoints.index import Index
 from .src.endpoints.menu import Menu
@@ -34,7 +34,7 @@ api.add_resource(Index, "/")
 api.add_resource(Menu, "/main_menu")
 login.add_resource(GoogleLogIn, "/login", resource_class_kwargs={})
 login.add_resource(LogInSuccessPage, "/loggedin")
-login.add_resource(VerifyUserLogin, "/callback")
+# login.add_resource(VerifyUserLogin, "/callback")
 post.add_resource(Posts, "/posts")
 addr.add_resource(Addresses, "/addr")
 
