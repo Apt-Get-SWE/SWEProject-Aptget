@@ -3,12 +3,13 @@ import pathlib
 import requests
 import google.auth.transport.requests
 from flask import redirect, request
-from flask_restx import Resource
+from flask_restx import Resource, Namespace
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
 from pip._vendor import cachecontrol
 from ..types.user import User
 
+api = Namespace("login", "Operations related to user login")
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # only for local testing
 
