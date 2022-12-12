@@ -20,6 +20,14 @@ Post format
 class Post:
     # STATIC METHODS
     @staticmethod
+    def update(filters: dict, new_values: dict) -> None:
+        if type(new_values) != dict:
+            raise ValueError(f'Cannot update with data of type{type(new_values)}')
+        if type(filters) != dict:
+            raise ValueError(f'Cannot update with filters of type{type(filters)}')
+        query.update('posts', filters, new_values)
+
+    @staticmethod
     def insert(data: dict) -> None:
         if type(data) != dict:
             raise ValueError(f'Cannot insert data of type{type(data)}')
@@ -32,6 +40,10 @@ class Post:
     @staticmethod
     def find_one(filters={}) -> dict:
         return query.find_one('posts', filters)
+
+    @staticmethod
+    def delete(pid) -> None:
+        return query.delete_one('posts', {'pid': pid})
 
     # CLASS METHODS
     @classmethod
@@ -63,4 +75,15 @@ class Post:
         return object_to_json_str(self)
 
     def save(self):
-        self.insert(self.__dict__)
+        # check if post already exists
+        if not Post.find_one({'pid': self.pid}):
+            Post.insert(self.__dict__)
+        else:
+            new_vals_dict = {"$set": {}}
+            new_vals_dict["$set"]["title"] = self.title
+            new_vals_dict["$set"]["descr"] = self.descr
+            new_vals_dict["$set"]["condition"] = self.condition
+            new_vals_dict["$set"]["price"] = self.price
+            new_vals_dict["$set"]["sold"] = self.sold
+
+            Post.update({'pid': self.pid}, new_vals_dict)
