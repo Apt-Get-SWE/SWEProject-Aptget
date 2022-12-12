@@ -9,10 +9,7 @@ COLLECTIONS = ('posts', 'items', 'users', 'addresses')
 
 
 def connect_db():
-    if os.getenv('LOCAL') == LOCAL:
-        return MongoClient('localhost', 27017)
-
-    elif os.getenv('CLOUD') == CLOUD:
+    if os.getenv('CLOUD', LOCAL) == CLOUD:
         user = os.getenv('USER')
         password = os.getenv('PASS')
         if user is None or password is None:
@@ -20,8 +17,10 @@ def connect_db():
 
         return MongoClient(f'mongodb+srv://{user}:{password}@cluster0.os9dia2.mongodb.net/apt-get')  # noqa
 
-    raise Exception('Connection unable to be established!')
-    
+    else:
+        print("nice")
+        return MongoClient('localhost', 27017)
+
 
 def get_collection(collection_name: str) -> collection.Collection:
     validate(collection_name)
