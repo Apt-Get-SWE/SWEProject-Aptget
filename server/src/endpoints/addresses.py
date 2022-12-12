@@ -8,11 +8,12 @@ api = Namespace("addresses", "Operations related to addresses")
 
 addresses_field = api.model('NewAddress', {
     "aid": fields.String,
-    "building" : fields.String,
-    "city"     : fields.String,
-    "state"    : fields.String,
-    "zipcode"  : fields.String,
+    "building": fields.String,
+    "city": fields.String,
+    "state": fields.String,
+    "zipcode": fields.String,
 })
+
 
 class Addresses(Resource):
     def get(self):
