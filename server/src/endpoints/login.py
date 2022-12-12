@@ -3,12 +3,13 @@ import pathlib
 import requests
 import google.auth.transport.requests
 from flask import redirect, request
-from flask_restx import Resource
+from flask_restx import Resource, Namespace
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
 from pip._vendor import cachecontrol
 from ..types.user import User
 
+api = Namespace("login", "Operations related to user login")
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # only for local testing
 
@@ -37,12 +38,9 @@ class GoogleLogIn(Resource):
 
     def get(self):
         """
-        The url to jump to needs to be manually added to the google
-        credentials.
-
-        #TODO: store state in sessions to track logged in users and parse user
-        #      info to store to db. Verify if
+        Redirects user to google server for google account login authentication
         """
+        # TODO: store state in sessions to track logged in users and parse user
 
         authorizationUrl, state = self.flow.authorization_url()
 
@@ -87,12 +85,18 @@ class VerifyUserLogin(Resource):
 
 
 class LogInSuccessPage(Resource):
-    """
-    Place holder for the page to jump to after log in is successful.
-    """
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
+        self.ids = []
 
     def get(self):
-        # TODO: implement page
+        """
+        Check user login status.
+
+        This returns a static json to suit the swagger ui. The google authentication relies on redirecting to a
+        google link, which cannot be done in swagger ui. So the implementation in callback only works with our
+        react front end.
+        """
         return {
             'Type': 'Data',
             'Data': {'Login Status': {'Login Status': 'Successful'}},
