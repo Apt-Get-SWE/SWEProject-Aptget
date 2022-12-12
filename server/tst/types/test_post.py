@@ -37,10 +37,8 @@ class TestPost:
     def test_query(self):
         if os.getenv('LOCAL') == q.LOCAL:
 
-            # post.insert({'test': 'post'}, True)
-
-            res = Post.find_all({}, True)
+            res = Post.find_all()
             assert type(res) == list
 
-            res = Post.find_one({}, True)
+            res = Post.find_one()
             assert type(res) == dict

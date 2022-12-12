@@ -56,7 +56,7 @@ class User:
 
     @staticmethod
     def exists(filters={}) -> bool:
-        return query.users('users', filters)
+        return query.exists('users', filters)
 
     @staticmethod
     def count(filters={}) -> int:

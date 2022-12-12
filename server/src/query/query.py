@@ -56,7 +56,9 @@ def find_one(collection_name: str, filters={}) -> dict:
 
     # fetch collection from db & return first instance of desired document
     collection = get_collection(collection_name)
-    return collection.find_one(filters)
+    result = collection.find_one(filters)
+
+    return result if result is not None else {}
 
 
 def exists(collection_name: str, filters={}) -> bool:
