@@ -17,131 +17,133 @@ class TestPosts:
             # insert one test data
             newpost = Post('1', '1', '1', 'test title', 'test descr', 'new', '1668994811', '100', 'False')
             newpost.save()
-        else:
-            assert False  # only run test with local db
 
     def test_query(self, client):
-        response = client.get('/posts/posts')
-        assert response.status_code == 200
-        assert response.json == {
-            'Type': 'Data',
-            'Title': 'List of posts',
-            'Data': {
-                'posts': [
-                    {
-                        'pid': '1',
-                        'uid': '1',
-                        'aid': '1',
-                        'title': 'test title',
-                        'descr': 'test descr',
-                        'condition': 'new',
-                        'list_dt': '1668994811',
-                        'price': '100',
-                        'sold': 'False',
-                    }
-                ]
+        if os.getenv('LOCAL') == q.LOCAL:
+            response = client.get('/posts/posts')
+            assert response.status_code == 200
+            assert response.json == {
+                'Type': 'Data',
+                'Title': 'List of posts',
+                'Data': {
+                    'posts': [
+                        {
+                            'pid': '1',
+                            'uid': '1',
+                            'aid': '1',
+                            'title': 'test title',
+                            'descr': 'test descr',
+                            'condition': 'new',
+                            'list_dt': '1668994811',
+                            'price': '100',
+                            'sold': 'False',
+                        }
+                    ]
+                }
             }
-        }
 
     def test_post(self, client):
-        response = client.post('/posts/posts', json={
-            'pid': '2',
-            'uid': '2',
-            'aid': '2',
-            'title': 'test title',
-            'descr': 'test descr',
-            'condition': 'new',
-            'list_dt': '1668994811',
-            'price': '100',
-            'sold': 'False',
-        })
-        assert response.status_code == 201
-        assert response.json == 'Post created successfully'
+        if os.getenv('LOCAL') == q.LOCAL:
+            response = client.post('/posts/posts', json={
+                'pid': '2',
+                'uid': '2',
+                'aid': '2',
+                'title': 'test title',
+                'descr': 'test descr',
+                'condition': 'new',
+                'list_dt': '1668994811',
+                'price': '100',
+                'sold': 'False',
+            })
+            assert response.status_code == 201
+            assert response.json == 'Post created successfully'
 
-        response = client.get('/posts/posts')
-        assert response.status_code == 200
-        assert response.json == {
-            'Type': 'Data',
-            'Title': 'List of posts',
-            'Data': {
-                'posts': [
-                    {
-                        'pid': '1',
-                        'uid': '1',
-                        'aid': '1',
-                        'title': 'test title',
-                        'descr': 'test descr',
-                        'condition': 'new',
-                        'list_dt': '1668994811',
-                        'price': '100',
-                        'sold': 'False',
-                    },
-                    {
-                        'pid': '2',
-                        'uid': '2',
-                        'aid': '2',
-                        'title': 'test title',
-                        'descr': 'test descr',
-                        'condition': 'new',
-                        'list_dt': '1668994811',
-                        'price': '100',
-                        'sold': 'False',
-                    }
-                ]
+            response = client.get('/posts/posts')
+            assert response.status_code == 200
+            assert response.json == {
+                'Type': 'Data',
+                'Title': 'List of posts',
+                'Data': {
+                    'posts': [
+                        {
+                            'pid': '1',
+                            'uid': '1',
+                            'aid': '1',
+                            'title': 'test title',
+                            'descr': 'test descr',
+                            'condition': 'new',
+                            'list_dt': '1668994811',
+                            'price': '100',
+                            'sold': 'False',
+                        },
+                        {
+                            'pid': '2',
+                            'uid': '2',
+                            'aid': '2',
+                            'title': 'test title',
+                            'descr': 'test descr',
+                            'condition': 'new',
+                            'list_dt': '1668994811',
+                            'price': '100',
+                            'sold': 'False',
+                        }
+                    ]
+                }
             }
-        }
 
-        # delete the new post
-        response = client.delete('/posts/posts', json={'pid': '2'})
+            # delete the new post
+            response = client.delete('/posts/posts', json={'pid': '2'})
 
     def test_put(self, client):
-        response = client.put('/posts/posts', json={
-            'pid': '1',
-            'uid': '1',
-            'aid': '1',
-            'title': 'test title updated',
-            'descr': 'test descr',
-            'condition': 'new',
-            'list_dt': '1668994811',
-            'price': '100',
-            'sold': 'False',
-        })
-        assert response.status_code == 200
-        assert response.json == 'Post updated successfully'
+        if os.getenv('LOCAL') == q.LOCAL:
+            response = client.put('/posts/posts', json={
+                'pid': '1',
+                'uid': '1',
+                'aid': '1',
+                'title': 'test title updated',
+                'descr': 'test descr',
+                'condition': 'new',
+                'list_dt': '1668994811',
+                'price': '100',
+                'sold': 'False',
+            })
+            assert response.status_code == 200
+            assert response.json == 'Post updated successfully'
 
-        response = client.get('/posts/posts')
-        assert response.status_code == 200
-        assert response.json == {
-            'Type': 'Data',
-            'Title': 'List of posts',
-            'Data': {
-                'posts': [
-                    {
-                        'pid': '1',
-                        'uid': '1',
-                        'aid': '1',
-                        'title': 'test title updated',
-                        'descr': 'test descr',
-                        'condition': 'new',
-                        'list_dt': '1668994811',
-                        'price': '100',
-                        'sold': 'False',
-                    }
-                ]
+            response = client.get('/posts/posts')
+            assert response.status_code == 200
+            assert response.json == {
+                'Type': 'Data',
+                'Title': 'List of posts',
+                'Data': {
+                    'posts': [
+                        {
+                            'pid': '1',
+                            'uid': '1',
+                            'aid': '1',
+                            'title': 'test title updated',
+                            'descr': 'test descr',
+                            'condition': 'new',
+                            'list_dt': '1668994811',
+                            'price': '100',
+                            'sold': 'False',
+                        }
+                    ]
+                }
             }
-        }
 
     def test_delete(self, client):
-        response = client.delete('/posts/posts', json={'pid': '1'})
-        assert response.status_code == 200
-        assert response.json == 'Post deleted successfully'
+        if os.getenv('LOCAL') == q.LOCAL:
+            response = client.delete('/posts/posts', json={'pid': '1'})
+            assert response.status_code == 200
+            assert response.json == 'Post deleted successfully'
 
-        response = client.get('/posts/posts')
-        assert response.status_code == 200
-        assert response.json == {
-            'Type': 'Data',
-            'Title': 'List of posts',
-            'Data': {
-                'posts': []
+            response = client.get('/posts/posts')
+            assert response.status_code == 200
+            assert response.json == {
+                'Type': 'Data',
+                'Title': 'List of posts',
+                'Data': {
+                    'posts': []
+                }
             }
-        }
