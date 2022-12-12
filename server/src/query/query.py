@@ -40,6 +40,8 @@ def update(collection_name: str, filters: dict, new_values: dict) -> None:
     return collection.update_one(filters, new_values)
 
 # insert document / JSON object to specified collection
+
+
 def insert(collection_name: str, data: dict) -> None:
     validate(collection_name)
     collection = get_collection(collection_name)

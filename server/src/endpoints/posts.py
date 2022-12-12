@@ -9,12 +9,12 @@ POST_JSON = api.model('Post', {
     "pid": fields.String(description="Post ID", required=True),
     "aid": fields.String(description="Address ID"),
     "uid": fields.String(description="User ID"),
-    "title" : fields.String(description="Title of the post"),
-    "descr"     : fields.String(description="Description of the post"),
-    "condition"    : fields.String(description="Condition of the item", enum=['new', 'like new', 'good', 'fair', 'poor']),
-    "list_dt"  : fields.DateTime(description="Date the item was listed"),
-    "price"  : fields.Float(description="Price of the item", min=0),
-    "sold"  : fields.Boolean(description="Whether the item has been sold"),
+    "title": fields.String(description="Title of the post"),
+    "descr": fields.String(description="Description of the post"),
+    "condition": fields.String(description="Condition of the item", enum=['new', 'like new', 'good', 'fair', 'poor']),
+    "list_dt": fields.DateTime(description="Date the item was listed"),
+    "price": fields.Float(description="Price of the item", min=0),
+    "sold": fields.Boolean(description="Whether the item has been sold"),
 })
 
 PID_JSON = api.model('PostID', {
@@ -26,6 +26,7 @@ GET_RESPONSE = api.model('PostGetResponse', {
     "Title": fields.String(description="Title of response"),
     "Data": fields.Raw(description="Data of response"),
 })
+
 
 class Posts(Resource):
     @api.produces(['application/json'])
