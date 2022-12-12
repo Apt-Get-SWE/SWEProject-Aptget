@@ -1,7 +1,6 @@
 import os
 from pymongo import MongoClient, collection, results
 
-
 LOCAL = '0'
 CLOUD = '1'
 DB_NAME = 'apt-get'
@@ -34,7 +33,15 @@ def validate(collection_name):
         raise Exception(f"Cannot insert to '{collection_name}'")
 
 
+# update document / JSON object to specified collection
+def update(collection_name: str, filters: dict, new_values: dict) -> None:
+    validate(collection_name)
+    collection = get_collection(collection_name)
+    return collection.update_one(filters, new_values)
+
 # insert document / JSON object to specified collection
+
+
 def insert(collection_name: str, data: dict) -> None:
     validate(collection_name)
     collection = get_collection(collection_name)
