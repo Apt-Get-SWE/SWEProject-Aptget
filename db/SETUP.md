@@ -4,8 +4,6 @@ To install a local MongoDB database, follow the instructions here: https://www.p
 
 ## Environment Setup
 
-For <b>local</b> connections, run `export LOCAL=0`
-
 For <b>remote</b> connections, run
 
 - `export CLOUD=1`
@@ -13,8 +11,6 @@ For <b>remote</b> connections, run
 - `export PASS=PASSWORD`
 
 where `USER` is the URI username and `PASS` is the URI password. 
-
-In the event where both `LOCAL` and `CLOUD` environment variables are exported, priority is given to `LOCAL`. See `connect_db()` in `server/src/query/query.py` for details.
 
 To run the local database on a <b>UNIX</b> system, run:
 - `cd PATH_TO_DB_DIRECTORY`

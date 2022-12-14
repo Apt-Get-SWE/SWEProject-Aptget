@@ -35,12 +35,10 @@ class TestPost:
         assert data == '{"aid": "345", "condition": "new", "descr": "willing to negotiate", "list_dt": "10/29/2022 10:11:53", "pid": "123", "price": "24.99", "sold": "False", "title": "Selling chairs!", "uid": "234"}'  # noqa
 
     def test_query(self):
-        if os.getenv('LOCAL') == q.LOCAL:
+        if os.getenv('CLOUD') == q.LOCAL:
 
-            # post.insert({'test': 'post'}, True)
-
-            res = Post.find_all({}, True)
+            res = Post.find_all()
             assert type(res) == list
 
-            res = Post.find_one({}, True)
+            res = Post.find_one()
             assert type(res) == dict

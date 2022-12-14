@@ -41,7 +41,7 @@ class TestAddress:
         assert data == '{"aid": "123", "building": "370 Jay St", "city": "Brooklyn", "state": "NY", "zipcode": "11201"}'  # noqa
 
     def test_query(self):
-        if os.getenv('LOCAL') == q.LOCAL:
+        if os.getenv('CLOUD') == q.LOCAL:
             Address.insert({"aid": "123", "building": "370 Jay St",
                             "city": "Brooklyn", "state": "NY",
                             "zipcode": "11201"})

@@ -33,7 +33,7 @@ class TestUser:
             '"phone": "1234567890", "uid": "123"}'
 
     def test_insert_find(self):
-        if os.getenv('LOCAL') == q.LOCAL:
+        if os.getenv('CLOUD') == q.LOCAL:
 
             user = User("123", "netid@nyu.edu", "John", "Doe",
                         "1234567890", "https://www.google.com")
