@@ -21,6 +21,10 @@ class Address:
     def insert(data: dict) -> None:
         if type(data) != dict:
             raise ValueError(f'Cannot insert data of type{type(data)}')
+
+        # aid is primary key
+        if 'aid' not in data:
+            raise ValueError('Cannot insert apartment without aid')
         query.insert('addresses', data)
 
     @staticmethod

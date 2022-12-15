@@ -17,3 +17,8 @@ class TestUtils:
         json_str = '{"email": "netid@nyu.edu", "uid": "123"}'
         obj = json_to_object(json_str)
         assert object_to_json_str(obj) == json_str
+
+    def test_test_object_to_json_st_fail(self):
+        json_str = '{"uid": "123", "email": "netid@nyu.edu"}'
+        obj = json_to_object(json_str)
+        assert object_to_json_str(obj) != json_str

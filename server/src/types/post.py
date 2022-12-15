@@ -22,15 +22,19 @@ class Post:
     @staticmethod
     def update(filters: dict, new_values: dict) -> None:
         if type(new_values) != dict:
-            raise ValueError(f'Cannot update with data of type{type(new_values)}')
+            raise ValueError(f'Cannot update with data of type{type(new_values)}')  # noqa
         if type(filters) != dict:
-            raise ValueError(f'Cannot update with filters of type{type(filters)}')
+            raise ValueError(f'Cannot update with filters of type{type(filters)}')  # noqa\
         query.update('posts', filters, new_values)
 
     @staticmethod
     def insert(data: dict) -> None:
         if type(data) != dict:
             raise ValueError(f'Cannot insert data of type{type(data)}')
+
+        # pid is primary key
+        if 'pid' not in data:
+            raise ValueError('Cannot insert post without pid')
         query.insert('posts', data)
 
     @staticmethod

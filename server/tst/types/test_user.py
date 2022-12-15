@@ -1,6 +1,7 @@
 import os
 from ...src.types.user import User
 from server.src.query import query as q
+import pytest
 
 
 class TestUser:
@@ -57,3 +58,9 @@ class TestUser:
 
             User.delete_all({'uid': '123'})
             assert User.count({'uid': '123'}) == 0
+
+    def test_insert_fail(self):
+        with pytest.raises(ValueError):
+            data = {"fname": "John", "lname": "Doe", "phone": "1234567890",
+                    "pfp": "https://www.google.com"}
+            User.insert(data)

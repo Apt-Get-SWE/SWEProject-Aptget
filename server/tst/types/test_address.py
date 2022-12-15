@@ -1,6 +1,7 @@
 from ...src.types.address import Address
 from server.src.query import query as q
 import os
+import pytest
 
 
 class TestAddress:
@@ -51,3 +52,9 @@ class TestAddress:
 
             res = Address.find_one({})
             assert type(res) == dict
+
+    def test_insert_fail(self):
+        with pytest.raises(ValueError):
+            data = {"building": "370 Jay St", "city": "Brooklyn",
+                    "state": "NY", "zipcode": "11201"}
+            Address.insert(data)
