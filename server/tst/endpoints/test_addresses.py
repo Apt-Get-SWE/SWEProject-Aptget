@@ -1,20 +1,44 @@
-import flask
-from ...src.endpoints.addresses import Addresses
+import pytest
+import os
+from server.app import app
+from server.src.query import query as q
+from ...src.types.address import Address
 
 
-class TestPosts:
-    def test_query(self):
-        return  # TODO: setup testing local db
-        # Test with a valid query
-        with flask.Flask(__name__).test_request_context() as flask_context:
-            flask_context.request.args = {"zip": "11201"}
+class TestAddr:
+    @pytest.fixture
+    def client(self):
+        app.config['TESTING'] = True
+        with app.test_client() as client:
+            yield client
 
-            addr = Addresses()
-            response = addr.get()
-            assert response['Type'] == 'Data'
-            assert response['Title'] == 'List of addresses'
-            assert response['Data'] is not None
+    def setup(self):
+        if os.getenv('CLOUD') == q.LOCAL:
+            # insert one test data
+            newaddr = Address('0', 'test bldg', 'test city', 'test state', '00000')
+            newaddr.save()
 
-            # Assert zip code is correct
-            for aid, addr in response['Data'].items():
-                assert addr['zipcode'] == '11201'
+    def test_query(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            response = client.get('/addresses/addr')
+            assert response.status_code == 200
+            assert response.json['Type'] == 'Data'
+            assert response.json['Title'] == 'List of addresses'
+            assert isinstance(response.json['Data'], dict)
+            assert len(response.json['Data']) > 0
+
+    def test_post(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            response = client.post('/addresses/addr', json={
+                "aid": "1",
+                "building": "test bldg",
+                "city": "test city",
+                "state": "test state",
+                "zipcode": "00000"
+            })
+            assert response.status_code == 201
+            assert response.json == "Address created successfully"
+
+            response = client.post('/addresses/addr')
+            assert response.status_code == 415
+            assert response.json == "Content-Type not supported!"
