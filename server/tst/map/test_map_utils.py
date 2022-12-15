@@ -14,8 +14,8 @@ class TestMapUtils:
         assert serializeParam["testkey2"] == "false"
         assert serializeParam["testkey3"] == "1|2|3"
 
+    @pytest.mark.skip(reason="calc_distance function is not used and need refactoring")
     def test_calc_distance(self):
-        return  # FIXME: this test is failing
         addr1 = (823.12, 923.17)
         addr2 = (-221.4, 2.97)
         result = calcDistance(addr1, addr2)
@@ -29,8 +29,8 @@ class TestMapUtils:
         assert result[0]['geometry']['location']['lat'] == 37.4224082
         assert result[0]['geometry']['location']['lng'] == -122.0856086
 
+    @pytest.mark.skip(reason="find_nearby_address function is not used and need refactoring")
     def test_find_nearby_address(self):
-        return  # FIXME: this test is failing
         address = (823.12, 923.17)
         addressList = [(823.12, 923.17), (-221.4, 2.97), (0, 0)]
         distance = 1000
