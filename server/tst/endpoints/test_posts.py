@@ -14,6 +14,10 @@ class TestPosts:
 
     def test_query(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
+            response = client.get('/posts/posts')
+            assert response.status_code == 200
+            assert not len(response.json['Data']) > 0
+
             newpost = Post('1', '1', '1', 'Local test first post',
                            'First test descr', 'new', '1668994811', '100', 'False')
             newpost.save()
@@ -31,6 +35,11 @@ class TestPosts:
     def test_post(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             response = client.post('/posts/posts', json={
+                'shoudl': 'fail',
+            })
+            assert response.status_code == 500
+
+            response = client.post('/posts/posts', json={
                 'pid': '2',
                 'uid': '2',
                 'aid': '2',
@@ -46,8 +55,6 @@ class TestPosts:
 
             response = client.get('/posts/posts')
 
-            print(response.json)
-
             assert response.status_code == 200
             assert len(response.json['Data']) == 1
             assert response.json['Data']['2']['title'] == 'Local test second post'
@@ -58,6 +65,11 @@ class TestPosts:
 
     def test_put(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
+            response = client.post('/posts/posts', json={
+                'shoudl': 'fail',
+            })
+            assert response.status_code == 500
+
             newpost = Post('1', '1', '1', 'Local test first post',
                            'First test descr', 'new', '1668994811', '100', 'False')
             newpost.save()
@@ -78,8 +90,6 @@ class TestPosts:
 
             response = client.get('/posts/posts')
 
-            print(response.json)
-
             assert response.status_code == 200
             assert len(response.json['Data']) == 1
             assert response.json['Data']['1']['title'] == 'Updated local test first post'
@@ -94,13 +104,14 @@ class TestPosts:
                            'First test descr', 'new', '1668994811', '100', 'False')
             newpost.save()
 
+            response = client.delete('/posts/posts', json={'should': 'fail'})
+            assert response.status_code == 500
+
             response = client.delete('/posts/posts', json={'pid': '1'})
             assert response.status_code == 201
             assert response.json == 'Post deleted successfully'
 
             response = client.get('/posts/posts')
-
-            print(response.json)
 
             assert response.status_code == 200
             assert len(response.json['Data']) == 0
