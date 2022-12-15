@@ -12,7 +12,8 @@ class TestAddr:
         with app.test_client() as client:
             yield client
         # Clean up
-        q.delete_all('addresses', {})
+        if os.getenv('CLOUD') == q.LOCAL:
+            q.delete_all('addresses', {})
 
     def test_query_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
