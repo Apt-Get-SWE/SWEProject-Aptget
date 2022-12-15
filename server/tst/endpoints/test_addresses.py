@@ -11,15 +11,21 @@ class TestAddr:
         app.config['TESTING'] = True
         with app.test_client() as client:
             yield client
-
-    def setup(self):
+        # Clean up
         if os.getenv('CLOUD') == q.LOCAL:
-            # insert one test data
-            newaddr = Address('0', 'test bldg', 'test city', 'test state', '00000')
-            newaddr.save()
+            q.delete_all('addresses', {})
+
+    def test_query_fail(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            response = client.get('/addresses/addr')
+            assert response.status_code == 200
+            assert not len(response.json['Data']) > 0
 
     def test_query(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
+            newaddr = Address('0', 'test bldg', 'test city', 'test state', '00000')
+            newaddr.save()
+
             response = client.get('/addresses/addr')
             assert response.status_code == 200
             assert response.json['Type'] == 'Data'
@@ -30,7 +36,7 @@ class TestAddr:
     def test_post(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             response = client.post('/addresses/addr', json={
-                "aid": "1",
+                "aid": "0",
                 "building": "test bldg",
                 "city": "test city",
                 "state": "test state",
@@ -39,6 +45,10 @@ class TestAddr:
             assert response.status_code == 201
             assert response.json == "Address created successfully"
 
+    def test_post_fail(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
             response = client.post('/addresses/addr')
-            assert response.status_code == 415
-            assert response.json == "Content-Type not supported!"
+            assert response.status_code != 201
+
+            response = client.post('/addresses/addr', data="some illegal message")
+            assert response.status_code != 201

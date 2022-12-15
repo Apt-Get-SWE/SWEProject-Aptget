@@ -16,7 +16,6 @@ class TestAddress:
     def test_from_raw_addr(self):
         addr = Address.from_json(Address.process_raw_addr(
             "370 Jay St, Brooklyn, NY, 11201"))
-        print(addr.building)
         assert addr.building == "370 Jay St"
         assert addr.city == "Brooklyn"
         assert addr.state == "NY"
@@ -51,3 +50,5 @@ class TestAddress:
 
             res = Address.find_one({})
             assert type(res) == dict
+
+            q.delete_all('addresses', {})
