@@ -1,6 +1,7 @@
 from ...src.types.post import Post
 from server.src.query import query as q
 import os
+import pytest
 
 
 class TestPost:
@@ -42,3 +43,11 @@ class TestPost:
 
             res = Post.find_one()
             assert type(res) == dict
+
+    def test_insert_fail(self):
+        with pytest.raises(ValueError):
+            data = {"uid": "234", "aid": "345", "title": "Selling chairs!",
+                    "descr": "willing to negotiate", "condition": "new",
+                    "list_dt": "10/29/2022 10:11:53", "price": "24.99",
+                    "sold": "False"}
+            Post.insert(data)

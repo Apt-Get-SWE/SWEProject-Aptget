@@ -1,5 +1,6 @@
 from server.src.query import query as q
 from pymongo import collection, results
+import pytest
 import os
 # import logging
 
@@ -7,6 +8,7 @@ import os
 # LOGGER.setLevel(logging.INFO)
 TEST_USER = {'test': 'user'}
 COLLECTION = 'users'
+INVALID_COLLECTION = 'names'
 
 
 class TestClass:
@@ -14,6 +16,11 @@ class TestClass:
         if os.getenv('CLOUD') == q.LOCAL:
             collec = q.get_collection(COLLECTION)
             assert type(collec) == collection.Collection
+
+    def test_getcollection_fail(self):
+        if os.getenv('CLOUD') == q.LOCAL:
+            with pytest.raises(Exception):
+                q.get_collection(INVALID_COLLECTION)
 
     def test_insert(self, data=TEST_USER):
         if os.getenv('CLOUD') == q.LOCAL:
