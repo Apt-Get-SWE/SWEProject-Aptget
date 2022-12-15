@@ -87,8 +87,8 @@ class Posts(Resource):
             return 'Content-Type not supported!', 415
 
         # Parse pid, aid, uid, title, descr, condition, price, sold from json
-        post = Post.from_json(json)
         try:
+            post = Post.from_json(json)
             post.save()
             return "Post updated successfully", 201
         except Exception as e:
