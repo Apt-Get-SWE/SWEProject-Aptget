@@ -7,10 +7,17 @@ https://www.aptget.nyc/
 ## Project Description
 A online trading platform for buying and selling items between apartment residents in New York. The furniture turnover rate in New York is high, with people frequently moving, and leaving furnitures in good condition out on the street or in trash rooms. A marketplace for these furnitures with a building/neighborhood approach makes it easy for new and old residents to buy and sell furnitures.
 
-## How to run
-1. You need npm installed
-2. `make`
-3. `make run`
+## How to run tests in local environment
+1. You need mongodb installed, follow instructions [here](db/SETUP.md) to install
+2. Install all dependencies by running `make` (Suggest doing this in a new virtual environment)
+3. Set variable `export CLOUD=0` and start up local mongodb server by running `mongod --dbpath /usr/local/var/mongodb --logpath /usr/local/var/log/mongodb/mongo.log --fork`. (This needs to be run on macOS or Linux)
+4. Run test with `make all_tests`.
+
+## How to run server in local environment
+1. You need npm and mongodb installed. Follow instructions [here](db/SETUP.md) to install mongodb
+2. Set variable `export CLOUD=0` and start up local mongodb server by running `mongod --dbpath /usr/local/var/mongodb --logpath /usr/local/var/log/mongodb/mongo.log --fork`. (This needs to be run on macOS or Linux)
+3. `make`
+4. `make run`
 
 ## Tech Stack
 - Design: Figma
