@@ -51,7 +51,7 @@ class TestAddress:
 
             res = Address.find_one({})
             assert type(res) == dict
-            
+
             q.delete_all('addresses', {})
 
     def test_insert_fail(self):

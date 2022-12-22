@@ -9,6 +9,8 @@ class TestAddr:
     @pytest.fixture
     def client(self):
         app.config['TESTING'] = True
+        if os.getenv('CLOUD') == q.LOCAL:
+            q.delete_all('addresses', {})
         with app.test_client() as client:
             yield client
         # Clean up
