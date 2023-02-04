@@ -52,7 +52,7 @@ class GoogleLogIn(Resource):
             return redirect(f"{ROOT_URL}/endpoints")
 
 
-class VerifyUserLogin(Resource):
+class SaveUserLogin(Resource):
 
     def get(self):
         """
