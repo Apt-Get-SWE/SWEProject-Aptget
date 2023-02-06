@@ -9,7 +9,7 @@ from google.oauth2 import id_token
 from pip._vendor import cachecontrol
 from ..types.user import User
 
-api = Namespace("login", "Operations related to user login")
+api = Namespace("login", "Operations related to user login", path="/api/login")
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # only for local testing
 

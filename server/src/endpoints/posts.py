@@ -3,7 +3,7 @@ from flask import request
 from ..types.post import Post
 from ..types.utils import parse_json
 
-api = Namespace("posts", "Operations related to item posts")
+api = Namespace("posts", "Operations related to item posts", path="/api/posts")
 
 POST_JSON = api.model('Post', {
     "pid": fields.String(description="Post ID", required=True),
