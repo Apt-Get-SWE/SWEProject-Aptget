@@ -10,7 +10,7 @@ class TestGoogleAPI:
             "Validate": False,
             'URL': "www.randomurl.com"
         })
-        response = testapp.post('http://127.0.0.1:8000/serialize/serialize',
+        response = testapp.post('http://127.0.0.1:8000/api/serialize/serialize',
                                 headers={"Content-Type": "application/json"}, data=payload)
 
         assert 200 == response.status_code
@@ -23,6 +23,6 @@ class TestGoogleAPI:
             "Validate": 'False',
             'URL': "www.randomurl.com"
         })
-        response = testapp.post('http://127.0.0.1:8000/serialize/serialize',
+        response = testapp.post('http://127.0.0.1:8000/api/serialize/serialize',
                                 headers={"Content-Type": "application/json"}, data=payload)
         assert b'{}\n' == response.data

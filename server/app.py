@@ -16,11 +16,11 @@ from .src.endpoints.googleapi import GoogleAPIRequest, api as google
 app = Flask(__name__, static_folder=Constants.STATIC_FOLDER)
 blueprint = Blueprint('api', __name__, url_prefix='/api')
 api = Api(blueprint,
-    title='AptGet API',
-    version='v0.1',
-    doc='/docs',
-    base_url='/api'
-    )
+          title='AptGet API',
+          version='v0.1',
+          doc='/docs',
+          base_url='/api'
+          )
 app.register_blueprint(blueprint)
 
 logging.basicConfig(level=logging.INFO,
