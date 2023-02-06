@@ -26,22 +26,22 @@ class Constants:
             DEFAULT: CONTINUE,
             CHOICES: {
                 CONTINUE: {
-                    URL: '/main_menu',
+                    URL: 'api/main_menu',
                     METHOD: 'get',
                     TEXT: "Continue displaying menu"
                 },
                 LOGIN: {
-                    URL: '/loggedin',
+                    URL: 'api/loggedin',
                     METHOD: 'get',
                     TEXT: "Login with google"
                 },
                 POSTS: {
-                    URL: '/posts',
+                    URL: 'api/posts',
                     METHOD: 'get',
                     TEXT: "Get all posts"
                 },
                 ADDR: {
-                    URL: '/addr',
+                    URL: 'api/addr',
                     METHOD: 'get',
                     TEXT: "Get all addresses"
                 },

@@ -26,7 +26,7 @@ function Home() {
           <span className="Subtitle">find cheap stuff in your building.</span>
 
           <div className="SearchBar">
-            <img src={spotlight} />
+            <img src={spotlight} alt="spotlight" />
             <input className="AddressInput" type="text" name="address" placeholder="what's your address?" />
           </div>
 

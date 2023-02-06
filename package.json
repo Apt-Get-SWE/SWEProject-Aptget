@@ -2,6 +2,9 @@
   "name": "AptGet",
   "version": "0.1.0",
   "scripts": {
-    "postinstall": "cd server && npm install --prefix frontend && cd frontend && npm run build"
+    "postinstall": "cd server && npm install --prefix frontend && cd frontend && npm run build",
+    "backend": "gunicorn server.app:app --bind 0.0.0.0:8000",
+    "frontend": "cd server/frontend && npm run build && node server.js",
+    "start": "npm run backend & npm run frontend"
   }
 }

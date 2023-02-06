@@ -14,7 +14,7 @@ build:
 	cd $(API_DIR) && npm install --prefix frontend && cd frontend && npm run build
 
 run:
-	gunicorn server.app:app
+	npm run start
 
 clean:
 	rm -rf $(API_DIR)/frontend/build
