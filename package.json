@@ -4,8 +4,7 @@
   "scripts": {
     "postinstall": "cd server && npm install --prefix frontend && cd frontend && npm run build",
     "backend": "gunicorn server.app:app --bind 0.0.0.0:8000",
-    "frontend": "cd server/frontend && npm run build && serve -s build -l tcp://0.0.0.0:3000",
-    "proxy": "cd server/frontend && node server.js",
-    "start": "npm run backend & npm run frontend & npm run proxy"
+    "frontend": "cd server/frontend && npm run build && node server.js",
+    "start": "npm run backend & npm run frontend"
   }
 }
