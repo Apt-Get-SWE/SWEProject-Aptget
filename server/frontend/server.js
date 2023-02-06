@@ -6,7 +6,9 @@ const { createProxyMiddleware } = require('http-proxy-middleware')
 const port = process.env.PORT || 8080;
 
 var apiProxy = createProxyMiddleware('/api', { target: 'http://0.0.0.0:8000'});
+var swaggerProxy = createProxyMiddleware('/swaggerui', { target: 'http://0.0.0.0:8000'});
 app.use(apiProxy);
+app.use(swaggerProxy);
 
 // Serve the built frontend files
 app.use(express.static(path.join(__dirname, '/build')));
