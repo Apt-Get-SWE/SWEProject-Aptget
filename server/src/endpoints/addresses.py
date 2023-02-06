@@ -6,16 +6,24 @@ from ..types.utils import parse_json
 api = Namespace("addresses", "Operations related to addresses")
 
 
-addresses_field = api.model('NewAddress', {
-    "aid": fields.String,
-    "building": fields.String,
-    "city": fields.String,
-    "state": fields.String,
-    "zipcode": fields.String,
+addresses_field = api.model('Address', {
+    "aid": fields.String(description="Address ID", required=True),
+    "building": fields.String(description="Address building name"),
+    "city": fields.String(description="Address city name"),
+    "state": fields.String(description="Address state name"),
+    "zipcode": fields.String(description="Address zip code"),
+})
+
+GET_RESPONSE = api.model('AddressGetResponse', {
+    "Type": fields.String(description="Type of response"),
+    "Title": fields.String(description="Title of response"),
+    "Data": fields.Raw(description="Data of response"),
 })
 
 
 class Addresses(Resource):
+    @api.produces(['application/json'])
+    @api.marshal_with(GET_RESPONSE)
     def get(self):
         '''
         Returns a list of all existing addresses
@@ -38,6 +46,10 @@ class Addresses(Resource):
         }
 
     @api.expect(addresses_field)
+    @api.response(201, 'Address created successfully')
+    @api.response(500, 'Error saving address')
+    @api.response(415, 'Content-Type not supported!')
+    @api.produces(['text/plain'])
     def post(self):
         '''
         Add a new address
