@@ -28,7 +28,7 @@ class TestAddr:
             newaddr = Address('0', 'test bldg', 'test city', 'test state', '00000')
             newaddr.save()
 
-            response = client.get('/addresses/addr')
+            response = client.get('api/addresses/addr')
             assert response.status_code == 200
             assert response.json['Type'] == 'Data'
             assert response.json['Title'] == 'List of addresses'
@@ -37,7 +37,7 @@ class TestAddr:
 
     def test_post(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            response = client.post('/addresses/addr', json={
+            response = client.post('api/addresses/addr', json={
                 "aid": "0",
                 "building": "test bldg",
                 "city": "test city",
@@ -49,8 +49,8 @@ class TestAddr:
 
     def test_post_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            response = client.post('/addresses/addr')
+            response = client.post('api/addresses/addr')
             assert response.status_code != 201
 
-            response = client.post('/addresses/addr', data="some illegal message")
+            response = client.post('api/addresses/addr', data="some illegal message")
             assert response.status_code != 201
