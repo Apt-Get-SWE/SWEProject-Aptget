@@ -24,7 +24,7 @@ class Address:
 
         # aid is primary key
         if 'aid' not in data:
-            raise ValueError('Cannot insert apartment without aid')
+            raise KeyError('Cannot insert apartment without aid')
         query.insert('addresses', data)
 
     @staticmethod
