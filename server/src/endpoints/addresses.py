@@ -3,7 +3,7 @@ from flask import request
 from ..types.address import Address
 from ..types.utils import parse_json
 
-api = Namespace("addresses", "Operations related to addresses", path="/api/addresses")
+api = Namespace("addresses", "Operations related to addresses")
 
 
 addresses_field = api.model('NewAddress', {

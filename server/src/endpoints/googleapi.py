@@ -2,7 +2,7 @@ from flask_restx import Resource, Namespace, fields
 from flask import request
 from ..map.map_utils import serializeParameters
 
-api = Namespace("serialize", "Serializing google api request data", path="/api/serialize")
+api = Namespace("serialize", "Serializing google api request data")
 
 dummyQueryModel = api.model("queryRequest", {
     'Request Type': fields.String,
