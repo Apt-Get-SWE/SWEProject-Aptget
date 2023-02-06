@@ -19,7 +19,7 @@ class TestAddr:
 
     def test_query_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            response = client.get('/addresses/addr')
+            response = client.get('api/addresses/addr')
             assert response.status_code == 200
             assert not len(response.json['Data']) > 0
 

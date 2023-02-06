@@ -18,7 +18,7 @@ class TestPosts:
 
     def test_get_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            response = client.get('/posts/posts')
+            response = client.get('api/posts/posts')
             assert response.status_code == 200
             assert not len(response.json['Data']) > 0
 
@@ -28,7 +28,7 @@ class TestPosts:
                            'First test descr', 'new', '1668994811', '100', 'False')
             newpost.save()
 
-            response = client.get('/posts/posts')
+            response = client.get('api/posts/posts')
             assert response.status_code == 200
             assert len(response.json['Data']) == 1
 
@@ -61,7 +61,7 @@ class TestPosts:
             assert response.status_code == 201
             assert response.json == 'Post created successfully'
 
-            response = client.get('/posts/posts')
+            response = client.get('api/posts/posts')
 
             assert response.status_code == 200
             assert len(response.json['Data']) == 1
@@ -98,7 +98,7 @@ class TestPosts:
             assert response.status_code == 201
             assert response.json == 'Post updated successfully'
 
-            response = client.get('/posts/posts')
+            response = client.get('api/posts/posts')
 
             assert response.status_code == 200
             assert len(response.json['Data']) == 1
@@ -126,7 +126,7 @@ class TestPosts:
             assert response.status_code == 201
             assert response.json == 'Post deleted successfully'
 
-            response = client.get('/posts/posts')
+            response = client.get('api/posts/posts')
 
             assert response.status_code == 200
             assert len(response.json['Data']) == 0
