@@ -7,11 +7,11 @@ api = Namespace("addresses", "Operations related to addresses")
 
 
 addresses_field = api.model('NewAddress', {
-    "aid": fields.String,
-    "building": fields.String,
-    "city": fields.String,
-    "state": fields.String,
-    "zipcode": fields.String,
+    "aid": fields.String(description="Address ID", required=True),
+    "building": fields.String(description="Address building name"),
+    "city": fields.String(description="Address city name"),
+    "state": fields.String(description="Address state name"),
+    "zipcode": fields.String(description="Address zip code"),
 })
 
 
