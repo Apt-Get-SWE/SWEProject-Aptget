@@ -44,6 +44,10 @@ A online trading platform for buying and selling items between apartment residen
 - Post requests for items
 
 # Changelog
+## 2023.02.05
+- Separated frontend & backend servers
+- Express server serves frontend + proxies /api/* to backend Flask server
+
 ## 2022.11.4
 - Make menu api
 
