@@ -14,7 +14,7 @@ api = Namespace("login", "Operations related to user login")
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # only for local testing
 
 ENV = os.environ.get('ENV', 'local')  # default local, or else production
-ROOT_URL = "http://127.0.0.1:8000" if ENV == 'local'\
+ROOT_URL = "http://localhost:8080" if ENV == 'local'\
     else "https://www.aptget.nyc"
 
 GOOGLE_CLIENT_ID_TEST = "497541279341-qtudp4uvo0g39s0o4ops0mr2dsvemnp5.apps.googleusercontent.com"  # noqa
@@ -24,7 +24,7 @@ flow = Flow.from_client_secrets_file(
     client_secrets_file=CLIENT_SECRET_FILE,
     scopes=["https://www.googleapis.com/auth/userinfo.profile",
             "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri=f"{ROOT_URL}/callback")
+    redirect_uri=f"{ROOT_URL}/api/login/callback")
 
 
 class GoogleLogIn(Resource):
@@ -41,12 +41,12 @@ class GoogleLogIn(Resource):
         Redirects user to google server for google account login authentication
         """
         # TODO: store state in sessions to track logged in users and parse user
-
+        print(ROOT_URL)
         authorizationUrl, state = self.flow.authorization_url()
 
         if state:  # check
-            # return redirect(authorizationUrl)
-            return {"Redirect URL": authorizationUrl, "state": state}
+            return redirect(authorizationUrl)
+            # return {"Redirect URL": authorizationUrl, "state": state}
         else:
             # return {"Main menu" : f"{ROOT_URL}/"}
             return redirect(f"{ROOT_URL}/endpoints")

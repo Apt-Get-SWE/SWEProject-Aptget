@@ -7,7 +7,7 @@ function Home() {
 
       <div className="Navbar">
         <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <a className="LoginLink" href="/login">
+        <a className="LoginLink" href="/api/login/login">
           <div className="Login">
              <span className="login-text">Login</span>
           </div>
