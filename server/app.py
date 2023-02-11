@@ -6,7 +6,7 @@ The endpoint called `endpoints` will return all available endpoints.
 from flask import Flask, Blueprint
 from flask_restx import Api
 import logging
-from .src.endpoints.login import GoogleLogIn, LogInSuccessPage, api as login
+from .src.endpoints.login import GoogleLogIn, LogInSuccessPage, SaveUserLogin, api as login
 from .src.constants import Constants
 from .src.endpoints.menu import Menu
 from .src.endpoints.posts import Posts, api as posts
@@ -36,7 +36,7 @@ api.add_namespace(google)
 api.add_resource(Menu, "/main_menu")
 login.add_resource(GoogleLogIn, "/login", resource_class_kwargs={})
 login.add_resource(LogInSuccessPage, "/loggedin")
-# login.add_resource(VerifyUserLogin, "/callback")
+login.add_resource(SaveUserLogin, "/callback")
 posts.add_resource(Posts, "/posts")
 addr.add_resource(Addresses, "/addr")
 google.add_resource(GoogleAPIRequest, "/serialize")
