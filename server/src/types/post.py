@@ -1,5 +1,6 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
+from pymongo import results
 
 """
 Post format
@@ -22,15 +23,15 @@ class Post:
     @staticmethod
     def update(filters: dict, new_values: dict) -> None:
         if type(new_values) != dict:
-            raise ValueError(f'Cannot update with data of type{type(new_values)}')  # noqa
+            raise TypeError(f'Cannot update with data of type{type(new_values)}')  # noqa
         if type(filters) != dict:
-            raise ValueError(f'Cannot update with filters of type{type(filters)}')  # noqa\
+            raise TypeError(f'Cannot update with filters of type{type(filters)}')  # noqa\
         query.update('posts', filters, new_values)
 
     @staticmethod
     def insert(data: dict) -> None:
         if type(data) != dict:
-            raise ValueError(f'Cannot insert data of type{type(data)}')
+            raise TypeError(f'Cannot insert data of type{type(data)}')
 
         # pid is primary key
         if 'pid' not in data:
@@ -46,8 +47,12 @@ class Post:
         return query.find_one('posts', filters)
 
     @staticmethod
-    def delete(pid) -> None:
+    def delete(pid) -> results.DeleteResult:
         return query.delete_one('posts', {'pid': pid})
+
+    @staticmethod
+    def delete_all(filters={}) -> results.DeleteResult:
+        return query.delete_all('posts', filters)
 
     # CLASS METHODS
     @classmethod
