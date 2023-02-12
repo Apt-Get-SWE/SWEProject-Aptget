@@ -89,7 +89,7 @@ class Addresses(Resource):
             return "Address created successfully", 201
         except Exception as e:
             return f'Error saving address: {e}', 500
-        
+
     @api.expect(addresses_field)
     @api.response(200, 'Address updated successfully')
     @api.response(500, 'Error saving address')
@@ -106,8 +106,8 @@ class Addresses(Resource):
             return 'Content-Type not supported!', 415
 
         # Parse aid, building, city, state, zipcode from json
-        addr = Address.from_json(json)
         try:
+            addr = Address.from_json(json)
             addr.save()
             return "Address modified successfully", 200
         except Exception as e:
