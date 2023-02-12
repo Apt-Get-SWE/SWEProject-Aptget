@@ -84,4 +84,27 @@ class Addresses(Resource):
             addr.save()
             return "Address created successfully", 201
         except Exception as e:
-            return f'Error saving post: {e}', 500
+            return f'Error saving address: {e}', 500
+        
+    @api.expect(addresses_field)
+    @api.response(200, 'Address updated successfully')
+    @api.response(500, 'Error saving address')
+    @api.response(415, 'Content-Type not supported!')
+    @api.produces(['text/plain'])
+    def put(self):
+        '''
+        Modify an existing address
+        '''
+        content_type = request.headers.get('Content-Type')
+        if content_type == 'application/json':
+            json = request.json
+        else:
+            return 'Content-Type not supported!', 415
+
+        # Parse aid, building, city, state, zipcode from json
+        addr = Address.from_json(json)
+        try:
+            addr.save()
+            return "Address modified successfully", 200
+        except Exception as e:
+            return f'Error saving address: {e}', 500
