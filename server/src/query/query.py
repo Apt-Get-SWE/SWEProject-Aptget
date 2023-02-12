@@ -22,7 +22,7 @@ def connect_db():
 
 def get_collection(collection_name: str) -> collection.Collection:
     if collection_name.lower() not in COLLECTIONS:
-        raise Exception(f"Cannot insert to '{collection_name}'")
+        raise Exception(f"Cannot find collection '{collection_name}'")
     client = connect_db()
     return client[DB_NAME][collection_name]
 
