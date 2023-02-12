@@ -1,5 +1,6 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
+from pymongo import results
 
 """
 Post format
@@ -46,8 +47,12 @@ class Post:
         return query.find_one('posts', filters)
 
     @staticmethod
-    def delete(pid) -> None:
+    def delete(pid) -> results.DeleteResult:
         return query.delete_one('posts', {'pid': pid})
+
+    @staticmethod
+    def delete_all(filters={}) -> results.DeleteResult:
+        return query.delete_all('posts', filters)
 
     # CLASS METHODS
     @classmethod

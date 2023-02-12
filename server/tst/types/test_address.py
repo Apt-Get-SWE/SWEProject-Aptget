@@ -89,7 +89,7 @@ class TestAddress:
             res = Address.find_one()
             assert type(res) == dict
 
-            q.delete_all('addresses')
+            Address.delete_all()
 
     def test_address_insert_no_aid(self, insert_no_aid):
         with pytest.raises(ValueError):

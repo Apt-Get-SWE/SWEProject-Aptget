@@ -1,5 +1,6 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
+from pymongo import results
 import usaddress
 import json
 
@@ -34,6 +35,22 @@ class Address:
     @staticmethod
     def find_one(filters={}) -> dict:
         return query.find_one('addresses', filters)
+
+    @staticmethod
+    def exists(filters={}) -> bool:
+        return query.exists('addresses', filters)
+
+    @staticmethod
+    def count(filters={}) -> int:
+        return query.count('addresses', filters)
+
+    @staticmethod
+    def delete_one(filters={}) -> results.DeleteResult:
+        return query.delete_one('addresses', filters)
+
+    @staticmethod
+    def delete_all(filters={}) -> results.DeleteResult:
+        return query.delete_all('addresses', filters)
 
     @staticmethod
     def process_raw_addr(raw: str):

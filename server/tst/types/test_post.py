@@ -74,7 +74,7 @@ class TestPost:
             res = Post.find_one()
             assert type(res) == dict
 
-            q.delete_all('posts')
+            Post.delete_all()
 
     def test_post_insert_no_pid(self, insert_no_pid):
         with pytest.raises(ValueError):
