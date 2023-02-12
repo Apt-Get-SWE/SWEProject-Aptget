@@ -22,6 +22,9 @@ GET_RESPONSE = api.model('AddressGetResponse', {
 
 
 class Addresses(Resource):
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
+
     @api.produces(['application/json'])
     @api.marshal_with(GET_RESPONSE)
     def get(self):
