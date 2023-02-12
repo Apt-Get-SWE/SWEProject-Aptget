@@ -15,6 +15,10 @@ addresses_field = api.model('Address', {
     "zipcode": fields.String(description="Address zip code"),
 })
 
+aid_field = api.model('Address ID', {
+    "aid": fields.String(description="Address ID", required=True)
+})
+
 GET_RESPONSE = api.model('AddressGetResponse', {
     "Type": fields.String(description="Type of response"),
     "Title": fields.String(description="Title of response"),
@@ -84,4 +88,49 @@ class Addresses(Resource):
             addr.save()
             return "Address created successfully", 201
         except Exception as e:
-            return f'Error saving post: {e}', 500
+            return f'Error saving address: {e}', 500
+
+    @api.expect(addresses_field)
+    @api.response(200, 'Address updated successfully')
+    @api.response(500, 'Error saving address')
+    @api.response(415, 'Content-Type not supported!')
+    @api.produces(['text/plain'])
+    def put(self):
+        '''
+        Modify an existing address
+        '''
+        content_type = request.headers.get('Content-Type')
+        if content_type == 'application/json':
+            json = request.json
+        else:
+            return 'Content-Type not supported!', 415
+
+        # Parse aid, building, city, state, zipcode from json
+        try:
+            addr = Address.from_json(json)
+            addr.save()
+            return "Address modified successfully", 200
+        except Exception as e:
+            return f'Error saving address: {e}', 500
+
+    @api.expect(aid_field)
+    @api.response(200, 'Address deleted successfully')
+    @api.response(500, 'Error deleting address')
+    @api.response(415, 'Content-Type not supported!')
+    @api.produces(['text/plain'])
+    def delete(self):
+        """
+        Deletes an address
+        """
+        # For deleting an existing address
+        content_type = request.headers.get('Content-Type')
+        if content_type == 'application/json':
+            json = request.json
+        else:
+            return 'Content-Type not supported!', 415
+
+        try:
+            Address.delete_one({'aid': json['aid']})
+            return "Address deleted successfully", 200
+        except Exception as e:
+            return f'Error deleting address: {e}', 500

@@ -35,6 +35,46 @@ class TestAddr:
             assert isinstance(response.json['Data'], dict)
             assert len(response.json['Data']) > 0
 
+            response = client.delete('api/addresses/addr', json={
+                'aid': '0'
+            })
+            assert response.status_code == 200
+
+    def test_put(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            newAddr = Address('1', 'test bldg', 'test city', 'test state', '00000')
+            newAddr.save()
+
+            response = client.put('api/addresses/addr', json={
+                "aid": "1",
+                "building": "altered bldg",
+                "city": "altered city",
+                "state": "altered state",
+                "zipcode": "00000"
+            })
+            assert response.status_code == 200
+            assert response.json == "Address modified successfully"
+
+            response = client.get('api/addresses/addr')
+
+            assert response.status_code == 200
+            assert len(response.json['Data']) == 1
+            assert response.json['Data']['1']['building'] == "altered bldg"
+            assert response.json['Data']['1']['city'] == "altered city"
+            assert response.json['Data']['1']['state'] == "altered state"
+
+            response = client.delete('api/addresses/addr', json={
+                'aid': '1'
+            })
+            assert response.status_code == 200
+
+    def test_put_fail(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            response = client.put('api/addresses/addr', json={
+                'should': 'fail',
+            })
+            assert response.status_code == 500
+
     def test_post_and_prefix_query(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             response = client.post('api/addresses/addr', json={
@@ -61,6 +101,11 @@ class TestAddr:
             assert isinstance(response.json['Data'], dict)
             assert len(response.json['Data']) == 1
 
+            response = client.delete('api/addresses/addr', json={
+                'aid': '0'
+            })
+            assert response.status_code == 200
+
     def test_post_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             response = client.post('api/addresses/addr')
@@ -68,3 +113,21 @@ class TestAddr:
 
             response = client.post('api/addresses/addr', data="some illegal message")
             assert response.status_code != 201
+
+    def test_delete_fail(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            response = client.delete('api/addresses/addr', json={'should': 'fail'})
+            assert response.status_code == 500
+
+    def test_delete(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            newAddr = Address('2', 'test bldg', 'test city', 'test state', '00000')
+            newAddr.save()
+
+            response = client.delete('api/addresses/addr', json={'aid': '2'})
+            assert response.status_code == 200
+            assert response.json == "Address deleted successfully"
+
+            response = client.get('api/addresses/addr')
+            assert response.status_code == 200
+            assert len(response.json['Data']) == 0

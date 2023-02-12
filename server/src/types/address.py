@@ -29,6 +29,14 @@ class Address:
         query.insert('addresses', data)
 
     @staticmethod
+    def update(filters: dict, new_values: dict) -> None:
+        if type(new_values) != dict:
+            raise TypeError(f'Cannot update with data of type{type(new_values)}')
+        if type(filters) != dict:
+            raise TypeError(f'Cannot update with filters of type{type(filters)}')
+        query.update('addresses', filters, new_values)
+
+    @staticmethod
     def find_all(filters={}) -> list:
         return query.find_all('addresses', filters)
 
@@ -86,4 +94,14 @@ class Address:
         return object_to_json_str(self)
 
     def save(self):
-        self.insert(self.__dict__)
+        # check if post already exists
+        if not Address.find_one({'aid': self.aid}):
+            Address.insert(self.__dict__)
+        else:
+            new_vals_dict = {"$set": {}}
+            new_vals_dict["$set"]["building"] = self.building
+            new_vals_dict["$set"]["city"] = self.city
+            new_vals_dict["$set"]["state"] = self.state
+            new_vals_dict["$set"]["zipcode"] = self.zipcode
+
+            Address.update({'aid': self.aid}, new_vals_dict)
