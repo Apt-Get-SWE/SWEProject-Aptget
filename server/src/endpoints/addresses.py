@@ -14,6 +14,10 @@ addresses_field = api.model('Address', {
     "zipcode": fields.String(description="Address zip code"),
 })
 
+address_search_field = api.model('AddressSearch', {
+    "addressPrefix": fields.String(description="Prefix of an Address as a String", required=False)
+})
+
 GET_RESPONSE = api.model('AddressGetResponse', {
     "Type": fields.String(description="Type of response"),
     "Title": fields.String(description="Title of response"),
@@ -22,13 +26,31 @@ GET_RESPONSE = api.model('AddressGetResponse', {
 
 
 class Addresses(Resource):
+
+    @api.expect(address_search_field)
     @api.produces(['application/json'])
     @api.marshal_with(GET_RESPONSE)
     def get(self):
         '''
         Returns a list of all existing addresses
         '''
-        data = parse_json(Address.find_all())
+        content_type = request.headers.get('Content-Type')
+        if content_type == 'application/json':
+            json = request.json
+        else:
+            return 'Content-Type not supported!', 415
+
+        # Parse address from json
+        address = json.get('addressPrefix')
+        if address:
+            filters = {
+                'building': {
+                    '$regex': f'^{address}'
+                }
+            }
+            data = parse_json(Address.find_all(filters))
+        else:
+            data = parse_json(Address.find_all())
 
         # If zip code url param is provided, filter by zip code
         zipcode = request.args.get('zip')
