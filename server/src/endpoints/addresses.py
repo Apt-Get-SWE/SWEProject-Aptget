@@ -1,3 +1,4 @@
+import logging
 from flask_restx import Resource, Namespace, fields
 from flask import request
 from ..types.address import Address
@@ -22,13 +23,28 @@ GET_RESPONSE = api.model('AddressGetResponse', {
 
 
 class Addresses(Resource):
+
+    @api.doc(params={'addressPrefix': 'Address prefix'})
     @api.produces(['application/json'])
     @api.marshal_with(GET_RESPONSE)
     def get(self):
         '''
         Returns a list of all existing addresses
         '''
-        data = parse_json(Address.find_all())
+        prefix = request.args.get('addressPrefix')
+        logging.info(f'addressPrefix: {prefix}')
+
+        if prefix:
+            filters = {
+                'building': {
+                    '$regex': f'^{prefix}'
+                }
+            }
+            data = parse_json(Address.find_all(filters))
+            logging.info(f'Found {len(data)} addresses')
+        else:
+            data = parse_json(Address.find_all())
+            logging.info(f'No prefix Found {len(data)} addresses')
 
         # If zip code url param is provided, filter by zip code
         zipcode = request.args.get('zip')
