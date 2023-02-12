@@ -53,6 +53,8 @@ class GoogleLogIn(Resource):
 
 
 class SaveUserLogin(Resource):
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
 
     def get(self):
         """

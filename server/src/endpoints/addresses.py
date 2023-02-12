@@ -23,6 +23,8 @@ GET_RESPONSE = api.model('AddressGetResponse', {
 
 
 class Addresses(Resource):
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
 
     @api.doc(params={'addressPrefix': 'Address prefix'})
     @api.produces(['application/json'])
