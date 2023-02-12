@@ -35,7 +35,7 @@ class TestAddr:
             assert isinstance(response.json['Data'], dict)
             assert len(response.json['Data']) > 0
 
-    def test_post(self, client):
+    def test_post_and_prefix_query(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             response = client.post('api/addresses/addr', json={
                 "aid": "0",
@@ -46,6 +46,20 @@ class TestAddr:
             })
             assert response.status_code == 201
             assert response.json == "Address created successfully"
+
+            response = client.get('api/addresses/addr?addressPrefix=shouldGiveNoResults')
+            assert response.status_code == 200
+            assert response.json['Type'] == 'Data'
+            assert response.json['Title'] == 'List of addresses'
+            assert isinstance(response.json['Data'], dict)
+            assert len(response.json['Data']) == 0
+
+            response = client.get('api/addresses/addr?addressPrefix=test')
+            assert response.status_code == 200
+            assert response.json['Type'] == 'Data'
+            assert response.json['Title'] == 'List of addresses'
+            assert isinstance(response.json['Data'], dict)
+            assert len(response.json['Data']) == 1
 
     def test_post_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:

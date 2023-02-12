@@ -1,3 +1,4 @@
+import logging
 from flask_restx import Resource, Namespace, fields
 from flask import request
 from ..types.address import Address
@@ -14,10 +15,6 @@ addresses_field = api.model('Address', {
     "zipcode": fields.String(description="Address zip code"),
 })
 
-address_search_field = api.model('AddressSearch', {
-    "addressPrefix": fields.String(description="Prefix of an Address as a String", required=False)
-})
-
 GET_RESPONSE = api.model('AddressGetResponse', {
     "Type": fields.String(description="Type of response"),
     "Title": fields.String(description="Title of response"),
@@ -27,30 +24,27 @@ GET_RESPONSE = api.model('AddressGetResponse', {
 
 class Addresses(Resource):
 
-    @api.expect(address_search_field)
+    @api.doc(params={'addressPrefix': 'Address prefix'})
     @api.produces(['application/json'])
     @api.marshal_with(GET_RESPONSE)
     def get(self):
         '''
         Returns a list of all existing addresses
         '''
-        content_type = request.headers.get('Content-Type')
-        if content_type == 'application/json':
-            json = request.json
-        else:
-            return 'Content-Type not supported!', 415
+        prefix = request.args.get('addressPrefix')
+        logging.info(f'addressPrefix: {prefix}')
 
-        # Parse address from json
-        address = json.get('addressPrefix')
-        if address:
+        if prefix:
             filters = {
                 'building': {
-                    '$regex': f'^{address}'
+                    '$regex': f'^{prefix}'
                 }
             }
             data = parse_json(Address.find_all(filters))
+            logging.info(f'Found {len(data)} addresses')
         else:
             data = parse_json(Address.find_all())
+            logging.info(f'No prefix Found {len(data)} addresses')
 
         # If zip code url param is provided, filter by zip code
         zipcode = request.args.get('zip')
