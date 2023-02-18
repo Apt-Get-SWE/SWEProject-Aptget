@@ -98,9 +98,16 @@ class RestrictedArea(Resource):
         Restricted area for logged in users.
         TODO: implement frontend page for logged in users
         """
-        return {
-            'Type': 'Data',
-            'Data': {'Login Status': {'Login Status': f'Successfully logged'}},
-            'Title': 'Login Successful Page'
-        }
-
+        user_id = session.get("user_id")
+        if user_id is not None:
+            return {
+                'Type': 'Data',
+                'Data': {'Login Status': {'Login Status': f'Successfully logged in user {user_id}'}},
+                'Title': 'Login Successful Page'
+            }
+        else:
+            return {
+                'Type': 'Data',
+                'Data': {'Login Status': {'Login Status': 'Not logged in!'}},
+                'Title': 'Login Error'
+            }
