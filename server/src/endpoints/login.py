@@ -2,7 +2,7 @@ import os
 import pathlib
 import requests
 import google.auth.transport.requests
-from flask import redirect, request
+from flask import redirect, request, session
 from flask_restx import Resource, Namespace
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
@@ -81,26 +81,26 @@ class SaveUserLogin(Resource):
         # Insert user in DB if not already there
         user = User(google_id, email, fname=fname, lname=lname, pfp=pfp)
         user.save()
+        session['user_id'] = google_id
+        # messages = json.dumps
 
         # TODO: redirect to register or load existing user data.
-        return user.to_dict()
+        return redirect(f"{ROOT_URL}/api/login/restricted_area")
 
 
-class LogInSuccessPage(Resource):
+class RestrictedArea(Resource):
     def __init__(self, api=None, *args, **kwargs):
         super().__init__(api, *args, **kwargs)
         self.ids = []
 
     def get(self):
         """
-        Check user login status.
-
-        This returns a static json to suit the swagger ui. The google authentication relies on redirecting to a
-        google link, which cannot be done in swagger ui. So the implementation in callback only works with our
-        react front end.
+        Restricted area for logged in users.
+        TODO: implement frontend page for logged in users
         """
         return {
             'Type': 'Data',
-            'Data': {'Login Status': {'Login Status': 'Successful'}},
+            'Data': {'Login Status': {'Login Status': f'Successfully logged'}},
             'Title': 'Login Successful Page'
         }
+

@@ -6,7 +6,7 @@ The endpoint called `endpoints` will return all available endpoints.
 from flask import Flask, Blueprint
 from flask_restx import Api
 import logging
-from .src.endpoints.login import GoogleLogIn, LogInSuccessPage, SaveUserLogin, api as login
+from .src.endpoints.login import GoogleLogIn, RestrictedArea, SaveUserLogin, api as login
 from .src.constants import Constants
 from .src.endpoints.menu import Menu
 from .src.endpoints.posts import Posts, api as posts
@@ -22,6 +22,7 @@ api = Api(blueprint,
           base_url='/api'
           )
 app.register_blueprint(blueprint)
+app.secret_key = "some_random_key"  # This secret key is to support the use of session. TODO: make this a env variable
 
 logging.basicConfig(level=logging.INFO,
                     format='[%(levelname)s] %(asctime)s - '
@@ -35,7 +36,7 @@ api.add_namespace(google)
 
 api.add_resource(Menu, "/main_menu")
 login.add_resource(GoogleLogIn, "/login", resource_class_kwargs={})
-login.add_resource(LogInSuccessPage, "/loggedin")
+login.add_resource(RestrictedArea, "/restricted_area", resource_class_kwargs={})
 login.add_resource(SaveUserLogin, "/callback")
 posts.add_resource(Posts, "/posts")
 addr.add_resource(Addresses, "/addr")
