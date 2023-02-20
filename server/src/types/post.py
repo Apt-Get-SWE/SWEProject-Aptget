@@ -59,6 +59,10 @@ class Post:
         return query.exists('posts', filters)
 
     @staticmethod
+    def count(filters={}) -> int:
+        return query.count('posts', filters)
+
+    @staticmethod
     def delete(pid) -> results.DeleteResult:
         return query.delete_one('posts', {'pid': pid})
 
