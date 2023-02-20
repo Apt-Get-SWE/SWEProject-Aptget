@@ -85,8 +85,9 @@ class SaveUserLogin(Resource):
         # messages = json.dumps
 
         # TODO: redirect to register or load existing user data.
-        # for now redirect to home page
-        return redirect(f"{ROOT_URL}")
+        # for now redirecting to register page regardless of data persistence in db.
+        # TODO: detect existence in db
+        return redirect(f"{ROOT_URL}/register")
 
 
 class RestrictedArea(Resource):

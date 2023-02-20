@@ -8,7 +8,6 @@ function Home() {
 
   if (sessionStorage.getItem("loggedIn") !== "1" || loggedIn === false) {
     axios.get("/api/login/restricted_area").then((res) => {
-      console.log(res.data.Status)
       if (res.data && res.data.Status === "Success") {
         sessionStorage.setItem("loggedIn", "1")
         setLoggedIn(true)
