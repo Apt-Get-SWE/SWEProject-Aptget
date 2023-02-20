@@ -9,11 +9,16 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import UserInfoForm from './Components/UserInfoForm/UserInfoForm';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/register",
+    element: <UserInfoForm />
   },
   {
     path: "*",
