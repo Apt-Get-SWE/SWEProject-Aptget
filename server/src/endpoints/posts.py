@@ -69,10 +69,10 @@ class Posts(Resource):
         try:
             post = Post.from_json(json)
             cookie_user_id = session.get("user_id")
-            
+
             if cookie_user_id is None:
                 return "User not logged in", 401
-            
+
             if cookie_user_id != post.uid:
                 return "User does not own post", 401
 
@@ -137,7 +137,7 @@ class Posts(Resource):
 
             if cookie_user_id is None:
                 return "User not logged in", 401
-            
+
             if cookie_user_id != post.uid:
                 return "User does not own post", 401
 
