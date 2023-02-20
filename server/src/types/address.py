@@ -3,6 +3,7 @@ from .utils import json_to_object, object_to_json_str
 from pymongo import results
 import usaddress
 import json
+import logging
 
 """
 Address format
@@ -26,14 +27,22 @@ class Address:
         # aid is primary key
         if 'aid' not in data:
             raise ValueError('Cannot insert apartment without aid')
-        query.insert('addresses', data)
+
+        if query.exists({'aid': data['aid']}):
+            logging.info(
+                f'Address with address id {data["aid"]} already exists')
+        else:
+            query.insert('addresses', data)
+            logging.info(f'Inserted address {data} into database')
 
     @staticmethod
     def update(filters: dict, new_values: dict) -> None:
         if type(new_values) != dict:
-            raise TypeError(f'Cannot update with data of type{type(new_values)}')
+            raise TypeError(
+                f'Cannot update with data of type{type(new_values)}')
         if type(filters) != dict:
-            raise TypeError(f'Cannot update with filters of type{type(filters)}')
+            raise TypeError(
+                f'Cannot update with filters of type{type(filters)}')
         query.update('addresses', filters, new_values)
 
     @staticmethod

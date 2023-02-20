@@ -1,6 +1,7 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
 from pymongo import results
+import logging
 
 """
 Post format
@@ -36,7 +37,13 @@ class Post:
         # pid is primary key
         if 'pid' not in data:
             raise ValueError('Cannot insert post without pid')
-        query.insert('posts', data)
+
+        if query.exists({'pid': data['pid']}):
+            logging.info(
+                f'Post with post id {data["pid"]} already exists')
+        else:
+            query.insert('posts', data)
+            logging.info(f'Inserted post {data} into database')
 
     @staticmethod
     def find_all(filters={}) -> list:
