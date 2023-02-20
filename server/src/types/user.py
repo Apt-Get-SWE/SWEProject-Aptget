@@ -40,7 +40,7 @@ class User:
 
         logging.info(f'Inserting user {data}')
 
-        if query.exists({'uid': data['uid']}):
+        if User.exists({'uid': data['uid']}):
             logging.info(f'User with user id {data["uid"]} already exists')
         else:
             query.insert('users', data)

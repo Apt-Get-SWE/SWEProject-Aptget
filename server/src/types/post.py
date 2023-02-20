@@ -38,7 +38,7 @@ class Post:
         if 'pid' not in data:
             raise ValueError('Cannot insert post without pid')
 
-        if query.exists({'pid': data['pid']}):
+        if Post.exists({'pid': data['pid']}):
             logging.info(
                 f'Post with post id {data["pid"]} already exists')
         else:
@@ -52,6 +52,10 @@ class Post:
     @staticmethod
     def find_one(filters={}) -> dict:
         return query.find_one('posts', filters)
+
+    @staticmethod
+    def exists(filters={}) -> bool:
+        return query.exists('posts', filters)
 
     @staticmethod
     def delete(pid) -> results.DeleteResult:

@@ -28,7 +28,7 @@ class Address:
         if 'aid' not in data:
             raise ValueError('Cannot insert apartment without aid')
 
-        if query.exists({'aid': data['aid']}):
+        if Address.exists({'aid': data['aid']}):
             logging.info(
                 f'Address with address id {data["aid"]} already exists')
         else:
