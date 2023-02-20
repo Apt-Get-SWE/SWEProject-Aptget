@@ -71,3 +71,8 @@ def delete_one(collection_name: str, filters={}) -> results.DeleteResult:
 def delete_all(collection_name: str, filters={}) -> results.DeleteResult:
     collection = get_collection(collection_name)
     return collection.delete_many(filters)
+
+
+def count_documents(collection_name: str, filters={}) -> int:
+    collection = get_collection(collection_name)
+    return collection.count_documents(filters)

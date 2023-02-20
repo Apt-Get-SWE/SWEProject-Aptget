@@ -1,5 +1,5 @@
 import logging
-from pymongo import results, errors
+from pymongo import results
 from ..query import query
 from .utils import json_to_object, object_to_json_str
 
@@ -40,11 +40,11 @@ class User:
 
         logging.info(f'Inserting user {data}')
 
-        try:
+        if User.exists({'uid': data['uid']}):
+            logging.info(f'User with user id {data["uid"]} already exists')
+        else:
             query.insert('users', data)
             logging.info(f'Inserted user {data} into database')
-        except errors.DuplicateKeyError:
-            logging.info(f'User with uid {data["uid"]} already exists')
 
     @staticmethod
     def find_all(filters={}) -> list:
