@@ -50,8 +50,7 @@ def find_all(collection_name: str, filters={}) -> list:
 def find_one(collection_name: str, filters={}) -> dict:
     # fetch collection from db & return first instance of desired document
     collection = get_collection(collection_name)
-    result = collection.find_one(filters)
-    return result if result is not None else {}
+    return collection.find_one(filters)
 
 
 def exists(collection_name: str, filters={}) -> bool:

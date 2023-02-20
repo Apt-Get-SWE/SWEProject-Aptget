@@ -35,7 +35,6 @@ class TestUser:
 
     def test_insert_find(self):
         if os.getenv('CLOUD') == q.LOCAL:
-
             user = User("123", "netid@nyu.edu", "John", "Doe",
                         "1234567890", "https://www.google.com")
             user.save()

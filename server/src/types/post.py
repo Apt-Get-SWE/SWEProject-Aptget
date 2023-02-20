@@ -1,6 +1,7 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
-from pymongo import results
+from pymongo import results, errors
+import logging
 
 """
 Post format
@@ -36,7 +37,14 @@ class Post:
         # pid is primary key
         if 'pid' not in data:
             raise ValueError('Cannot insert post without pid')
-        query.insert('posts', data)
+
+        try:
+            if Post.exists({'pid': data['pid']}):
+                raise errors.DuplicateKeyError
+            query.insert('posts', data)
+            logging.info(f'Inserted post {data} into database')
+        except errors.DuplicateKeyError:
+            logging.info(f'Post with post id {data["pid"]} already exists')
 
     @staticmethod
     def find_all(filters={}) -> list:
@@ -45,6 +53,14 @@ class Post:
     @staticmethod
     def find_one(filters={}) -> dict:
         return query.find_one('posts', filters)
+
+    @staticmethod
+    def exists(filters={}) -> bool:
+        return query.exists('posts', filters)
+
+    @staticmethod
+    def count(filters={}) -> int:
+        return query.count('posts', filters)
 
     @staticmethod
     def delete(pid) -> results.DeleteResult:
@@ -85,7 +101,7 @@ class Post:
 
     def save(self):
         # check if post already exists
-        if not Post.find_one({'pid': self.pid}):
+        if not Post.exists({'pid': self.pid}):
             Post.insert(self.__dict__)
         else:
             new_vals_dict = {"$set": {}}

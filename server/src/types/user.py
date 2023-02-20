@@ -41,10 +41,12 @@ class User:
         logging.info(f'Inserting user {data}')
 
         try:
+            if User.exists({'uid': data['uid']}):
+                raise errors.DuplicateKeyError()
             query.insert('users', data)
             logging.info(f'Inserted user {data} into database')
         except errors.DuplicateKeyError:
-            logging.info(f'User with uid {data["uid"]} already exists')
+            logging.info(f'User with user id {data["uid"]} already exists')
 
     @staticmethod
     def find_all(filters={}) -> list:
@@ -95,4 +97,13 @@ class User:
         return object_to_json_str(self)
 
     def save(self):
-        self.insert(self.__dict__)
+        if not User.exists({'uid': self.uid}):
+            self.insert(self.__dict__)
+        else:
+            new_vals_dict = {"$set": {}}
+            new_vals_dict["$set"]["fname"] = self.fname
+            new_vals_dict["$set"]["lname"] = self.lname
+            new_vals_dict["$set"]["phone"] = self.phone
+            new_vals_dict["$set"]["email"] = self.email
+
+            User.update({'uid': self.uid}, new_vals_dict)
