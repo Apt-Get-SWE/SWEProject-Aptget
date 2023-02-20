@@ -65,8 +65,8 @@ class TestPost:
 
     def test_post_query(self, query):
         if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
-            print(q.LOCAL)
             Post.insert(query)
+            assert q.count('posts') == 1
 
             res = Post.find_all()
             assert type(res) == list
@@ -74,7 +74,7 @@ class TestPost:
             res = Post.find_one()
             assert type(res) == dict
 
-            Post.delete_all()
+            # Post.delete_all()
 
     def test_post_insert_no_pid(self, insert_no_pid):
         with pytest.raises(ValueError):

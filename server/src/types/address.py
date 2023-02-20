@@ -1,6 +1,6 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
-from pymongo import results
+from pymongo import results, errors
 import usaddress
 import json
 import logging
@@ -28,12 +28,13 @@ class Address:
         if 'aid' not in data:
             raise ValueError('Cannot insert apartment without aid')
 
-        if Address.exists({'aid': data['aid']}):
-            logging.info(
-                f'Address with address id {data["aid"]} already exists')
-        else:
+        try:
+            if Address.exists({'aid': data['aid']}):
+                raise errors.DuplicateKeyError()
             query.insert('addresses', data)
             logging.info(f'Inserted address {data} into database')
+        except errors.DuplicateKeyError:
+            logging.info(f'Address with address id {data["aid"]} already exists')
 
     @staticmethod
     def update(filters: dict, new_values: dict) -> None:
@@ -104,7 +105,7 @@ class Address:
 
     def save(self):
         # check if post already exists
-        if not Address.find_one({'aid': self.aid}):
+        if not Address.exists({'aid': self.aid}):
             Address.insert(self.__dict__)
         else:
             new_vals_dict = {"$set": {}}
