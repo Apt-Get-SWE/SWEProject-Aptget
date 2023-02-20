@@ -1,17 +1,37 @@
 import './Home.css';
 import spotlight from "./spotlight.svg"
+import axios from 'axios'
+import { useState } from 'react';
 
 function Home() {
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  if (sessionStorage.getItem("loggedIn") !== "1" || loggedIn === false) {
+    axios.get("/api/login/restricted_area").then((res) => {
+      console.log(res.data.Status)
+      if (res.data && res.data.Status === "Success") {
+        sessionStorage.setItem("loggedIn", "1")
+        setLoggedIn(true)
+      }
+    });
+  }
+
   return (
     <div className="Home">
 
       <div className="Navbar">
         <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <a className="LoginLink" href="/api/login/login">
-          <div className="Login">
-             <span className="login-text">Login</span>
-          </div>
-        </a>
+        {
+          loggedIn
+            ? 
+            <div></div>
+            :
+            <a className="LoginLink" href="/api/login/login">
+              <div className="Login">
+                <span className="login-text">Login</span>
+              </div>
+            </a>
+        }
       </div>
 
       <div className="Body">

@@ -85,7 +85,8 @@ class SaveUserLogin(Resource):
         # messages = json.dumps
 
         # TODO: redirect to register or load existing user data.
-        return redirect(f"{ROOT_URL}/api/login/restricted_area")
+        # for now redirect to home page
+        return redirect(f"{ROOT_URL}")
 
 
 class RestrictedArea(Resource):
@@ -103,11 +104,11 @@ class RestrictedArea(Resource):
             return {
                 'Type': 'Data',
                 'Data': {'Login Status': {'Login Status': f'Successfully logged in user {user_id}'}},
-                'Title': 'Login Successful Page'
+                'Status': 'Success'
             }
         else:
             return {
                 'Type': 'Data',
                 'Data': {'Login Status': {'Login Status': 'Not logged in!'}},
-                'Title': 'Login Error'
+                'Status': 'Failed'
             }
