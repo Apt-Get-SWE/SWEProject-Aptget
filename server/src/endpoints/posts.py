@@ -1,5 +1,5 @@
 from flask_restx import Resource, Namespace, fields
-from flask import request
+from flask import request, session
 from ..types.post import Post
 from ..types.utils import parse_json
 
@@ -68,6 +68,14 @@ class Posts(Resource):
         # Parse pid, aid, uid, title, descr, condition, price, sold from json
         try:
             post = Post.from_json(json)
+            cookie_user_id = session.get("user_id")
+            
+            if cookie_user_id is None:
+                return "User not logged in", 401
+            
+            if cookie_user_id != post.uid:
+                return "User does not own post", 401
+
             post.save()
             return "Post created successfully", 201
         except Exception as e:
