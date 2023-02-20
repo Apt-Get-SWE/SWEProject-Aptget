@@ -40,7 +40,7 @@ class TestPosts:
 
             # delete the new post
             response = client.delete('api/posts/posts', json={'pid': '1'})
-            assert response.status_code == 201
+            assert response.status_code == 201, response.json
 
     def test_post_no_login_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
@@ -98,7 +98,7 @@ class TestPosts:
                 'price': '100',
                 'sold': 'False',
             })
-            assert response.status_code == 201
+            assert response.status_code == 201, response.json
             assert response.json == 'Post created successfully'
 
             response = client.get('api/posts/posts')
@@ -109,7 +109,7 @@ class TestPosts:
 
             # delete the new post
             response = client.delete('api/posts/posts', json={'pid': '2'})
-            assert response.status_code == 201
+            assert response.status_code == 201, response.json
 
     def test_put_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
@@ -120,7 +120,7 @@ class TestPosts:
 
     def test_put(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            newpost = Post('1', '1', '1', 'Local test first post',
+            newpost = Post('1', '1337', '1', 'Local test first post',
                            'First test descr', 'new', '1668994811', '100', 'False')
             newpost.save()
 
@@ -135,7 +135,7 @@ class TestPosts:
                 'price': '100',
                 'sold': 'False',
             })
-            assert response.status_code == 201
+            assert response.status_code == 201, response.json
             assert response.json == 'Post updated successfully'
 
             response = client.get('api/posts/posts')
@@ -146,7 +146,7 @@ class TestPosts:
 
             # delete the new post
             response = client.delete('api/posts/posts', json={'pid': '1'})
-            assert response.status_code == 201
+            assert response.status_code == 201, response.json
 
     def test_delete_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
@@ -163,7 +163,7 @@ class TestPosts:
             assert response.status_code == 500
 
             response = client.delete('api/posts/posts', json={'pid': '1'})
-            assert response.status_code == 201
+            assert response.status_code == 201, response.json
             assert response.json == 'Post deleted successfully'
 
             response = client.get('api/posts/posts')

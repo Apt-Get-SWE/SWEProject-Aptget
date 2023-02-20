@@ -138,7 +138,7 @@ class Posts(Resource):
             if cookie_user_id is None:
                 return "User not logged in", 401
 
-            if cookie_user_id != post.uid:
+            if cookie_user_id != post['uid']:
                 return "User does not own post", 401
 
             Post.delete(json['pid'])
