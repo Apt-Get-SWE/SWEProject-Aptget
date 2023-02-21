@@ -51,6 +51,10 @@ A online trading platform for buying and selling items between apartment residen
 
 # Changelog
 
+## 2023.02.20
+
+- Frontend Google login now working
+
 ## 2023.02.12
 
 - Allow searching for addresses by prefix
