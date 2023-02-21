@@ -56,6 +56,8 @@ A online trading platform for buying and selling items between apartment residen
 - Frontend google login redirection now working
 - Added session for authentication feature
 - /post APIs now require login auth token
+- All class types now update preexisting documents if duplicate key is inserted
+- Fixed bugs related to inserting data to database
 
 ## 2023.02.12
 
