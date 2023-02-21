@@ -53,6 +53,7 @@ A online trading platform for buying and selling items between apartment residen
 
 ## 2023.02.19
 
+- Frontend google login redirection now working
 - Added session for authentication feature
 - /post APIs now require login auth token
 
