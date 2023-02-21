@@ -51,6 +51,11 @@ A online trading platform for buying and selling items between apartment residen
 
 # Changelog
 
+## 2023.02.19
+
+- Added session for authentication feature
+- /post APIs now require login auth token
+
 ## 2023.02.12
 
 - Allow searching for addresses by prefix
