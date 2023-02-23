@@ -42,11 +42,21 @@ class User:
 
         try:
             if User.exists({'uid': data['uid']}):
-                raise errors.DuplicateKeyError()
+                raise errors.DuplicateKeyError(f'User with user id {data["uid"]} already exists')
             query.insert('users', data)
             logging.info(f'Inserted user {data} into database')
         except errors.DuplicateKeyError:
             logging.info(f'User with user id {data["uid"]} already exists')
+
+    @staticmethod
+    def update(filters: dict, new_values: dict) -> None:
+        if type(new_values) != dict:
+            raise TypeError(
+                f'Cannot update with data of type{type(new_values)}')
+        if type(filters) != dict:
+            raise TypeError(
+                f'Cannot update with filters of type{type(filters)}')
+        query.update('users', filters, new_values)
 
     @staticmethod
     def find_all(filters={}) -> list:

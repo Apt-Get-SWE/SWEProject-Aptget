@@ -22,14 +22,6 @@ Post format
 class Post:
     # STATIC METHODS
     @staticmethod
-    def update(filters: dict, new_values: dict) -> None:
-        if type(new_values) != dict:
-            raise TypeError(f'Cannot update with data of type{type(new_values)}')  # noqa
-        if type(filters) != dict:
-            raise TypeError(f'Cannot update with filters of type{type(filters)}')  # noqa\
-        query.update('posts', filters, new_values)
-
-    @staticmethod
     def insert(data: dict) -> None:
         if type(data) != dict:
             raise TypeError(f'Cannot insert data of type{type(data)}')
@@ -40,11 +32,19 @@ class Post:
 
         try:
             if Post.exists({'pid': data['pid']}):
-                raise errors.DuplicateKeyError
+                raise errors.DuplicateKeyError(f'Post with post id {data["pid"]} already exists')
             query.insert('posts', data)
             logging.info(f'Inserted post {data} into database')
         except errors.DuplicateKeyError:
             logging.info(f'Post with post id {data["pid"]} already exists')
+
+    @staticmethod
+    def update(filters: dict, new_values: dict) -> None:
+        if type(new_values) != dict:
+            raise TypeError(f'Cannot update with data of type{type(new_values)}')  # noqa
+        if type(filters) != dict:
+            raise TypeError(f'Cannot update with filters of type{type(filters)}')  # noqa\
+        query.update('posts', filters, new_values)
 
     @staticmethod
     def find_all(filters={}) -> list:

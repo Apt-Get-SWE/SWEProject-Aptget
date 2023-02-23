@@ -30,7 +30,7 @@ class Address:
 
         try:
             if Address.exists({'aid': data['aid']}):
-                raise errors.DuplicateKeyError()
+                raise errors.DuplicateKeyError(f'Address with address id {data["aid"]} already exists')
             query.insert('addresses', data)
             logging.info(f'Inserted address {data} into database')
         except errors.DuplicateKeyError:
