@@ -1,5 +1,5 @@
 import logging
-from pymongo import results, errors
+from pymongo import results
 from ..query import query
 from .utils import json_to_object, object_to_json_str
 
@@ -38,15 +38,13 @@ class User:
         if 'email' not in data or 'uid' not in data:
             raise ValueError('Cannot insert user without an email or uid')
 
-        logging.info(f'Inserting user {data}')
-
-        try:
-            if User.exists({'uid': data['uid']}):
-                raise errors.DuplicateKeyError(f'User with user id {data["uid"]} already exists')
+        filters = {'uid': data['uid']}
+        if User.exists(filters):
+            new_values = {"$set": data}
+            User.update(filters, new_values)
+        else:
             query.insert('users', data)
-            logging.info(f'Inserted user {data} into database')
-        except errors.DuplicateKeyError:
-            logging.info(f'User with user id {data["uid"]} already exists')
+            logging.info(f'Inserted user {data["uid"]}')
 
     @staticmethod
     def update(filters: dict, new_values: dict) -> None:
@@ -57,6 +55,7 @@ class User:
             raise TypeError(
                 f'Cannot update with filters of type{type(filters)}')
         query.update('users', filters, new_values)
+        logging.info(f'Updated users w/ filters {filters}')
 
     @staticmethod
     def find_all(filters={}) -> list:
@@ -108,7 +107,7 @@ class User:
 
     def save(self):
         if not User.exists({'uid': self.uid}):
-            self.insert(self.__dict__)
+            self.insert(self.to_dict())
         else:
             new_vals_dict = {"$set": {}}
             new_vals_dict["$set"]["fname"] = self.fname

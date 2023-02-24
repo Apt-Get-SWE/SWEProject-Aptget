@@ -6,18 +6,25 @@ import pytest
 
 class TestPost:
     @pytest.fixture
-    def from_json(self):
+    def post_instance(self):
+        return Post("123", "234", "345")
+
+    @pytest.fixture
+    def dict_instance(self):
+        return {"pid": "123", "uid": "234", "aid": "345",
+                "title": "Selling chairs!", "descr": "willing to negotiate",
+                "condition": "new", "list_dt": "10/29/2022 10:11:53",
+                "price": "24.99", "sold": "False"}
+
+    @pytest.fixture
+    def json_instance(self):
         return '{"pid": "123", "uid": "234", "aid": "345", \
                  "title": "Selling chairs!", "descr": "willing to negotiate", \
                  "condition": "new", "list_dt": "10/29/2022 10:11:53", \
                  "price": "24.99", "sold": "False"}'
 
     @pytest.fixture
-    def to_dict(self):
-        return Post("123", "234", "345")
-
-    @pytest.fixture
-    def to_json_str(self):
+    def post_and_json_instance(self):
         post = Post('123', '234', '345', 'Selling chairs!',
                     'willing to negotiate', 'new',
                     '10/29/2022 10:11:53', "24.99", "False")
@@ -25,48 +32,48 @@ class TestPost:
         return post, json
 
     @pytest.fixture
-    def query(self):
-        return {'pid': '123', 'uid': '456', 'aid': '789'}
-
-    @pytest.fixture
-    def insert_no_pid(self):
+    def json_no_pid_instance(self):
         return {"uid": "234", "aid": "345", "title": "Selling chairs!",
                 "descr": "willing to negotiate", "condition": "new",
                 "list_dt": "10/29/2022 10:11:53", "price": "24.99",
                 "sold": "False"}
 
     @pytest.fixture
-    def insert_badtype(self):
+    def badtype_instance(self):
         return {1, 2, 3, 4}
 
     # Test from_json
-    def test_post_from_json(self, from_json):
+    def test_post_from_json(self, json_instance):
         # Test with a valid json string
-        post = Post.from_json(from_json)
+        post = Post.from_json(json_instance)
         assert post.pid == "123"
         assert post.uid == "234"
         assert post.aid == "345"
 
     # Test to_dict
-    def test_post_to_dict(self, to_dict):
+    def test_post_to_dict(self, post_instance):
         # Test with a valid post
-        post = to_dict
-        post_dict = post.to_dict()
+        post_dict = post_instance.to_dict()
         assert post_dict["pid"] == "123"
         assert post_dict["uid"] == "234"
         assert post_dict["aid"] == "345"
 
     # Test to_json_str
-    def test_post_to_json_str(self, to_json_str):
+    def test_post_to_json_str(self, post_and_json_instance):
         # Test with a valid post
-        post, json = to_json_str
+        post, json = post_and_json_instance
         data = post.to_json_str()
         assert data == json
 
-    def test_post_query(self, query):
+    def test_post_query(self, dict_instance):
         if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
-            Post.insert(query)
-            assert q.count('posts') == 1
+            Post.insert(dict_instance)
+
+            assert Post.count() > 0
+
+            pid, uid, aid = dict_instance['pid'], dict_instance['uid'],\
+                dict_instance['aid']
+            assert Post.exists({'pid': pid, 'uid': uid, 'aid': aid})
 
             res = Post.find_all()
             assert type(res) == list
@@ -74,15 +81,34 @@ class TestPost:
             res = Post.find_one()
             assert type(res) == dict
 
-            # Post.delete_all()
+            Post.delete_all()
+            assert Post.count() == 0
 
-    def test_post_insert_no_pid(self, insert_no_pid):
-        with pytest.raises(ValueError):
-            data = insert_no_pid
-            Post.insert(data)
+    def test_post_insert_no_pid(self, json_no_pid_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            with pytest.raises(ValueError):
+                data = json_no_pid_instance
+                Post.insert(data)
 
-    def test_post_insert_badtype(self, insert_badtype):
-        with pytest.raises(TypeError):
-            data = insert_badtype
-            assert not isinstance(data, dict)
-            Post.insert(data)
+    def test_post_insert_badtype(self, badtype_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            with pytest.raises(TypeError):
+                data = badtype_instance
+                assert not isinstance(data, dict)
+                Post.insert(data)
+
+    def test_insert_duplicate(self, dict_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            Post.insert(dict_instance)
+            filters = {'pid': dict_instance['pid']}
+            assert Post.count(filters) == 1
+
+            dict_instance['title'] = 'Large couch'
+            Post.insert(dict_instance)
+            assert Post.count(filters) == 1
+
+            post = Post.find_one(filters)
+            assert post['title'] == 'Large couch'
+
+            Post.delete_all()
+            assert Post.count() == 0

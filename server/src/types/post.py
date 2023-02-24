@@ -1,6 +1,6 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
-from pymongo import results, errors
+from pymongo import results
 import logging
 
 """
@@ -30,21 +30,23 @@ class Post:
         if 'pid' not in data:
             raise ValueError('Cannot insert post without pid')
 
-        try:
-            if Post.exists({'pid': data['pid']}):
-                raise errors.DuplicateKeyError(f'Post with post id {data["pid"]} already exists')
+        filters = {'pid': data['pid']}
+        if Post.exists(filters):
+            new_values = {'$set': data}
+            Post.update(filters, new_values)
+        else:
             query.insert('posts', data)
-            logging.info(f'Inserted post {data} into database')
-        except errors.DuplicateKeyError:
-            logging.info(f'Post with post id {data["pid"]} already exists')
+            logging.info(f'Inserted post {data}')
 
     @staticmethod
     def update(filters: dict, new_values: dict) -> None:
         if type(new_values) != dict:
-            raise TypeError(f'Cannot update with data of type{type(new_values)}')  # noqa
+            raise TypeError(f'Cannot update with data of type{type(new_values)}') # noqa
         if type(filters) != dict:
-            raise TypeError(f'Cannot update with filters of type{type(filters)}')  # noqa\
+            raise TypeError(f'Cannot update with filters of type{type(filters)}') # noqa
+
         query.update('posts', filters, new_values)
+        logging.info(f'Updated users w/ filters {filters}')
 
     @staticmethod
     def find_all(filters={}) -> list:
@@ -102,7 +104,7 @@ class Post:
     def save(self):
         # check if post already exists
         if not Post.exists({'pid': self.pid}):
-            Post.insert(self.__dict__)
+            Post.insert(self.to_dict())
         else:
             new_vals_dict = {"$set": {}}
             new_vals_dict["$set"]["title"] = self.title

@@ -1,6 +1,6 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
-from pymongo import results, errors
+from pymongo import results
 import usaddress
 import json
 import logging
@@ -28,23 +28,23 @@ class Address:
         if 'aid' not in data:
             raise ValueError('Cannot insert apartment without aid')
 
-        try:
-            if Address.exists({'aid': data['aid']}):
-                raise errors.DuplicateKeyError(f'Address with address id {data["aid"]} already exists')
+        filters = {'aid': data['aid']}
+        if Address.exists(filters):
+            new_values = {'$set': data}
+            Address.update(filters, new_values)
+        else:
             query.insert('addresses', data)
-            logging.info(f'Inserted address {data} into database')
-        except errors.DuplicateKeyError:
-            logging.info(f'Address with address id {data["aid"]} already exists')
+            logging.info(f'Inserted address {data}')
 
     @staticmethod
     def update(filters: dict, new_values: dict) -> None:
         if type(new_values) != dict:
-            raise TypeError(
-                f'Cannot update with data of type{type(new_values)}')
+            raise TypeError(f'Cannot update with data of type{type(new_values)}') # noqa
         if type(filters) != dict:
-            raise TypeError(
-                f'Cannot update with filters of type{type(filters)}')
+            raise TypeError(f'Cannot update with filters of type{type(filters)}') # noqa
+
         query.update('addresses', filters, new_values)
+        logging.info(f'Updated users w/ filters {filters}')
 
     @staticmethod
     def find_all(filters={}) -> list:
@@ -106,7 +106,7 @@ class Address:
     def save(self):
         # check if post already exists
         if not Address.exists({'aid': self.aid}):
-            Address.insert(self.__dict__)
+            Address.insert(self.to_dict())
         else:
             new_vals_dict = {"$set": {}}
             new_vals_dict["$set"]["building"] = self.building
