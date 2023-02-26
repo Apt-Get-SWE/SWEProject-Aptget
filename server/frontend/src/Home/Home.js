@@ -23,7 +23,10 @@ function Home() {
         {
           loggedIn
             ? 
-            <div></div>
+            // TODO: Make this a link to the dashboard (Dashboard frontend and backend not yet implemented)
+            <div className='LoggedIn'>
+              <span className="login-text">Dashboard</span>
+            </div>
             :
             <a className="LoginLink" href="/api/login/login">
               <div className="Login">

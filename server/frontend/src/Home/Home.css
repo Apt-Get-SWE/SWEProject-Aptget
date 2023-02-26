@@ -52,6 +52,32 @@
   text-decoration: none;
 }
 
+.LoggedIn {
+  /* Logged In */
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+  padding-left: 10px;
+
+  width: 150px;
+  height: 53px;
+
+  /* Green 1.5 */
+
+  background: #42DC89;
+  border-radius: 10px;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  text-decoration: none;
+}
+
 .LoginLink{
   text-decoration: none;
   font-size: 24px;
