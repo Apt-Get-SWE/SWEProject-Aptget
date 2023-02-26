@@ -42,7 +42,7 @@ class GoogleLogIn(Resource):
         """
         if session.get("user_id") is not None:
             redirect(ROOT_URL)
-        
+
         authorizationUrl, state = self.flow.authorization_url()
         if state:  # check
             session["state"] = state
