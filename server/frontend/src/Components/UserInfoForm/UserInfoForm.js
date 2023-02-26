@@ -120,8 +120,8 @@ const UserInfoForm = () => {
 				</div>
 				
 			</div>
-			<div className="px-3 mt-6">
-				<button class="shadow bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button" onClick={handleSubmit}>
+			<div className="mt-8">
+				<button class="shadow text-lg bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button" onClick={handleSubmit}>
 					Sign Up
 				</button>
 			</div>
