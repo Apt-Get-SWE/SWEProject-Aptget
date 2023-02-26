@@ -40,16 +40,17 @@ class GoogleLogIn(Resource):
         """
         Redirects user to google server for google account login authentication
         """
-        # TODO: store state in sessions to track logged in users and parse user
-        print(ROOT_URL)
+        if session.get("user_id") is not None:
+            redirect(ROOT_URL)
+        
         authorizationUrl, state = self.flow.authorization_url()
-
         if state:  # check
+            session["state"] = state
             return redirect(authorizationUrl)
             # return {"Redirect URL": authorizationUrl, "state": state}
         else:
             # return {"Main menu" : f"{ROOT_URL}/"}
-            return redirect(f"{ROOT_URL}/endpoints")
+            return redirect(ROOT_URL)
 
 
 class SaveUserLogin(Resource):
@@ -84,7 +85,7 @@ class SaveUserLogin(Resource):
         session['user_id'] = google_id
         # messages = json.dumps
 
-        # TODO: redirect to register or load existing user data.
+        # TODO: redirect to registration or user page
         # for now redirecting to register page regardless of data persistence in db.
         # TODO: detect existence in db
         return redirect(f"{ROOT_URL}/register")
