@@ -6,7 +6,23 @@ import pytest
 
 class TestAddress:
     @pytest.fixture
-    def from_json(self):
+    def address_instance(self):
+        return Address("123", "370 Jay St", "Brooklyn", "NY", "11201")
+
+    @pytest.fixture
+    def dict_instance(self):
+        return {"aid": "123", "building": "370 Jay St",
+                "city": "Brooklyn", "state": "NY",
+                "zipcode": "11201"}
+
+    @pytest.fixture
+    def post_and_json_instance(self):
+        address = Address("123", "370 Jay St", "Brooklyn", "NY", "11201")
+        json = '{"aid": "123", "building": "370 Jay St", "city": "Brooklyn", "state": "NY", "zipcode": "11201"}'  # noqa
+        return address, json
+
+    @pytest.fixture
+    def address_instance_from_json(self):
         json = """{"aid":      "123",
                    "building": "370 Jay St",
                    "city":     "Brooklyn",
@@ -15,56 +31,39 @@ class TestAddress:
         return Address.from_json(json)
 
     @pytest.fixture
-    def from_raw_addr(self):
+    def address_instance_from_raw_addr(self):
         raw = "370 Jay St, Brooklyn, NY, 11201"
         return Address.from_json(Address.process_raw_addr(raw))
 
     @pytest.fixture
-    def to_dict(self):
-        return Address("123", "370 Jay St", "Brooklyn", "NY", "11201")
-
-    @pytest.fixture
-    def to_json_str(self):
-        address = Address("123", "370 Jay St", "Brooklyn", "NY", "11201")
-        json = '{"aid": "123", "building": "370 Jay St", "city": "Brooklyn", "state": "NY", "zipcode": "11201"}'  # noqa
-        return address, json
-
-    @pytest.fixture
-    def query(self):
-        return {"aid": "123", "building": "370 Jay St",
-                "city": "Brooklyn", "state": "NY",
-                "zipcode": "11201"}
-
-    @pytest.fixture
-    def insert_no_aid(self):
+    def dict_instance_no_aid(self):
         return {"building": "370 Jay St", "city": "Brooklyn",
                 "state": "NY", "zipcode": "11201"}
 
     @pytest.fixture
-    def insert_badtype(self):
+    def badtype_instance(self):
         return {1, 2, 3, 4}
 
-    def test_address_from_json(self, from_json):
+    def test_address_from_json(self, address_instance_from_json):
         # Test with a valid json string
-        addr = from_json
+        addr = address_instance_from_json
         assert addr.aid == "123"
         assert addr.building == "370 Jay St"
         assert addr.city == "Brooklyn"
         assert addr.state == "NY"
         assert addr.zipcode == "11201"
 
-    def test_address_from_raw_addr(self, from_raw_addr):
-        addr = from_raw_addr
+    def test_address_from_raw_addr(self, address_instance_from_raw_addr):
+        addr = address_instance_from_raw_addr
         assert addr.building == "370 Jay St"
         assert addr.city == "Brooklyn"
         assert addr.state == "NY"
         assert addr.zipcode == "11201"
 
     # Test to_dict
-    def test_address_to_dict(self, to_dict):
+    def test_address_to_dict(self, address_instance):
         # Test with a valid address
-        addr = to_dict
-        addr_dict = addr.to_dict()
+        addr_dict = address_instance.to_dict()
         assert addr_dict["aid"] == "123"
         assert addr_dict["building"] == "370 Jay St"
         assert addr_dict["city"] == "Brooklyn"
@@ -72,16 +71,19 @@ class TestAddress:
         assert addr_dict["zipcode"] == "11201"
 
     # Test to_json_str
-    def test_address_to_json_str(self, to_json_str):
+    def test_address_to_json_str(self, post_and_json_instance):
         # Test with a valid address
-        addr, json = to_json_str
+        addr, json = post_and_json_instance
         data = addr.to_json_str()
 
         assert data == json
 
-    def test_address_query(self, query):
+    def test_address_query(self, dict_instance):
         if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
-            Address.insert(query)
+            Address.insert(dict_instance)
+
+            assert Address.count() > 0
+            assert Address.exists({'aid': dict_instance['aid']})
 
             res = Address.find_all()
             assert type(res) == list
@@ -90,14 +92,33 @@ class TestAddress:
             assert type(res) == dict
 
             Address.delete_all()
+            assert Address.count() == 0
 
-    def test_address_insert_no_aid(self, insert_no_aid):
-        with pytest.raises(ValueError):
-            data = insert_no_aid
-            Address.insert(data)
+    def test_address_insert_no_aid(self, dict_instance_no_aid):
+        if os.getenv('CLOUD') == q.LOCAL:
+            with pytest.raises(ValueError):
+                data = dict_instance_no_aid
+                Address.insert(data)
 
-    def test_address_insert_badtype(self, insert_badtype):
-        with pytest.raises(TypeError):
-            data = insert_badtype
-            assert not isinstance(data, dict)
-            Address.insert(data)
+    def test_address_insert_badtype(self, badtype_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            with pytest.raises(TypeError):
+                data = badtype_instance
+                assert not isinstance(data, dict)
+                Address.insert(data)
+
+    def test_insert_duplicate(self, dict_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            Address.insert(dict_instance)
+            filters = {'aid': dict_instance['aid']}
+            assert Address.count(filters) == 1
+
+            dict_instance['zipcode'] = '00000'
+            Address.insert(dict_instance)
+            assert Address.count(filters) == 1
+
+            addr = Address.find_one(filters)
+            assert addr['zipcode'] == '00000'
+
+            Address.delete_all()
+            assert Address.count() == 0

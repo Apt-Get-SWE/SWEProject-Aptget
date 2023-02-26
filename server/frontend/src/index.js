@@ -4,12 +4,13 @@ import './index.css';
 import Home from './Home/Home';
 import NotFound from './NotFound/NotFound';
 import reportWebVitals from './reportWebVitals';
+import Register from './Pages/Register/Register';
 
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import UserInfoForm from './Components/UserInfoForm/UserInfoForm';
+
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: <UserInfoForm />
+    element: <Register />
   },
   {
     path: "*",

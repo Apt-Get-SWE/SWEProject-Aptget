@@ -141,7 +141,7 @@ class Posts(Resource):
             if cookie_user_id != post['uid']:
                 return "User does not own post", 401
 
-            Post.delete(json['pid'])
+            Post.delete_one(json['pid'])
             return "Post deleted successfully", 201
         except Exception as e:
             return f'Error deleting post: {e}', 500
