@@ -81,7 +81,7 @@ class Addresses(Resource):
             json = request.json
         else:
             return 'Content-Type not supported!', 415
-        
+
         cookie_user_id = session.get("user_id")
 
         if cookie_user_id is None:
@@ -109,7 +109,7 @@ class Addresses(Resource):
             json = request.json
         else:
             return 'Content-Type not supported!', 415
-        
+
         cookie_user_id = session.get("user_id")
 
         if cookie_user_id is None:
@@ -138,8 +138,7 @@ class Addresses(Resource):
             json = request.json
         else:
             return 'Content-Type not supported!', 415
-        
-        
+
         # TODO: Needs more access control here. Only admins should be able to delete addresses
         cookie_user_id = session.get("user_id")
 
