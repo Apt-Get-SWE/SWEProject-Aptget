@@ -1,6 +1,6 @@
 import logging
 from flask_restx import Resource, Namespace, fields
-from flask import request
+from flask import request, session
 from ..types.address import Address
 from ..types.utils import parse_json
 
@@ -82,6 +82,11 @@ class Addresses(Resource):
         else:
             return 'Content-Type not supported!', 415
 
+        cookie_user_id = session.get("user_id")
+
+        if cookie_user_id is None:
+            return "User not logged in", 401
+
         # Parse aid, building, city, state, zipcode from json
         addr = Address.from_json(json)
         try:
@@ -104,6 +109,11 @@ class Addresses(Resource):
             json = request.json
         else:
             return 'Content-Type not supported!', 415
+
+        cookie_user_id = session.get("user_id")
+
+        if cookie_user_id is None:
+            return "User not logged in", 401
 
         # Parse aid, building, city, state, zipcode from json
         try:
@@ -128,6 +138,12 @@ class Addresses(Resource):
             json = request.json
         else:
             return 'Content-Type not supported!', 415
+
+        # TODO: Needs more access control here. Only admins should be able to delete addresses
+        cookie_user_id = session.get("user_id")
+
+        if cookie_user_id is None:
+            return "User not logged in", 401
 
         try:
             Address.delete_one({'aid': json['aid']})

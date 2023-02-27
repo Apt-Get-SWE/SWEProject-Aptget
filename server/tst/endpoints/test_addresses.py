@@ -12,6 +12,10 @@ class TestAddr:
         if os.getenv('CLOUD') == q.LOCAL:
             q.delete_all('addresses', {})
         with app.test_client() as client:
+            # set client session user_id cookie to 1337
+            with client.session_transaction() as sess:
+                sess['user_id'] = '1337'
+
             yield client
         # Clean up
         if os.getenv('CLOUD') == q.LOCAL:
