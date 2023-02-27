@@ -28,7 +28,7 @@ github:
 all_tests: lint unit
 
 unit:
-	cd $(API_DIR); pytest --cov=server $(PYTESTFLAGS)
+	cd $(API_DIR); make tests
 
 lint:
 	autopep8 --in-place --recursive $(API_DIR)/.
