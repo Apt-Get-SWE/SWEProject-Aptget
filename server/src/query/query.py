@@ -28,7 +28,7 @@ def get_collection(collection_name: str) -> collection.Collection:
 
 
 # update document / JSON object to specified collection
-def update(collection_name: str, filters: dict, new_values: dict) -> None:
+def update_one(collection_name: str, filters: dict, new_values: dict) -> None:
     collection = get_collection(collection_name)
     return collection.update_one(filters, new_values)
 

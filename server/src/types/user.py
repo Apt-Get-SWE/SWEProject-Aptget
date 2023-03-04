@@ -10,6 +10,7 @@ class User:
     {
         uid   : str (google_id)
         email : str
+        aid   : str
         fname : str
         lname : str
         phone : str
@@ -41,13 +42,13 @@ class User:
         filters = {'uid': data['uid']}
         if User.exists(filters):
             new_values = {"$set": data}
-            User.update(filters, new_values)
+            User.update_one(filters, new_values)
         else:
             query.insert('users', data)
             logging.info(f'Inserted user {data["uid"]}')
 
     @staticmethod
-    def update(filters: dict, new_values: dict) -> None:
+    def update_one(filters: dict, new_values: dict) -> None:
         """
         Finds a single User with the specified filters
         and updates them with new values.
@@ -109,11 +110,12 @@ class User:
     def from_json(cls, data: str):
         """Creates a User object from the JSON string provided."""
         obj = json_to_object(data)
-        return cls(obj.uid, obj.email, obj.fname, obj.lname, obj.phone, obj.pfp)  # noqa
+        return cls(obj.uid, obj.email, obj.aid, obj.fname, obj.lname, obj.phone, obj.pfp)  # noqa
 
     # NON-STATIC METHODS
-    def __init__(self, uid: str, email: str, fname: str = None, lname: str = None, phone: str = None, pfp=None):  # noqa
+    def __init__(self, uid: str, email: str, aid: str = None, fname: str = None, lname: str = None, phone: str = None, pfp=None):  # noqa
         self.uid = uid
+        self.aid = aid
         self.fname = fname
         self.lname = lname
         self.phone = phone
@@ -142,9 +144,10 @@ class User:
             self.insert(self.to_dict())
         else:
             new_vals_dict = {"$set": {}}
+            new_vals_dict["$set"]["aid"] = self.aid
             new_vals_dict["$set"]["fname"] = self.fname
             new_vals_dict["$set"]["lname"] = self.lname
             new_vals_dict["$set"]["phone"] = self.phone
             new_vals_dict["$set"]["email"] = self.email
 
-            User.update({'uid': self.uid}, new_vals_dict)
+            User.update_one({'uid': self.uid}, new_vals_dict)
