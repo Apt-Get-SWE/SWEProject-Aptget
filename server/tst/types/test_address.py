@@ -94,7 +94,7 @@ class TestAddress:
             Address.delete_all()
             assert Address.count() == 0
 
-    def test_address_insert_no_aid(self, dict_instance_no_aid):
+    def test_address_insert(self, dict_instance_no_aid):
         if os.getenv('CLOUD') == q.LOCAL:
             data = dict_instance_no_aid
             Address.insert(data)
@@ -117,7 +117,7 @@ class TestAddress:
                 assert not isinstance(data, dict)
                 Address.insert(data)
 
-    def test_insert_duplicate(self, dict_instance_no_aid):
+    def test_address_insert_duplicate(self, dict_instance_no_aid):
         if os.getenv('CLOUD') == q.LOCAL:
             Address.insert(dict_instance_no_aid)
             filters = {

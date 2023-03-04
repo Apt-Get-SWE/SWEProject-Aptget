@@ -21,11 +21,11 @@ class Address:
 
     # STATIC METHODS
     @staticmethod
-    def insert(data: dict) -> str:
+    def insert(data: dict) -> str or None:
         """
         Inserts new Address to database or updates Address if
         same AID is found. A unique AID is generated if none is provided.
-        Returns AID of inserted data.
+        Returns AID of data inserted.
 
         Arguments:
         data (dict) -- dict containing the Address information
@@ -145,14 +145,15 @@ class Address:
         """Returns the Address object as a JSON string."""
         return object_to_json_str(self)
 
-    def save(self):
+    def save(self) -> str or None:
         """
         Inserts Address object to database or updates Address if
         same AID is found.
-        Returns auto-generated AID if no duplicate found.
+        Returns auto-generated AID if no duplicate is found.
         """
         # check if post already exists
         if not Address.exists({'aid': self.aid}):
+            # if aid not found, generate UUID inside Address.insert()
             data = self.to_dict()
             del data['aid']
             return Address.insert(data)
