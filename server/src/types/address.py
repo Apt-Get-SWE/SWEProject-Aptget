@@ -43,7 +43,7 @@ class Address:
         filters = {'aid': data['aid']}
         if Address.exists(filters):
             new_values = {'$set': data}
-            Address.update(filters, new_values)
+            Address.update_one(filters, new_values)
         else:
             query.insert('addresses', data)
             logging.info(f'Inserted address {data}')
@@ -66,7 +66,7 @@ class Address:
         if type(filters) != dict:
             raise TypeError(f'Cannot update with filters of type{type(filters)}')  # noqa
 
-        query.update('addresses', filters, new_values)
+        query.update_one('addresses', filters, new_values)
         logging.info(f'Updated Addresses w/ filters {filters}')
 
     @staticmethod
@@ -160,4 +160,4 @@ class Address:
             new_vals_dict["$set"]["state"] = self.state
             new_vals_dict["$set"]["zipcode"] = self.zipcode
 
-            Address.update({'aid': self.aid}, new_vals_dict)
+            Address.update_one({'aid': self.aid}, new_vals_dict)

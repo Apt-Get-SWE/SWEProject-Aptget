@@ -44,13 +44,13 @@ class Post:
         filters = {'pid': data['pid']}
         if Post.exists(filters):
             new_values = {'$set': data}
-            Post.update(filters, new_values)
+            Post.update_one(filters, new_values)
         else:
             query.insert('posts', data)
             logging.info(f'Inserted post {data}')
 
     @staticmethod
-    def update(filters: dict, new_values: dict) -> None:
+    def update_one(filters: dict, new_values: dict) -> None:
         """
         Finds a single Post with the specified filters
         and updates them with new values.
@@ -67,7 +67,7 @@ class Post:
         if type(filters) != dict:
             raise TypeError(f'Cannot update with filters of type{type(filters)}')  # noqa
 
-        query.update('posts', filters, new_values)
+        query.update_one('posts', filters, new_values)
         logging.info(f'Updated Posts w/ filters {filters}')
 
     @staticmethod
@@ -155,4 +155,4 @@ class Post:
             new_vals_dict["$set"]["price"] = self.price
             new_vals_dict["$set"]["sold"] = self.sold
 
-            Post.update({'pid': self.pid}, new_vals_dict)
+            Post.update_one({'pid': self.pid}, new_vals_dict)
