@@ -49,7 +49,7 @@ class Address:
             logging.info(f'Inserted address {data}')
 
     @staticmethod
-    def update(filters: dict, new_values: dict) -> None:
+    def update_one(filters: dict, new_values: dict) -> None:
         """
         Finds a single Address with the specified filters
         and updates them with new values.

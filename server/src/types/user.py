@@ -66,7 +66,7 @@ class User:
         if type(filters) != dict:
             raise TypeError(
                 f'Cannot update with filters of type{type(filters)}')
-        query.update('users', filters, new_values)
+        query.update_one('users', filters, new_values)
         logging.info(f'Updated Users w/ filters {filters}')
 
     @staticmethod
