@@ -76,7 +76,12 @@ class TestAddress:
         if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
             Address.insert(dict_instance_no_aid)
 
-            filters = dict_instance_no_aid
+            filters = {
+                "building": "370 Jay St",
+                "city": "Brooklyn",
+                "state": "NY",
+                "zipcode": "11201"
+            }
             assert Address.count(filters) > 0
             assert Address.exists(filters)
 
@@ -94,10 +99,15 @@ class TestAddress:
             data = dict_instance_no_aid
             Address.insert(data)
 
-            filters = dict_instance_no_aid
+            filters = {
+                "building": "370 Jay St",
+                "city": "Brooklyn",
+                "state": "NY",
+                "zipcode": "11201"
+            }
             assert Address.count(filters) == 1
 
-            Address.delete(filters)
+            Address.delete_one(filters)
             assert Address.count(filters) == 0
 
     def test_address_insert_badtype(self, badtype_instance):
@@ -118,12 +128,10 @@ class TestAddress:
             }
             assert Address.count(filters) == 1
 
-            addr = Address.find_one(filters)
-            addr['zipcode'] = "00000"
-            Address.insert(addr)
+            copy = {"building": "370 Jay St", "city": "Brooklyn",
+                    "state": "NY", "zipcode": "11201"}
+            Address.insert(copy)
+            assert Address.count(filters) == 2
 
-            filters['zipcode'] = "00000"
-            assert Address.count(filters) == 1
-
-            Address.delete(filters)
+            Address.delete_all(filters)
             assert Address.count(filters) == 0
