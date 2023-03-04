@@ -1,6 +1,7 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
 from pymongo import results
+from uuid import uuid4
 import usaddress
 import json
 import logging
@@ -36,15 +37,12 @@ class Address:
         if type(data) != dict:
             raise TypeError(f'Cannot insert data of type{type(data)}')
 
-        # aid is primary key
-        if 'aid' not in data:
-            raise ValueError('Cannot insert apartment without aid')
-
-        filters = {'aid': data['aid']}
-        if Address.exists(filters):
+        if 'aid' in data:
+            filters = {'aid': data['aid']}
             new_values = {'$set': data}
             Address.update_one(filters, new_values)
         else:
+            data['aid'] = str(uuid4())
             query.insert('addresses', data)
             logging.info(f'Inserted address {data}')
 
