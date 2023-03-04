@@ -30,7 +30,8 @@ class TestAddr:
     def test_query(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             newaddr = Address('0', 'test bldg', 'test city', 'test state', '00000')
-            newaddr.save()
+            aid = newaddr.save()
+            assert aid is not None
 
             response = client.get('api/addresses/addr')
             assert response.status_code == 200
@@ -40,17 +41,18 @@ class TestAddr:
             assert len(response.json['Data']) > 0
 
             response = client.delete('api/addresses/addr', json={
-                'aid': '0'
+                "aid": aid
             })
             assert response.status_code == 200
 
     def test_put(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             newAddr = Address('1', 'test bldg', 'test city', 'test state', '00000')
-            newAddr.save()
+            aid = newAddr.save()
+            assert aid is not None
 
             response = client.put('api/addresses/addr', json={
-                "aid": "1",
+                "aid": aid,
                 "building": "altered bldg",
                 "city": "altered city",
                 "state": "altered state",
@@ -63,12 +65,12 @@ class TestAddr:
 
             assert response.status_code == 200
             assert len(response.json['Data']) == 1
-            assert response.json['Data']['1']['building'] == "altered bldg"
-            assert response.json['Data']['1']['city'] == "altered city"
-            assert response.json['Data']['1']['state'] == "altered state"
+            assert response.json['Data'][aid]['building'] == "altered bldg"
+            assert response.json['Data'][aid]['city'] == "altered city"
+            assert response.json['Data'][aid]['state'] == "altered state"
 
             response = client.delete('api/addresses/addr', json={
-                'aid': '1'
+                "aid": aid,
             })
             assert response.status_code == 200
 
@@ -126,9 +128,10 @@ class TestAddr:
     def test_delete(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             newAddr = Address('2', 'test bldg', 'test city', 'test state', '00000')
-            newAddr.save()
+            aid = newAddr.save()
+            assert aid is not None
 
-            response = client.delete('api/addresses/addr', json={'aid': '2'})
+            response = client.delete('api/addresses/addr', json={'aid': aid})
             assert response.status_code == 200
             assert response.json == "Address deleted successfully"
 

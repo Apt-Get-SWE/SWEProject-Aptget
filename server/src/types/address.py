@@ -21,10 +21,11 @@ class Address:
 
     # STATIC METHODS
     @staticmethod
-    def insert(data: dict) -> None:
+    def insert(data: dict) -> str:
         """
         Inserts new Address to database or updates Address if
-        same AID is found.
+        same AID is found. A unique AID is generated if none is provided.
+        Returns AID of inserted data.
 
         Arguments:
         data (dict) -- dict containing the Address information
@@ -45,6 +46,7 @@ class Address:
             data['aid'] = str(uuid4())
             query.insert('addresses', data)
             logging.info(f'Inserted address {data}')
+        return data['aid']
 
     @staticmethod
     def update_one(filters: dict, new_values: dict) -> None:
@@ -147,10 +149,13 @@ class Address:
         """
         Inserts Address object to database or updates Address if
         same AID is found.
+        Returns auto-generated AID if no duplicate found.
         """
         # check if post already exists
         if not Address.exists({'aid': self.aid}):
-            Address.insert(self.to_dict())
+            data = self.to_dict()
+            del data['aid']
+            return Address.insert(data)
         else:
             new_vals_dict = {"$set": {}}
             new_vals_dict["$set"]["building"] = self.building
