@@ -1,5 +1,6 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
+from datetime import datetime
 from pymongo import results
 import logging
 
@@ -34,12 +35,7 @@ class Post:
         ValueError -- raised if data is not of type dict or if the
                         dictionary does not contain required fields
         """
-        if type(data) != dict:
-            raise TypeError(f'Cannot insert data of type{type(data)}')
-
-        # pid is primary key
-        if 'pid' not in data:
-            raise ValueError('Cannot insert post without pid')
+        Post.isValid(data)
 
         filters = {'pid': data['pid']}
         if Post.exists(filters):
@@ -156,3 +152,30 @@ class Post:
             new_vals_dict["$set"]["sold"] = self.sold
 
             Post.update({'pid': self.pid}, new_vals_dict)
+
+    def isValid(data):
+        """
+        Checks if the fields in data are present and valid.
+        """
+        if type(data) != dict:
+            raise TypeError(f'Cannot insert data of type{type(data)}')
+
+        # pid is primary key
+        if 'pid' not in data:
+            raise ValueError('Cannot insert post without pid')
+
+        # Check if price is a number
+        try:
+            data['price'] = round(float(data['price']), 2)
+        except ValueError:
+            raise ValueError('Price must be a valid number')
+
+        # Check if list_dt is in correct format
+        try:
+            datetime.strptime(data['list_dt'], "%m/%d/%Y %H:%M:%S")
+        except ValueError:
+            raise ValueError('list_dt must be in format %m/%d/%Y %H:%M:%S')
+
+        # Check if sold is one of ["Sold", "Not Sold", "Pending"]
+        if data['sold'] not in ["Sold", "Available", "Pending"]:
+            raise ValueError('sold must be one of ["Sold", "Available", "Pending"]')
