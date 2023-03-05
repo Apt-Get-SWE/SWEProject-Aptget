@@ -5,6 +5,7 @@ import Home from './Home/Home';
 import NotFound from './NotFound/NotFound';
 import reportWebVitals from './reportWebVitals';
 import Register from './Pages/Register/Register';
+import CreateItem from './Pages/ItemRelated/CreateItem'
 
 import {
   createBrowserRouter,
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />
+  },
+  {
+    path: "/create",
+    element: <CreateItem />
   },
   {
     path: "*",
