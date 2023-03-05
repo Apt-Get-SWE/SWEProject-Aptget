@@ -10,6 +10,13 @@ class TestPost:
         return Post("123", "234", "345")
 
     @pytest.fixture
+    def dict_instance(self):
+        return {"pid": "123", "uid": "234", "aid": "345",
+                "title": "Selling chairs!", "descr": "willing to negotiate",
+                "condition": "new", "list_dt": "10/29/2022 10:11:53",
+                "price": "24.99", "sold": "Available"}
+
+    @pytest.fixture
     def json_instance(self):
         return '{"pid": "123", "uid": "234", "aid": "345", \
                  "title": "Selling chairs!", "descr": "willing to negotiate", \
@@ -117,3 +124,29 @@ class TestPost:
 
             Post.delete_all()
             assert Post.count() == 0
+
+    def test_insert_valid(self, dict_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            Post.insert(dict_instance)
+            filters = {'pid': dict_instance['pid']}
+            assert Post.count(filters) == 1
+            Post.delete_all()
+            assert Post.count() == 0
+
+    def test_insert_invalid_price(self, dict_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            dict_instance['price'] = 'abc'
+            with pytest.raises(ValueError):
+                Post.insert(dict_instance)
+
+    def test_insert_invalid_sold(self, dict_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            dict_instance['sold'] = 'abc'
+            with pytest.raises(ValueError):
+                Post.insert(dict_instance)
+
+    def test_insert_invalid_list_dt(self, dict_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            dict_instance['list_dt'] = 'abc'
+            with pytest.raises(ValueError):
+                Post.insert(dict_instance)
