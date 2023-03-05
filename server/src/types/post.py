@@ -58,8 +58,6 @@ class Post:
         Exceptions:
         TypeError -- raised if filters or new_values are not of type dict
         """
-        if type(new_values) != dict:
-            raise TypeError(f'Cannot update with data of type{type(new_values)}')  # noqa
         if type(filters) != dict:
             raise TypeError(f'Cannot update with filters of type{type(filters)}')  # noqa
 

@@ -29,7 +29,7 @@ class TestPosts:
     def test_get(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             newpost = Post('1', '1337', '1', 'Local test first post',
-                           'First test descr', 'new', '1668994811', '100', 'False')
+                           'First test descr', 'new', '10/29/2022 10:11:53', '100', 'Available')
             newpost.save()
 
             response = client.get('api/posts/posts')
@@ -54,9 +54,9 @@ class TestPosts:
                 'title': 'Local test second post',
                 'descr': 'Second test descr',
                 'condition': 'new',
-                'list_dt': '1668994811',
+                'list_dt': '10/29/2022 10:11:53',
                 'price': '100',
-                'sold': 'False',
+                'sold': 'Available',
             })
 
             assert response.status_code == 401
@@ -71,9 +71,9 @@ class TestPosts:
                 'title': 'Local test second post',
                 'descr': 'Second test descr',
                 'condition': 'new',
-                'list_dt': '1668994811',
+                'list_dt': '10/29/2022 10:11:53',
                 'price': '100',
-                'sold': 'False',
+                'sold': 'Available',
             })
 
             assert response.status_code == 401
@@ -94,9 +94,9 @@ class TestPosts:
                 'title': 'Local test second post',
                 'descr': 'Second test descr',
                 'condition': 'new',
-                'list_dt': '1668994811',
+                'list_dt': '10/29/2022 10:11:53',
                 'price': '100',
-                'sold': 'False',
+                'sold': 'Available',
             })
             assert response.status_code == 201, response.json
             assert response.json == 'Post created successfully'
@@ -121,7 +121,7 @@ class TestPosts:
     def test_put(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             newpost = Post('1', '1337', '1', 'Local test first post',
-                           'First test descr', 'new', '1668994811', '100', 'False')
+                           'First test descr', 'new', '10/29/2022 10:11:53', '100', 'Available')
             newpost.save()
 
             response = client.put('api/posts/posts', json={
@@ -131,9 +131,9 @@ class TestPosts:
                 'title': 'Updated local test first post',
                 'descr': 'test descr',
                 'condition': 'new',
-                'list_dt': '1668994811',
+                'list_dt': '10/29/2022 10:11:53',
                 'price': '100',
-                'sold': 'False',
+                'sold': 'Available',
             })
             assert response.status_code == 201, response.json
             assert response.json == 'Post updated successfully'
@@ -156,7 +156,7 @@ class TestPosts:
     def test_delete(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             newpost = Post('1', '1337', '1', 'Local test first post',
-                           'First test descr', 'new', '1668994811', '100', 'False')
+                           'First test descr', 'new', '10/29/2022 10:11:53', '100', 'Available')
             newpost.save()
 
             response = client.delete('api/posts/posts', json={'should': 'fail'})
