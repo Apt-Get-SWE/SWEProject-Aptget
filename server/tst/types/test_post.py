@@ -11,7 +11,7 @@ class TestPost:
 
     @pytest.fixture
     def dict_instance(self):
-        return {"pid": "123", "uid": "234", "aid": "345",
+        return {"uid": "234", "aid": "345",
                 "title": "Selling chairs!", "descr": "willing to negotiate",
                 "condition": "new", "list_dt": "10/29/2022 10:11:53",
                 "price": "24.99", "sold": "Available"}
@@ -36,7 +36,7 @@ class TestPost:
         return {"uid": "234", "aid": "345", "title": "Selling chairs!",
                 "descr": "willing to negotiate", "condition": "new",
                 "list_dt": "10/29/2022 10:11:53", "price": "24.99",
-                "sold": "False"}
+                "sold": "Available"}
 
     @pytest.fixture
     def badtype_instance(self):
@@ -117,7 +117,7 @@ class TestPost:
                 "condition": "new",
                 "list_dt": "10/29/2022 10:11:53",
                 "price": "24.99",
-                "sold": "False"
+                "sold": "Available"
             }
             Post.insert(copy)
             assert Post.count(filters) == 2

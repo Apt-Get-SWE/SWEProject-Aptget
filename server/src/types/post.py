@@ -38,9 +38,9 @@ class Post:
                         dictionary does not contain required fields
         """
         Post.isValid(data)
-        
-        filters = {'pid': data['pid']}
-        if Post.exists(filters):
+
+        if 'pid' in data:
+            filters = {'pid': data['pid']}
             new_values = {'$set': data}
             Post.update_one(filters, new_values)
         else:
@@ -165,10 +165,6 @@ class Post:
         """
         if type(data) != dict:
             raise TypeError(f'Cannot insert data of type{type(data)}')
-
-        # pid is primary key
-        if 'pid' not in data:
-            raise ValueError('Cannot insert post without pid')
 
         # Check if price is a number
         try:

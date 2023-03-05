@@ -30,7 +30,7 @@ class TestPosts:
         if os.getenv('CLOUD') == q.LOCAL:
             newpost = Post('1', '1337', '1', 'Local test first post',
                            'First test descr', 'new', '10/29/2022 10:11:53', '100', 'Available')
-            newpost.save()
+            pid = newpost.save()
 
             response = client.get('api/posts/posts')
             assert response.status_code == 200
@@ -124,7 +124,7 @@ class TestPosts:
         if os.getenv('CLOUD') == q.LOCAL:
             newpost = Post('1', '1337', '1', 'Local test first post',
                            'First test descr', 'new', '10/29/2022 10:11:53', '100', 'Available')
-            newpost.save()
+            pid = newpost.save()
 
             response = client.put('api/posts/posts', json={
                 'pid': pid,
@@ -159,7 +159,7 @@ class TestPosts:
         if os.getenv('CLOUD') == q.LOCAL:
             newpost = Post('1', '1337', '1', 'Local test first post',
                            'First test descr', 'new', '10/29/2022 10:11:53', '100', 'Available')
-            newpost.save()
+            pid = newpost.save()
 
             response = client.delete('api/posts/posts', json={'should': 'fail'})
             assert response.status_code == 500
