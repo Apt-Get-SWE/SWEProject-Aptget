@@ -10,12 +10,6 @@ class TestAddress:
         return Address("123", "370 Jay St", "Brooklyn", "NY", "11201")
 
     @pytest.fixture
-    def dict_instance(self):
-        return {"aid": "123", "building": "370 Jay St",
-                "city": "Brooklyn", "state": "NY",
-                "zipcode": "11201"}
-
-    @pytest.fixture
     def post_and_json_instance(self):
         address = Address("123", "370 Jay St", "Brooklyn", "NY", "11201")
         json = '{"aid": "123", "building": "370 Jay St", "city": "Brooklyn", "state": "NY", "zipcode": "11201"}'  # noqa
@@ -78,12 +72,18 @@ class TestAddress:
 
         assert data == json
 
-    def test_address_query(self, dict_instance):
+    def test_address_query(self, dict_instance_no_aid):
         if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
-            Address.insert(dict_instance)
+            Address.insert(dict_instance_no_aid)
 
-            assert Address.count() > 0
-            assert Address.exists({'aid': dict_instance['aid']})
+            filters = {
+                "building": "370 Jay St",
+                "city": "Brooklyn",
+                "state": "NY",
+                "zipcode": "11201"
+            }
+            assert Address.count(filters) > 0
+            assert Address.exists(filters)
 
             res = Address.find_all()
             assert type(res) == list
@@ -94,11 +94,21 @@ class TestAddress:
             Address.delete_all()
             assert Address.count() == 0
 
-    def test_address_insert_no_aid(self, dict_instance_no_aid):
+    def test_address_insert(self, dict_instance_no_aid):
         if os.getenv('CLOUD') == q.LOCAL:
-            with pytest.raises(ValueError):
-                data = dict_instance_no_aid
-                Address.insert(data)
+            data = dict_instance_no_aid
+            Address.insert(data)
+
+            filters = {
+                "building": "370 Jay St",
+                "city": "Brooklyn",
+                "state": "NY",
+                "zipcode": "11201"
+            }
+            assert Address.count(filters) == 1
+
+            Address.delete_one(filters)
+            assert Address.count(filters) == 0
 
     def test_address_insert_badtype(self, badtype_instance):
         if os.getenv('CLOUD') == q.LOCAL:
@@ -107,18 +117,21 @@ class TestAddress:
                 assert not isinstance(data, dict)
                 Address.insert(data)
 
-    def test_insert_duplicate(self, dict_instance):
+    def test_address_insert_duplicate(self, dict_instance_no_aid):
         if os.getenv('CLOUD') == q.LOCAL:
-            Address.insert(dict_instance)
-            filters = {'aid': dict_instance['aid']}
+            Address.insert(dict_instance_no_aid)
+            filters = {
+                "building": "370 Jay St",
+                "city": "Brooklyn",
+                "state": "NY",
+                "zipcode": "11201"
+            }
             assert Address.count(filters) == 1
 
-            dict_instance['zipcode'] = '00000'
-            Address.insert(dict_instance)
-            assert Address.count(filters) == 1
+            copy = {"building": "370 Jay St", "city": "Brooklyn",
+                    "state": "NY", "zipcode": "11201"}
+            Address.insert(copy)
+            assert Address.count(filters) == 2
 
-            addr = Address.find_one(filters)
-            assert addr['zipcode'] == '00000'
-
-            Address.delete_all()
-            assert Address.count() == 0
+            Address.delete_all(filters)
+            assert Address.count(filters) == 0

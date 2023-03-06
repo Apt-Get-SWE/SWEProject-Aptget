@@ -1,6 +1,7 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
 from pymongo import results
+from uuid import uuid4
 import usaddress
 import json
 import logging
@@ -20,10 +21,11 @@ class Address:
 
     # STATIC METHODS
     @staticmethod
-    def insert(data: dict) -> None:
+    def insert(data: dict) -> str or None:
         """
         Inserts new Address to database or updates Address if
-        same AID is found.
+        same AID is found. A unique AID is generated if none is provided.
+        Returns AID of data inserted.
 
         Arguments:
         data (dict) -- dict containing the Address information
@@ -36,20 +38,18 @@ class Address:
         if type(data) != dict:
             raise TypeError(f'Cannot insert data of type{type(data)}')
 
-        # aid is primary key
-        if 'aid' not in data:
-            raise ValueError('Cannot insert apartment without aid')
-
-        filters = {'aid': data['aid']}
-        if Address.exists(filters):
+        if 'aid' in data:
+            filters = {'aid': data['aid']}
             new_values = {'$set': data}
-            Address.update(filters, new_values)
+            Address.update_one(filters, new_values)
         else:
+            data['aid'] = str(uuid4())
             query.insert('addresses', data)
             logging.info(f'Inserted address {data}')
+        return data['aid']
 
     @staticmethod
-    def update(filters: dict, new_values: dict) -> None:
+    def update_one(filters: dict, new_values: dict) -> None:
         """
         Finds a single Address with the specified filters
         and updates them with new values.
@@ -66,7 +66,7 @@ class Address:
         if type(filters) != dict:
             raise TypeError(f'Cannot update with filters of type{type(filters)}')  # noqa
 
-        query.update('addresses', filters, new_values)
+        query.update_one('addresses', filters, new_values)
         logging.info(f'Updated Addresses w/ filters {filters}')
 
     @staticmethod
@@ -145,14 +145,18 @@ class Address:
         """Returns the Address object as a JSON string."""
         return object_to_json_str(self)
 
-    def save(self):
+    def save(self) -> str or None:
         """
         Inserts Address object to database or updates Address if
         same AID is found.
+        Returns auto-generated AID if no duplicate is found.
         """
         # check if post already exists
         if not Address.exists({'aid': self.aid}):
-            Address.insert(self.to_dict())
+            # if aid not found, generate UUID inside Address.insert()
+            data = self.to_dict()
+            del data['aid']
+            return Address.insert(data)
         else:
             new_vals_dict = {"$set": {}}
             new_vals_dict["$set"]["building"] = self.building
@@ -160,4 +164,4 @@ class Address:
             new_vals_dict["$set"]["state"] = self.state
             new_vals_dict["$set"]["zipcode"] = self.zipcode
 
-            Address.update({'aid': self.aid}, new_vals_dict)
+            Address.update_one({'aid': self.aid}, new_vals_dict)
