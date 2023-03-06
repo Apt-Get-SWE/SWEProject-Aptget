@@ -13,28 +13,28 @@ class TestPost:
     def dict_instance(self):
         return {"uid": "234", "aid": "345",
                 "title": "Selling chairs!", "descr": "willing to negotiate",
-                "condition": "new", "list_dt": "10/29/2022 10:11:53",
+                "image": '', "condition": "new", "list_dt": "10/29/2022 10:11:53",
                 "price": "24.99", "sold": "Available"}
 
     @pytest.fixture
     def json_instance(self):
         return '{"pid": "123", "uid": "234", "aid": "345", \
                  "title": "Selling chairs!", "descr": "willing to negotiate", \
-                 "condition": "new", "list_dt": "10/29/2022 10:11:53", \
+                 "image": "", "condition": "new", "list_dt": "10/29/2022 10:11:53", \
                  "price": "24.99", "sold": "False"}'
 
     @pytest.fixture
     def post_and_json_instance(self):
         post = Post('123', '234', '345', 'Selling chairs!',
-                    'willing to negotiate', 'new',
+                    'willing to negotiate', '', 'new',
                     '10/29/2022 10:11:53', "24.99", "False")
-        json = '{"aid": "345", "condition": "new", "descr": "willing to negotiate", "list_dt": "10/29/2022 10:11:53", "pid": "123", "price": "24.99", "sold": "False", "title": "Selling chairs!", "uid": "234"}'  # noqa
+        json = '{"aid": "345", "condition": "new", "descr": "willing to negotiate", "image": "", "list_dt": "10/29/2022 10:11:53", "pid": "123", "price": "24.99", "sold": "False", "title": "Selling chairs!", "uid": "234"}'  # noqa
         return post, json
 
     @pytest.fixture
     def dict_instance_no_pid(self):
         return {"uid": "234", "aid": "345", "title": "Selling chairs!",
-                "descr": "willing to negotiate", "condition": "new",
+                "descr": "willing to negotiate", "image": '', "condition": "new",
                 "list_dt": "10/29/2022 10:11:53", "price": "24.99",
                 "sold": "Available"}
 

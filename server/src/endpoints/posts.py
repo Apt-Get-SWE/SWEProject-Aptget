@@ -87,7 +87,8 @@ class Posts(Resource):
                 return "User does not own post", 401
 
             img = post.image
-            img = Post._post_img_to_bytes(img)
+            if img:
+                img = self._post_img_to_bytes(img)
             post.image = img
 
             post.save()
