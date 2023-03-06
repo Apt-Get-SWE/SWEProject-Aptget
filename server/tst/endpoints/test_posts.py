@@ -29,7 +29,7 @@ class TestPosts:
     def test_get(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             newpost = Post('1', '1337', '1', 'Local test first post',
-                           'First test descr', 'new', '10/29/2022 10:11:53', '100', 'Available')
+                           'First test descr', '', 'new', '10/29/2022 10:11:53', '100', 'Available')
             pid = newpost.save()
 
             response = client.get('api/posts/posts')
@@ -53,6 +53,7 @@ class TestPosts:
                 'aid': '2',
                 'title': 'Local test second post',
                 'descr': 'Second test descr',
+                'image': '',
                 'condition': 'new',
                 'list_dt': '10/29/2022 10:11:53',
                 'price': '100',
@@ -70,6 +71,7 @@ class TestPosts:
                 'aid': '2',
                 'title': 'Local test second post',
                 'descr': 'Second test descr',
+                'image': '',
                 'condition': 'new',
                 'list_dt': '10/29/2022 10:11:53',
                 'price': '100',
@@ -93,6 +95,7 @@ class TestPosts:
                 'aid': '2',
                 'title': 'Local test second post',
                 'descr': 'Second test descr',
+                'image': '',
                 'condition': 'new',
                 'list_dt': '10/29/2022 10:11:53',
                 'price': '100',
@@ -123,7 +126,7 @@ class TestPosts:
     def test_put(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             newpost = Post('1', '1337', '1', 'Local test first post',
-                           'First test descr', 'new', '10/29/2022 10:11:53', '100', 'Available')
+                           'First test descr', '', 'new', '10/29/2022 10:11:53', '100', 'Available')
             pid = newpost.save()
 
             response = client.put('api/posts/posts', json={
@@ -132,6 +135,7 @@ class TestPosts:
                 'aid': '1',
                 'title': 'Updated local test first post',
                 'descr': 'test descr',
+                'image': '',
                 'condition': 'new',
                 'list_dt': '10/29/2022 10:11:53',
                 'price': '100',
@@ -158,7 +162,7 @@ class TestPosts:
     def test_delete(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             newpost = Post('1', '1337', '1', 'Local test first post',
-                           'First test descr', 'new', '10/29/2022 10:11:53', '100', 'Available')
+                           'First test descr', '', 'new', '10/29/2022 10:11:53', '100', 'Available')
             pid = newpost.save()
 
             response = client.delete('api/posts/posts', json={'should': 'fail'})
