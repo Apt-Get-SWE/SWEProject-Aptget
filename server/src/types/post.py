@@ -1,7 +1,9 @@
 from ..query import query
 from .utils import json_to_object, object_to_json_str
+from datetime import datetime
 from pymongo import results
 import logging
+from uuid import uuid4
 
 
 class Post:
@@ -22,10 +24,11 @@ class Post:
 
     # STATIC METHODS
     @staticmethod
-    def insert(data: dict) -> None:
+    def insert(data: dict) -> str or None:
         """
         Inserts new Post to database or updates Post if
-        same PID is found.
+        same PID is found. A unique PID is generated if none is provided.
+        Returns PID of data inserted.
 
         Arguments:
         data (dict) -- dict containing the Post information
@@ -34,23 +37,20 @@ class Post:
         ValueError -- raised if data is not of type dict or if the
                         dictionary does not contain required fields
         """
-        if type(data) != dict:
-            raise TypeError(f'Cannot insert data of type{type(data)}')
+        Post.isValid(data)
 
-        # pid is primary key
-        if 'pid' not in data:
-            raise ValueError('Cannot insert post without pid')
-
-        filters = {'pid': data['pid']}
-        if Post.exists(filters):
+        if 'pid' in data:
+            filters = {'pid': data['pid']}
             new_values = {'$set': data}
-            Post.update(filters, new_values)
+            Post.update_one(filters, new_values)
         else:
+            data['pid'] = str(uuid4())
             query.insert('posts', data)
             logging.info(f'Inserted post {data}')
+        return data['pid']
 
     @staticmethod
-    def update(filters: dict, new_values: dict) -> None:
+    def update_one(filters: dict, new_values: dict) -> None:
         """
         Finds a single Post with the specified filters
         and updates them with new values.
@@ -62,12 +62,10 @@ class Post:
         Exceptions:
         TypeError -- raised if filters or new_values are not of type dict
         """
-        if type(new_values) != dict:
-            raise TypeError(f'Cannot update with data of type{type(new_values)}')  # noqa
         if type(filters) != dict:
             raise TypeError(f'Cannot update with filters of type{type(filters)}')  # noqa
 
-        query.update('posts', filters, new_values)
+        query.update_one('posts', filters, new_values)
         logging.info(f'Updated Posts w/ filters {filters}')
 
     @staticmethod
@@ -91,12 +89,12 @@ class Post:
         return query.count('posts', filters)
 
     @staticmethod
-    def delete_one(pid) -> results.DeleteResult:
+    def delete_one(filters={}) -> results.DeleteResult:
         """
         Finds and deletes a single Post with the filters provided.
         Returns the deleted data as a DeleteResult.
         """
-        return query.delete_one('posts', {'pid': pid})
+        return query.delete_one('posts', filters)
 
     @staticmethod
     def delete_all(filters={}) -> results.DeleteResult:
@@ -141,13 +139,17 @@ class Post:
         """Returns the Post object as a JSON string."""
         return object_to_json_str(self)
 
-    def save(self):
+    def save(self) -> str or None:
         """
         Inserts Post object to database or updates Post if
         same PID is found.
+        Returns auto-generated PID if no duplicate is found.
         """
         if not Post.exists({'pid': self.pid}):
-            Post.insert(self.to_dict())
+            # if pid not found, generate UUID inside Post.insert()
+            data = self.to_dict()
+            del data['pid']
+            return Post.insert(data)
         else:
             new_vals_dict = {"$set": {}}
             new_vals_dict["$set"]["title"] = self.title
@@ -157,4 +159,27 @@ class Post:
             new_vals_dict["$set"]["price"] = self.price
             new_vals_dict["$set"]["sold"] = self.sold
 
-            Post.update({'pid': self.pid}, new_vals_dict)
+            Post.update_one({'pid': self.pid}, new_vals_dict)
+
+    def isValid(data):
+        """
+        Checks if the fields in data are present and valid.
+        """
+        if type(data) != dict:
+            raise TypeError(f'Cannot insert data of type{type(data)}')
+
+        # Check if price is a number
+        try:
+            data['price'] = round(float(data['price']), 2)
+        except ValueError:
+            raise ValueError('Price must be a valid number')
+
+        # Check if list_dt is in correct format
+        try:
+            datetime.strptime(data['list_dt'], "%m/%d/%Y %H:%M:%S")
+        except ValueError:
+            raise ValueError('list_dt must be in format %m/%d/%Y %H:%M:%S')
+
+        # Check if sold is one of ["Sold", "Not Sold", "Pending"]
+        if data['sold'] not in ["Sold", "Available", "Pending"]:
+            raise ValueError('sold must be one of ["Sold", "Available", "Pending"]')

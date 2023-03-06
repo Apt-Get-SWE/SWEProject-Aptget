@@ -7,32 +7,32 @@ import pytest
 class TestUser:
     @pytest.fixture
     def user_instance(self):
-        return User("123", "netid@nyu.edu", "John", "Doe",
+        return User("123", "netid@nyu.edu", "345", "John", "Doe",
                     "1234567890", "https://www.google.com")
 
     @pytest.fixture
     def dict_instance(self):
-        return {"uid": "123", "email": "netid@nyu.edu", "fname": "John",
-                "lname": "Doe", "phone": "1234567890",
+        return {"uid": "123", "email": "netid@nyu.edu", "aid": "345",
+                "fname": "John", "lname": "Doe", "phone": "1234567890",
                 "pfp": "https://www.google.com"}
 
     @pytest.fixture
     def json_instance(self):
-        return '{"uid": "123", "email": "netid@nyu.edu", "fname": "John", \
-            "lname": "Doe", "phone": "1234567890", \
+        return '{"uid": "123", "email": "netid@nyu.edu", "aid": "345", \
+            "fname": "John", "lname": "Doe", "phone": "1234567890", \
             "pfp": "https://www.google.com"}'
 
     @pytest.fixture
     def user_and_json_instance(self):
-        user = User("123", "netid@nyu.edu", "John", "Doe",
+        user = User("123", "netid@nyu.edu", "345", "John", "Doe",
                     "1234567890", "https://www.google.com")
-        json = '{"email": "netid@nyu.edu", "fname": "John", ' + \
+        json = '{"aid": "345", "email": "netid@nyu.edu", "fname": "John", ' + \
             '"lname": "Doe", "pfp": "https://www.google.com", ' + \
             '"phone": "1234567890", "uid": "123"}'
         return user, json
 
     @pytest.fixture
-    def json_no_pid_instance(self):
+    def json_bad_instance(self):
         return {"fname": "John", "lname": "Doe", "phone": "1234567890",
                 "pfp": "https://www.google.com"}
 
@@ -82,10 +82,10 @@ class TestUser:
             User.delete_all(filters)
             assert User.count(filters) == 0
 
-    def test_insert_fail(self, json_no_pid_instance):
+    def test_insert_fail(self, json_bad_instance):
         if os.getenv('CLOUD') == q.LOCAL:
             with pytest.raises(ValueError):
-                data = json_no_pid_instance
+                data = json_bad_instance
                 User.insert(data)
 
     def test_insert_duplicate(self, dict_instance):

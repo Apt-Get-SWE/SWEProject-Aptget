@@ -11,10 +11,10 @@ class TestPost:
 
     @pytest.fixture
     def dict_instance(self):
-        return {"pid": "123", "uid": "234", "aid": "345",
+        return {"uid": "234", "aid": "345",
                 "title": "Selling chairs!", "descr": "willing to negotiate",
                 "condition": "new", "list_dt": "10/29/2022 10:11:53",
-                "price": "24.99", "sold": "False"}
+                "price": "24.99", "sold": "Available"}
 
     @pytest.fixture
     def json_instance(self):
@@ -32,11 +32,11 @@ class TestPost:
         return post, json
 
     @pytest.fixture
-    def json_no_pid_instance(self):
+    def dict_instance_no_pid(self):
         return {"uid": "234", "aid": "345", "title": "Selling chairs!",
                 "descr": "willing to negotiate", "condition": "new",
                 "list_dt": "10/29/2022 10:11:53", "price": "24.99",
-                "sold": "False"}
+                "sold": "Available"}
 
     @pytest.fixture
     def badtype_instance(self):
@@ -65,14 +65,12 @@ class TestPost:
         data = post.to_json_str()
         assert data == json
 
-    def test_post_query(self, dict_instance):
+    def test_post_query(self, dict_instance_no_pid):
         if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
-            Post.insert(dict_instance)
-
+            pid = Post.insert(dict_instance_no_pid)
             assert Post.count() > 0
 
-            pid, uid, aid = dict_instance['pid'], dict_instance['uid'],\
-                dict_instance['aid']
+            uid, aid = dict_instance_no_pid['uid'], dict_instance_no_pid['aid']
             assert Post.exists({'pid': pid, 'uid': uid, 'aid': aid})
 
             res = Post.find_all()
@@ -84,11 +82,19 @@ class TestPost:
             Post.delete_all()
             assert Post.count() == 0
 
-    def test_post_insert_no_pid(self, json_no_pid_instance):
+    def test_post_insert(self, dict_instance_no_pid):
         if os.getenv('CLOUD') == q.LOCAL:
-            with pytest.raises(ValueError):
-                data = json_no_pid_instance
-                Post.insert(data)
+            data = dict_instance_no_pid
+            pid = Post.insert(data)
+
+            filters = {"pid": pid}
+            assert Post.count(filters) == 1
+
+            post = Post.find_one(filters)
+            assert post['title'] == 'Selling chairs!'
+
+            Post.delete_one(filters)
+            assert Post.count(filters) == 0
 
     def test_post_insert_badtype(self, badtype_instance):
         if os.getenv('CLOUD') == q.LOCAL:
@@ -97,18 +103,50 @@ class TestPost:
                 assert not isinstance(data, dict)
                 Post.insert(data)
 
-    def test_insert_duplicate(self, dict_instance):
+    def test_post_insert_duplicate(self, dict_instance_no_pid):
+        if os.getenv('CLOUD') == q.LOCAL:
+            Post.insert(dict_instance_no_pid)
+            filters = {"uid": "234", "aid": "345"}
+            assert Post.count(filters) == 1
+
+            copy = {
+                "uid": "234",
+                "aid": "345",
+                "title": "Selling chairs!",
+                "descr": "willing to negotiate",
+                "condition": "new",
+                "list_dt": "10/29/2022 10:11:53",
+                "price": "24.99",
+                "sold": "Available"
+            }
+            Post.insert(copy)
+            assert Post.count(filters) == 2
+
+            Post.delete_all()
+            assert Post.count() == 0
+
+    def test_insert_valid(self, dict_instance):
         if os.getenv('CLOUD') == q.LOCAL:
             Post.insert(dict_instance)
             filters = {'pid': dict_instance['pid']}
             assert Post.count(filters) == 1
-
-            dict_instance['title'] = 'Large couch'
-            Post.insert(dict_instance)
-            assert Post.count(filters) == 1
-
-            post = Post.find_one(filters)
-            assert post['title'] == 'Large couch'
-
             Post.delete_all()
             assert Post.count() == 0
+
+    def test_insert_invalid_price(self, dict_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            dict_instance['price'] = 'abc'
+            with pytest.raises(ValueError):
+                Post.insert(dict_instance)
+
+    def test_insert_invalid_sold(self, dict_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            dict_instance['sold'] = 'abc'
+            with pytest.raises(ValueError):
+                Post.insert(dict_instance)
+
+    def test_insert_invalid_list_dt(self, dict_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            dict_instance['list_dt'] = 'abc'
+            with pytest.raises(ValueError):
+                Post.insert(dict_instance)
