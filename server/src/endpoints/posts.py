@@ -34,10 +34,10 @@ GET_RESPONSE = api.model('PostGetResponse', {
 class Posts(Resource):
     def __init__(self, api=None, *args, **kwargs):
         super().__init__(api, *args, **kwargs)
-    
+
     @staticmethod
     def _post_img_to_bytes(source):
-        img = Image.open(source) # source is user-uploaded image from POST
+        img = Image.open(source)  # source is user-uploaded image from POST
         image_bytes = BytesIO()
         img.save(image_bytes, format='JPEG')
         return image_bytes.getvalue()
@@ -85,7 +85,7 @@ class Posts(Resource):
 
             if cookie_user_id != post.uid:
                 return "User does not own post", 401
-            
+
             img = post.image
             img = Post._post_img_to_bytes(img)
             post.image = img
