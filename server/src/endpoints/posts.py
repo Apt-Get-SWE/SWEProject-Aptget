@@ -1,5 +1,7 @@
 from flask_restx import Resource, Namespace, fields
 from flask import request, session
+from PIL import Image
+from io import BytesIO
 from ..types.post import Post
 from ..types.utils import parse_json
 
@@ -11,6 +13,7 @@ POST_JSON = api.model('Post', {
     "uid": fields.String(description="User ID"),
     "title": fields.String(description="Title of the post"),
     "descr": fields.String(description="Description of the post"),
+    "image": fields.Raw(description="Image of the item"),
     "condition": fields.String(description="Condition of the item", enum=['new', 'like new', 'good', 'fair', 'poor']),
     "list_dt": fields.DateTime(description="Date the item was listed"),
     "price": fields.Float(description="Price of the item", min=0),
@@ -31,6 +34,13 @@ GET_RESPONSE = api.model('PostGetResponse', {
 class Posts(Resource):
     def __init__(self, api=None, *args, **kwargs):
         super().__init__(api, *args, **kwargs)
+    
+    @staticmethod
+    def _post_img_to_bytes(source):
+        img = Image.open(source) # source is user-uploaded image from POST
+        image_bytes = BytesIO()
+        img.save(image_bytes, format='JPEG')
+        return image_bytes.getvalue()
 
     @api.produces(['application/json'])
     @api.marshal_with(GET_RESPONSE)
@@ -75,6 +85,10 @@ class Posts(Resource):
 
             if cookie_user_id != post.uid:
                 return "User does not own post", 401
+            
+            img = post.image
+            img = Post._post_img_to_bytes(img)
+            post.image = img
 
             post.save()
             return "Post created successfully", 201

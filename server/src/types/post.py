@@ -111,17 +111,18 @@ class Post:
     def from_json(cls, data: str):
         """Creates a Post object from the JSON string provided."""
         obj = json_to_object(data)
-        return cls(obj.pid, obj.uid, obj.aid, obj.title, obj.descr, obj.condition, obj.list_dt, obj.price, obj.sold)  # noqa
+        return cls(obj.pid, obj.uid, obj.aid, obj.title, obj.descr, obj.image, obj.condition, obj.list_dt, obj.price, obj.sold)  # noqa
 
     # NON-STATIC METHODS
     def __init__(self, pid: str, uid: str, aid: str, title: str = None,
-                 descr: str = None, condition: str = None, list_dt: str = None,
-                 price: str = "0", sold: str = "False"):
+                 descr: str = None, image: str = None, condition: str = None,
+                 list_dt: str = None, price: str = "0", sold: str = "False"):
         self.pid = pid
         self.uid = uid
         self.aid = aid
         self.title = title
         self.descr = descr
+        self.image = image
         self.condition = condition
         self.list_dt = list_dt
         self.price = price
@@ -151,6 +152,7 @@ class Post:
             new_vals_dict = {"$set": {}}
             new_vals_dict["$set"]["title"] = self.title
             new_vals_dict["$set"]["descr"] = self.descr
+            new_vals_dict["$set"]["image"] = self.image
             new_vals_dict["$set"]["condition"] = self.condition
             new_vals_dict["$set"]["price"] = self.price
             new_vals_dict["$set"]["sold"] = self.sold
