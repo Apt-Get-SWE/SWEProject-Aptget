@@ -1,18 +1,18 @@
 const Footer = () => (
     <div>
-        <footer aria-label="Site Footer" class="bg-white text-center">
-            <div class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8">
-                <div class="mx-auto max-w-3xl space-y-6">
-                    <div class="flex justify-center gap-6">
+        <footer aria-label="Site Footer" className="bg-white text-center">
+            <div className="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-3xl space-y-6">
+                    <div className="flex justify-center gap-6">
                         <a
-                            class="text-gray-900 hover:text-gray-900/75"
-                            href="/"
+                            className="text-gray-900 hover:text-gray-900/75"
+                            href="https://github.com/Apt-Get-SWE/SWEProject-Aptget"
                             target="_blank"
                             rel="noreferrer"
                             aria-label="GitHub"
                         >
                             <svg
-                                class="h-8 w-8"
+                                className="h-8 w-8"
                                 fill="currentColor"
                                 viewBox="0 0 24 24"
                                 aria-hidden="true"
@@ -28,12 +28,12 @@ const Footer = () => (
 
                     <nav
                         aria-label="Footer Nav"
-                        class="rounded-3xl border-4 border-gray-900 p-6"
+                        className="rounded-3xl border-4 border-gray-900 p-6"
                     >
-                        <ul class="flex flex-wrap justify-center gap-6 text-sm font-bold">
+                        <ul className="flex flex-wrap justify-center gap-6 text-sm font-bold">
                             <li>
                                 <a
-                                    class="text-gray-900 transition hover:text-gray-900/75"
+                                    className="text-gray-900 transition hover:text-gray-900/75"
                                     href="/"
                                     target="_blank"
                                     rel="noreferrer"
@@ -44,7 +44,7 @@ const Footer = () => (
 
                             <li>
                                 <a
-                                    class="text-gray-900 transition hover:text-gray-900/75"
+                                    className="text-gray-900 transition hover:text-gray-900/75"
                                     href="/"
                                     target="_blank"
                                     rel="noreferrer"
@@ -55,7 +55,7 @@ const Footer = () => (
 
                             <li>
                                 <a
-                                    class="text-gray-900 transition hover:text-gray-900/75"
+                                    className="text-gray-900 transition hover:text-gray-900/75"
                                     href="/"
                                     target="_blank"
                                     rel="noreferrer"

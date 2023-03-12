@@ -6,6 +6,7 @@ import NotFound from './NotFound/NotFound';
 import reportWebVitals from './reportWebVitals';
 import Register from './Pages/Register/Register';
 import CreateItem from './Pages/ItemRelated/CreateItem'
+import Dashboard from './Pages/Dashboard';
 
 import {
   createBrowserRouter,
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/create",
     element: <CreateItem />
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
   },
   {
     path: "*",
