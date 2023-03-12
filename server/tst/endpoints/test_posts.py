@@ -35,8 +35,16 @@ class TestPosts:
             response = client.get('api/posts/posts')
             assert response.status_code == 200
             assert len(response.json['Data']) == 1
-
             assert response.json['Data'][pid]['title'] == 'Local test first post'
+
+            response = client.get('api/posts/posts?aid=1')
+            assert response.status_code == 200
+            assert len(response.json['Data']) == 1
+            assert response.json['Data'][pid]['title'] == 'Local test first post'
+
+            response = client.get('api/posts/posts?aid=4')
+            assert response.status_code == 200
+            assert len(response.json['Data']) == 0
 
             # delete the new post
             response = client.delete('api/posts/posts', json={'pid': pid})

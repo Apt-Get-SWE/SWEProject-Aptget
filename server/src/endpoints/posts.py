@@ -53,7 +53,7 @@ class Posts(Resource):
         aid = request.args.get('aid')
         if aid:
             filters['aid'] = aid
-        
+
         data = parse_json(Post.find_all(filters=filters))
         formatted_data = {}
         for post in data:
