@@ -14,24 +14,18 @@ const CreateItem = () => {
 
     const [hover, setHover] = useState(false);
 
-    const handleMouseEnter = () => {
-        setHover(true);
-    }
-
-    const handleMouseLeave = () => {
-        setHover(false);
-    }
-
-    const handleDelete = () => {
-        setUploaded(null);
-    }
-
     return (
         <div className="m-10">
-            <Notification trigger={trigger} title="Welcome!" description="Successfully Created Item Listing" actionPrompt="Go to dashboard" action={
+            <Notification trigger={trigger} title="You're all set" description="Successfully Created Item Listing" actionPrompt="Go to dashboard" action={
                 () => navigate("/")
                 // TODO: axios post item
             } />
+            {
+                trigger ? 
+                <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50 z-10 pointer-events-auto"></div>
+                :
+                null
+            }
             <div className="lg:grid lg:grid-cols-5 lg:gap-6">
                 <div className="lg:col-span-1"></div>
                 <div className="lg:col-span-1 text-center lg:text-left">
@@ -43,11 +37,11 @@ const CreateItem = () => {
                     <p className="mt-1 text-lg text-gray-600">Item Photo</p>
                     {
                         uploaded ?
-                            <div className="relative group" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                            <div className="relative group" onMouseEnter={() => {setHover(true);}} onMouseLeave={() => {setHover(false);}}>
                                 <img src={URL.createObjectURL(uploaded)} alt="Item Uploaded" className="aspect-square w-full object-cover rounded-lg" />
                                 {hover &&
                                     <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-75 transition-opacity">
-                                        <button className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" onClick={handleDelete}>Delete</button>
+                                        <button className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => setUploaded(null)}>Delete</button>
                                     </div>
                                 }
                             </div>
@@ -59,14 +53,14 @@ const CreateItem = () => {
                                         <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
                                         <p className="text-xs text-gray-500 dark:text-gray-400">PNG or JPG</p>
                                     </div>
-                                    <input id="dropzone-file" type="file" className="hidden" onChange={handleUpload} />
+                                    <input id="dropzone-file" accept=".jpeg, .jpg, .png" type="file" className="hidden" onChange={handleUpload} />
                                 </label>
                             </div>
                     }
                     </div>
                 </div>
                 <div className="mt-5 lg:col-span-2 md:mt-0">
-                    <ItemInfoForm setTrigger={setTrigger} />
+                    <ItemInfoForm setTrigger={setTrigger} uploaded={uploaded}/>
                 </div>
                 <div className="lg:col-span-1"></div>
             </div>

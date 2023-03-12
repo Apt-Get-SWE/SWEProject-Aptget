@@ -10,6 +10,7 @@ const ItemInfoForm = (props) => {
 	}
 
 	const handleSubmit = (event) => {
+		event.preventDefault();
 		props.setTrigger(true);
     // todo: add Item to db
   }
