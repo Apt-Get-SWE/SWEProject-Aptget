@@ -46,9 +46,15 @@ class Posts(Resource):
     @api.marshal_with(GET_RESPONSE)
     def get(self):
         """
-        Returns a list of all existing posts
+        Returns a list of all posts that match a certain filter
         """
-        data = parse_json(Post.find_all())
+        # Get address ID from query string
+        filters = {}
+        aid = request.args.get('aid')
+        if aid:
+            filters['aid'] = aid
+
+        data = parse_json(Post.find_all(filters=filters))
         formatted_data = {}
         for post in data:
             formatted_data[post['pid']] = post
