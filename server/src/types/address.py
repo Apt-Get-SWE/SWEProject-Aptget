@@ -21,6 +21,14 @@ class Address:
 
     # STATIC METHODS
     @staticmethod
+    def is_valid(data) -> None:
+        if type(data) != dict:
+            raise TypeError(f'Cannot insert data of type{type(data)}')
+
+        if 'zipcode' in data and len(data['zipcode']) != 5:
+            raise ValueError(f"Invalid zip code: {data['zipcode']}")
+
+    @staticmethod
     def insert(data: dict) -> str or None:
         """
         Inserts new Address to database or updates Address if
@@ -29,15 +37,9 @@ class Address:
 
         Arguments:
         data (dict) -- dict containing the Address information
-
-        Exceptions:
-        ValueError -- raised if data is not of type dictionary or if the
-                        dictionary does not contain required fields
         """
 
-        if type(data) != dict:
-            raise TypeError(f'Cannot insert data of type{type(data)}')
-
+        Address.is_valid(data)
         if 'aid' in data:
             filters = {'aid': data['aid']}
             new_values = {'$set': data}

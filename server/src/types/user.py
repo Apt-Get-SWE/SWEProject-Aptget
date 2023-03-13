@@ -20,6 +20,21 @@ class User:
 
     # STATIC METHODS
     @staticmethod
+    def is_valid(data) -> None:
+        """
+        Checks if the fields in data are present and valid.
+        """
+        if type(data) != dict:
+            raise TypeError(f'Cannot insert data of type{type(data)}')
+
+        # Assert that data has an email and user id
+        if 'email' not in data or 'uid' not in data:
+            raise ValueError('Cannot insert user without an email or UID')
+
+        if 'phone' in data and len(data['phone']) != 10 and not data['phone'].isnumeric():  # noqa
+            raise ValueError(f"Invalid phone format {data['phone']}")
+
+    @staticmethod
     def insert(data: dict) -> None:
         """
         Inserts new User to database or updates User if
@@ -27,18 +42,9 @@ class User:
 
         Arguments:
         data (dict) -- dict containing the User information
-
-        Exceptions:
-        ValueError -- raised if data is not of type dictionary or if the
-                        dictionary does not contain required fields
         """
-        if type(data) != dict:
-            raise ValueError(f'Cannot insert data of type{type(data)}')
 
-        # Assert that data has an email and user id
-        if 'email' not in data or 'uid' not in data:
-            raise ValueError('Cannot insert user without an email or UID')
-
+        User.is_valid(data)
         filters = {'uid': data['uid']}
         if User.exists(filters):
             new_values = {"$set": data}
