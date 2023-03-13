@@ -31,8 +31,10 @@ class User:
         if 'email' not in data or 'uid' not in data:
             raise ValueError('Cannot insert user without an email or UID')
 
-        if 'phone' in data and len(data['phone']) != 10 and not data['phone'].isnumeric():  # noqa
+        if data['phone'] != "None" and (len(data['phone']) != 10 or not data['phone'].isnumeric()):  # noqa
+            print(data['phone'], type(data["phone"]))
             raise ValueError(f"Invalid phone format {data['phone']}")
+        return True
 
     @staticmethod
     def insert(data: dict) -> None:
