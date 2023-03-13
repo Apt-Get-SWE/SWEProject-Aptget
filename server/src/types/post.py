@@ -46,6 +46,7 @@ class Post:
         # Check if sold is one of ["Sold", "Not Sold", "Pending"]
         if data['sold'] not in ["Sold", "Available", "Pending"]:
             raise ValueError('sold must be one of ["Sold", "Available", "Pending"]')
+        return True
 
     @staticmethod
     def insert(data: dict) -> str or None:

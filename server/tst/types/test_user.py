@@ -88,6 +88,13 @@ class TestUser:
                 data = json_bad_instance
                 User.insert(data)
 
+    def test_insert_fail_due_to_invalide_phone(self, dict_instance):
+        if os.getenv('CLOUD') == q.LOCAL:
+            with pytest.raises(ValueError):
+                data = dict_instance
+                data['phone'] = '12345678901'
+                User.insert(data)
+
     def test_insert_duplicate(self, dict_instance):
         if os.getenv('CLOUD') == q.LOCAL:
             User.insert(dict_instance)
