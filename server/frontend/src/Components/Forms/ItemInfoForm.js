@@ -10,19 +10,19 @@ const ItemInfoForm = (props) => {
 	}
 
 	const handleSubmit = (event) => {
-    event.preventDefault();
+		event.preventDefault();
 		props.setTrigger(true);
-    // todo: add add user info to db
+    // todo: add Item to db
   }
 
 	return (
-		<form className="w-full max-w-lg px-3 mx-auto mt-6">
+		<form className="w-full max-w-lg px-3 mx-auto mt-6" onSubmit={handleSubmit}>
 			<div className="flex flex-wrap -mx-3 mb-6">
 				<div className="w-full px-3 mb-4">
 					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-first-name">
 						Item Name
 					</label>
-					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Use a descriptive name for your item" name="itemName" value={inputs.itemName} onChange={handleChange}/>
+					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Use a descriptive name for your item" name="itemName" value={inputs.itemName} onChange={handleChange} required/>
 				</div>
 				<div className="w-full px-3 mb-2">
 					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-last-name">
@@ -37,7 +37,7 @@ const ItemInfoForm = (props) => {
 					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-address">
 						Address
 					</label>
-					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" type="text" placeholder="No. / Street / Apt" name="address" value={inputs.address} onChange={handleChange} required/>
+					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" type="text" name="address" placeholder="Street / No. / Apt" value={inputs.address} onChange={handleChange} required/>
 				</div>
 			</div>
 
@@ -46,7 +46,7 @@ const ItemInfoForm = (props) => {
 					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-city">
 						City
 					</label>
-					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="City" name="city" value={inputs.city} onChange={handleChange}/>
+					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="City" name="city" value={inputs.city} onChange={handleChange} required/>
 				</div>
 				<div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
 					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-state">
@@ -117,12 +117,12 @@ const ItemInfoForm = (props) => {
 					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-zip">
 						Zip
 					</label>
-					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-zip" type="text" placeholder="00000" name="zipcode" value={inputs.zipcode} onChange={handleChange}/>
+					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-zip" type="text" placeholder="00000" name="zipcode" value={inputs.zipcode} onChange={handleChange} required/>
 				</div>
 				
 			</div>
 			<div className="mt-8">
-				<button className="shadow text-lg bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button" onClick={handleSubmit}>
+				<button className="shadow text-lg bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit">
 					Create Item Listing
 				</button>
 			</div>

@@ -1,5 +1,5 @@
 const Notification = (props) => props.trigger ? (
-    <div className="fixed z-10 top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 bg-white shadow-md hover:shodow-lg rounded-2xl">
+    <div className="fixed z-50 top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 bg-white shadow-md hover:shodow-lg rounded-2xl">
         <div className="flex items-center justify-between">
             <div className="flex items-center">
                 <svg
