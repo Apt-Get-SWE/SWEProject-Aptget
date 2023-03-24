@@ -34,9 +34,13 @@ class TestAddr:
             assert aid is not None
 
             response = client.get('api/addresses/addr')
+            print(response.json)
+
             assert response.status_code == 200
             assert response.json['Type'] == 'Data'
             assert response.json['Title'] == 'List of addresses'
+            assert response.json['links']['create_address']['url'] == 'http://localhost/api/addresses/addr'
+            assert response.json['links']['create_address']['fields']['aid'] == 'Address ID (required)'
             assert isinstance(response.json['Data'], dict)
             assert len(response.json['Data']) > 0
 
