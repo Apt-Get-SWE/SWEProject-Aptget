@@ -22,31 +22,9 @@ class Post:
     }
     """
 
+    # TODO: change static methods to stand alone funcitons
+
     # STATIC METHODS
-    @staticmethod
-    def is_valid(data) -> None:
-        """
-        Checks if the fields in data are present and valid.
-        """
-        if type(data) != dict:
-            raise TypeError(f'Cannot insert data of type{type(data)}')
-
-        # Check if price is a number
-        try:
-            data['price'] = round(float(data['price']), 2)
-        except ValueError:
-            raise ValueError('Price must be a valid number')
-
-        # Check if list_dt is in correct format
-        try:
-            datetime.strptime(data['list_dt'], "%m/%d/%Y %H:%M:%S")
-        except ValueError:
-            raise ValueError('list_dt must be in format %m/%d/%Y %H:%M:%S')
-
-        # Check if sold is one of ["Sold", "Not Sold", "Pending"]
-        if data['sold'] not in ["Sold", "Available", "Pending"]:
-            raise ValueError('sold must be one of ["Sold", "Available", "Pending"]')
-        return True
 
     @staticmethod
     def insert(data: dict) -> str or None:
@@ -58,7 +36,6 @@ class Post:
         Arguments:
         data (dict) -- dict containing the Post information
         """
-        Post.is_valid(data)
 
         if 'pid' in data:
             filters = {'pid': data['pid']}
@@ -130,12 +107,45 @@ class Post:
     def from_json(cls, data: str):
         """Creates a Post object from the JSON string provided."""
         obj = json_to_object(data)
-        return cls(obj.pid, obj.uid, obj.aid, obj.title, obj.descr, obj.image, obj.condition, obj.list_dt, obj.price, obj.sold)  # noqa
+        return cls(obj.pid, obj.uid, obj.aid, obj.title, obj.descr,
+                   obj.image, obj.condition, obj.list_dt, obj.price, obj.sold)
+
+    def is_valid(self, pid, uid, aid, title,
+                 descr, image, condition,
+                 list_dt, price, sold) -> None:
+        """
+        Checks if the fields in data are present and valid.
+        """
+        # check if each field is of correct type
+        if type(pid) != str:
+            raise TypeError(f'pid must be of type str, not {type(pid)}')
+        if type(uid) != str:
+            raise TypeError(f'uid must be of type str, not {type(uid)}')
+        if type(aid) != str:
+            raise TypeError(f'aid must be of type str, not {type(aid)}')
+        if list_dt is not None:
+            if type(list_dt) != str:
+                raise TypeError(f'list_dt must be of type str, not {type(list_dt)}')
+
+            try:
+                datetime.strptime(list_dt, "%m/%d/%Y %H:%M:%S")
+            except ValueError:
+                raise ValueError('list_dt must be in format %m/%d/%Y %H:%M:%S')
+        if price is not None:
+            try:
+                round(float(price), 2)
+            except ValueError:
+                raise ValueError('Price must be a valid number')
+
+        if sold is None or sold not in ["Sold", "Available", "Pending"]:
+            raise ValueError('sold must be one of ["Sold", "Available", "Pending"]')
 
     # NON-STATIC METHODS
     def __init__(self, pid: str, uid: str, aid: str, title: str = None,
                  descr: str = None, image: str = None, condition: str = None,
                  list_dt: str = None, price: str = "0", sold: str = "False"):
+        # TODO: run validation on all fields
+        self.is_valid(pid, uid, aid, title, descr, image, condition, list_dt, price, sold) 
         self.pid = pid
         self.uid = uid
         self.aid = aid
@@ -144,8 +154,9 @@ class Post:
         self.image = image
         self.condition = condition
         self.list_dt = list_dt
-        self.price = price
+        self.price = str(round(float(price), 2))
         self.sold = sold
+
 
     def to_dict(self):
         """
