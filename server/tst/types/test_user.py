@@ -17,6 +17,13 @@ class TestUser:
                 "pfp": "https://www.google.com"}
 
     @pytest.fixture
+    def dict_instance_phone_none(self):
+        return {"uid": "123", "email": "netid@nyu.edu", "aid": "345",
+                "fname": "John", "lname": "Doe",
+                "pfp": "https://www.google.com",
+                "phone": None}
+
+    @pytest.fixture
     def json_instance(self):
         return '{"uid": "123", "email": "netid@nyu.edu", "aid": "345", \
             "fname": "John", "lname": "Doe", "phone": "1234567890", \
@@ -32,9 +39,14 @@ class TestUser:
         return user, json
 
     @pytest.fixture
-    def json_bad_instance(self):
-        return {"fname": "John", "lname": "Doe", "phone": "1234567890",
-                "pfp": "https://www.google.com"}
+    def json_instance_no_uid(self):
+        return {"email": "netid@nyu.edu", "fname": "John", "lname": "Doe",
+                "phone": "1234567890", "pfp": "https://www.google.com"}
+
+    @pytest.fixture
+    def json_instance_no_email(self):
+        return {"uid": "123", "fname": "John", "lname": "Doe",
+                "phone": "1234567890", "pfp": "https://www.google.com"}
 
     # Test from_json
     def test_from_json(self, json_instance):
@@ -82,21 +94,32 @@ class TestUser:
             User.delete_all(filters)
             assert User.count(filters) == 0
 
-    def test_insert_fail(self, json_bad_instance):
-        if os.getenv('CLOUD') == q.LOCAL:
+    def test_insert_phone_none(self, dict_instance_phone_none):
+        if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
+            User.insert(dict_instance_phone_none)
+            assert User.count() == 1
+
+    def test_insert_fail_no_uid(self, json_instance_no_uid):
+        if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
             with pytest.raises(ValueError):
-                data = json_bad_instance
+                data = json_instance_no_uid
                 User.insert(data)
 
-    def test_insert_fail_due_to_invalide_phone(self, dict_instance):
-        if os.getenv('CLOUD') == q.LOCAL:
+    def test_insert_fail_no_email(self, json_instance_no_email):
+        if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
+            with pytest.raises(ValueError):
+                data = json_instance_no_email
+                User.insert(data)
+
+    def test_insert_fail_invalid_phone(self, dict_instance):
+        if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
             with pytest.raises(ValueError):
                 data = dict_instance
                 data['phone'] = '12345678901'
                 User.insert(data)
 
     def test_insert_duplicate(self, dict_instance):
-        if os.getenv('CLOUD') == q.LOCAL:
+        if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
             User.insert(dict_instance)
             filters = {'uid': dict_instance['uid']}
             assert User.count(filters) == 1
