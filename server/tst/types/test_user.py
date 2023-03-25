@@ -11,6 +11,11 @@ class TestUser:
                     "1234567890", "https://www.google.com")
 
     @pytest.fixture
+    def user_instance_phone_none(self):
+        return User("123", "netid@nyu.edu", "345", "John", "Doe",
+                    None, "https://www.google.com")
+
+    @pytest.fixture
     def dict_instance(self):
         return {"uid": "123", "email": "netid@nyu.edu", "aid": "345",
                 "fname": "John", "lname": "Doe", "phone": "1234567890",
@@ -94,10 +99,29 @@ class TestUser:
             User.delete_all(filters)
             assert User.count(filters) == 0
 
-    def test_insert_phone_none(self, dict_instance_phone_none):
+    def test_insert_where_phone_none(self, dict_instance_phone_none):
         if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
+            before = User.count({"uid": "123"})
+
             User.insert(dict_instance_phone_none)
-            assert User.count() == 1
+
+            after = User.count({"uid": "123"})
+            assert before + 1 == after
+
+            User.delete_one({"uid": "123"})
+            assert before == User.count({"uid": "123"})
+
+    def test_save_where_phone_none(self, user_instance_phone_none):
+        if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
+            before = User.count({"uid": "123"})
+
+            user_instance_phone_none.save()
+
+            after = User.count({"uid": "123"})
+            assert before + 1 == after
+
+            User.delete_one({"uid": "123"})
+            assert before == User.count({"uid": "123"})
 
     def test_insert_fail_no_uid(self, json_instance_no_uid):
         if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
