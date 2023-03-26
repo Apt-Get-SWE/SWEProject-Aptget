@@ -7,7 +7,7 @@ import pytest
 class TestPost:
     @pytest.fixture
     def post_instance(self):
-        return Post("123", "234", "345")
+        return Post("123", "234", "345", sold="Available")
 
     @pytest.fixture
     def dict_instance(self):
@@ -21,14 +21,14 @@ class TestPost:
         return '{"pid": "123", "uid": "234", "aid": "345", \
                  "title": "Selling chairs!", "descr": "willing to negotiate", \
                  "image": "", "condition": "new", "list_dt": "10/29/2022 10:11:53", \
-                 "price": "24.99", "sold": "False"}'
+                 "price": "24.99", "sold": "Available"}'
 
     @pytest.fixture
     def post_and_json_instance(self):
         post = Post('123', '234', '345', 'Selling chairs!',
                     'willing to negotiate', '', 'new',
-                    '10/29/2022 10:11:53', "24.99", "False")
-        json = '{"aid": "345", "condition": "new", "descr": "willing to negotiate", "image": "", "list_dt": "10/29/2022 10:11:53", "pid": "123", "price": "24.99", "sold": "False", "title": "Selling chairs!", "uid": "234"}'  # noqa
+                    '10/29/2022 10:11:53', "24.99", "Available")
+        json = '{"aid": "345", "condition": "new", "descr": "willing to negotiate", "image": "", "list_dt": "10/29/2022 10:11:53", "pid": "123", "price": "24.99", "sold": "Available", "title": "Selling chairs!", "uid": "234"}'  # noqa
         return post, json
 
     @pytest.fixture
@@ -133,20 +133,21 @@ class TestPost:
             Post.delete_all()
             assert Post.count() == 0
 
-    def test_insert_invalid_price(self, dict_instance):
-        if os.getenv('CLOUD') == q.LOCAL:
-            dict_instance['price'] = 'abc'
-            with pytest.raises(ValueError):
-                Post.insert(dict_instance)
+    def test_init_invalid_price(self, dict_instance):
+        with pytest.raises(ValueError):
+            Post(pid = "123", uid = '234', aid = '345', title = 'Selling chairs!',
+                 price='24k', sold='Available', list_dt='10/29/2022 10:11:53',
+                 descr='willing to negotiate', condition='new')
 
-    def test_insert_invalid_sold(self, dict_instance):
-        if os.getenv('CLOUD') == q.LOCAL:
-            dict_instance['sold'] = 'abc'
-            with pytest.raises(ValueError):
-                Post.insert(dict_instance)
 
-    def test_insert_invalid_list_dt(self, dict_instance):
-        if os.getenv('CLOUD') == q.LOCAL:
-            dict_instance['list_dt'] = 'abc'
-            with pytest.raises(ValueError):
-                Post.insert(dict_instance)
+    def test_init_invalid_sold(self, dict_instance):
+        with pytest.raises(ValueError):
+            Post(pid = "123", uid = '234', aid = '345', title = 'Selling chairs!',
+                 price='24.99', sold='False', list_dt='10/29/2022 10:11:53',
+                 descr='willing to negotiate', condition='new')
+
+    def test_init_invalid_list_dt(self, dict_instance):
+        with pytest.raises(ValueError):
+            Post(pid = "123", uid = '234', aid = '345', title = 'Selling chairs!',
+                 price='24.99', sold='Available', list_dt='10-29-2022 10:11:53',
+                 descr='willing to negotiate', condition='new')
