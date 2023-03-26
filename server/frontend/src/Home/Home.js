@@ -5,26 +5,11 @@ import { useContext } from 'react';
 import AuthContext from '../Auth/AuthProvider';
 
 function Home() {
-  const { loggedIn, setLoggedIn } = useContext(AuthContext)
-
-  const handleLogin = async () => {
-      window.location.href = "/api/login/login"
-  }
-
-  const handleAuth = async () => {
-    if (!loggedIn) {
-      axios.get("/api/login/restricted_area").then((res) => {
-        if (res.data && res.data.Status === "Success") {
-          setLoggedIn(true)
-        }
-      });
-    }
-  }
-
+  const { loggedIn } = useContext(AuthContext);
 
   return (
-    <div className="Home" onLoad={handleAuth}>
-
+    <div className="Home">
+      
       <div className="Navbar">
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         {
@@ -34,7 +19,7 @@ function Home() {
               <span className="login-text">Dashboard</span>
             </div>
             :
-            <a className="LoginLink" onClick={handleLogin}>
+            <a className="LoginLink" href='/api/login/login'>
               <div className="Login">
                 <span className="login-text">Login</span>
               </div>
