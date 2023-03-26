@@ -1,6 +1,6 @@
 import logging
 from flask_restx import Resource, Namespace, fields
-from flask import request, session
+from flask import request, session, url_for
 from ..types.address import Address
 from ..types.utils import parse_json
 
@@ -23,6 +23,7 @@ GET_RESPONSE = api.model('AddressGetResponse', {
     "Type": fields.String(description="Type of response"),
     "Title": fields.String(description="Title of response"),
     "Data": fields.Raw(description="Data of response"),
+    "links": fields.Raw(description="Links for HATEOAS"),
 })
 
 
@@ -35,7 +36,7 @@ class Addresses(Resource):
     @api.marshal_with(GET_RESPONSE)
     def get(self):
         '''
-        Returns a list of all existing addresses
+        Returns a list of all existing addresses, or a list of addresses that match the address prefix
         '''
         prefix = request.args.get('addressPrefix')
         logging.info(f'addressPrefix: {prefix}')
@@ -59,12 +60,37 @@ class Addresses(Resource):
         for addr in data:
             if zipcode and addr['zipcode'] != zipcode:
                 continue
-            formatted_data[addr['aid']] = addr
+
+            addr_id = addr['aid']
+            addr["links"] = {
+                "self": url_for('api.addresses_addresses', _external=True, _method='GET'),
+                "update": {
+                    "url": url_for('api.addresses_addresses', _external=True, _method='PUT'),
+                    "aid": addr_id
+                },
+                "delete": {
+                    "url": url_for('api.addresses_addresses', _external=True, _method='DELETE'),
+                    "aid": addr_id
+                }
+            }
+            formatted_data[addr_id] = addr
 
         return {
             'Type': 'Data',
             'Title': 'List of addresses',
-            'Data': formatted_data
+            'Data': formatted_data,
+            'links': {
+                'create_address': {
+                    "url": url_for('api.addresses_addresses', _external=True, _method='POST'),
+                    "fields": {
+                        "aid": "Address ID (required)",
+                        "building": "Address building name",
+                        "city": "Address city name",
+                        "state": "Address state name",
+                        "zipcode": "Address zip code"
+                    }
+                }
+            }
         }
 
     @api.expect(addresses_field)
