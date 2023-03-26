@@ -7,40 +7,31 @@ import reportWebVitals from './reportWebVitals';
 import Register from './Pages/Register/Register';
 import CreateItem from './Pages/ItemRelated/CreateItem'
 import Dashboard from './Pages/Dashboard';
+import { AuthProvider } from './Auth/AuthProvider';
+import RequireAuth from './Auth/RequireAuth';
 
 import {
-  createBrowserRouter,
-  RouterProvider,
+  Routes,
+  Route,
+  BrowserRouter,
 } from "react-router-dom";
-
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/register",
-    element: <Register />
-  },
-  {
-    path: "/create",
-    element: <CreateItem />
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "*",
-    element: <NotFound />,
-  },
-]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/register" element={<Register />} />
+            <Route path="/create" element={<CreateItem />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   </React.StrictMode>
 );
 
