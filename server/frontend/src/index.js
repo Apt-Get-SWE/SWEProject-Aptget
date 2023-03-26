@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import Register from './Pages/Register/Register';
 import CreateItem from './Pages/ItemRelated/CreateItem'
 import Dashboard from './Pages/Dashboard';
+import { AuthProvider } from './Auth/AuthProvider';
 
 import {
   createBrowserRouter,
@@ -40,7 +41,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );
 

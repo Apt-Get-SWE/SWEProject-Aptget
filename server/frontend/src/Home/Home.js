@@ -1,34 +1,40 @@
 import './Home.css';
 import spotlight from "./spotlight.svg"
 import axios from 'axios'
-import { useState } from 'react';
+import { useContext } from 'react';
+import AuthContext from '../Auth/AuthProvider';
 
 function Home() {
-  const [loggedIn, setLoggedIn] = useState(false)
+  const { loggedIn, setLoggedIn } = useContext(AuthContext)
 
-  if (sessionStorage.getItem("loggedIn") !== "1" || loggedIn === false) {
-    axios.get("/api/login/restricted_area").then((res) => {
-      if (res.data && res.data.Status === "Success") {
-        sessionStorage.setItem("loggedIn", "1")
-        setLoggedIn(true)
-      }
-    });
+  const handleLogin = async () => {
+      window.location.href = "/api/login/login"
   }
 
+  const handleAuth = async () => {
+    if (!loggedIn) {
+      axios.get("/api/login/restricted_area").then((res) => {
+        if (res.data && res.data.Status === "Success") {
+          setLoggedIn(true)
+        }
+      });
+    }
+  }
+
+
   return (
-    <div className="Home">
+    <div className="Home" onLoad={handleAuth}>
 
       <div className="Navbar">
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         {
           loggedIn
             ? 
-            // TODO: Make this a link to the dashboard (Dashboard frontend and backend not yet implemented)
             <div className='LoggedIn'>
               <span className="login-text">Dashboard</span>
             </div>
             :
-            <a className="LoginLink" href="/api/login/login">
+            <a className="LoginLink" onClick={handleLogin}>
               <div className="Login">
                 <span className="login-text">Login</span>
               </div>
