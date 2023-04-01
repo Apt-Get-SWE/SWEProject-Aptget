@@ -10,8 +10,7 @@ const Register = () => {
     return (
         <div class="m-10">
             <Notification trigger={trigger} title="Welcome!" description="You are officially an AptGetter" actionPrompt="Go to dashboard" action={
-                () => navigate("/")
-                // TODO: Should navigate to the dashboard after it's implemented
+                () => navigate("/dashboard")
             }/>
             <div class="lg:grid lg:grid-cols-5 lg:gap-6">
                 <div class="lg:col-span-1"></div>
