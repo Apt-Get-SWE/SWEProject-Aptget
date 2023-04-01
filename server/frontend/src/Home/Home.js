@@ -1,6 +1,5 @@
 import './Home.css';
 import spotlight from "./spotlight.svg"
-import axios from 'axios'
 import { useContext } from 'react';
 import AuthContext from '../Auth/AuthProvider';
 

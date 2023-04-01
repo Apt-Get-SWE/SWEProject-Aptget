@@ -1,7 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import AuthContext from "./AuthProvider";
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 
 const RequireAuth = () => {
   const { loggedIn, loading } = useContext(AuthContext);
