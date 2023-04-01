@@ -9,14 +9,19 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLoginStatus = async () => {
-      try {
-        const res = await axios.get("/api/login/restricted_area")
-        if (res.data && res.data.Status === "Success") {
-          setLoggedIn(true)
-        }
+      if (process.env.REACT_APP_DEV === '1') {
+        setLoggedIn(true)
         setLoading(false)
-      } catch (error) {
-        console.error(error)
+      } else {
+        try {
+          const res = await axios.get("/api/login/restricted_area")
+          if (res.data && res.data.Status === "Success") {
+            setLoggedIn(true)
+          }
+          setLoading(false)
+        } catch (error) {
+          console.error(error)
+        }
       }
     }
 
