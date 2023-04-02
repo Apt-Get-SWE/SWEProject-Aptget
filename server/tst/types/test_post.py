@@ -135,19 +135,18 @@ class TestPost:
 
     def test_init_invalid_price(self, dict_instance):
         with pytest.raises(ValueError):
-            Post(pid = "123", uid = '234', aid = '345', title = 'Selling chairs!',
+            Post(pid="123", uid='234', aid='345', title='Selling chairs!',
                  price='24k', sold='Available', list_dt='10/29/2022 10:11:53',
                  descr='willing to negotiate', condition='new')
 
-
     def test_init_invalid_sold(self, dict_instance):
         with pytest.raises(ValueError):
-            Post(pid = "123", uid = '234', aid = '345', title = 'Selling chairs!',
+            Post(pid="123", uid='234', aid='345', title='Selling chairs!',
                  price='24.99', sold='False', list_dt='10/29/2022 10:11:53',
                  descr='willing to negotiate', condition='new')
 
     def test_init_invalid_list_dt(self, dict_instance):
         with pytest.raises(ValueError):
-            Post(pid = "123", uid = '234', aid = '345', title = 'Selling chairs!',
+            Post(pid="123", uid='234', aid='345', title='Selling chairs!',
                  price='24.99', sold='Available', list_dt='10-29-2022 10:11:53',
                  descr='willing to negotiate', condition='new')

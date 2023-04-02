@@ -167,9 +167,11 @@ class Addresses(Resource):
             return 'Content-Type not supported!', 415
 
         cookie_user_id = session.get("user_id")
-        if cookie_user_id: # check if user is admin
+        print(f"cookie_user_id: {cookie_user_id}")
+        if cookie_user_id:  # check if user is admin
             user_obj = User.find_one(filters={'uid': cookie_user_id})
-            if user_obj and user_obj['role'] != 'admin':
+            print(f"user_obj: {user_obj}")
+            if not user_obj or user_obj['role'] != 'admin':
                 return "User not admin", 401
         else:
             return "User not logged in", 401
