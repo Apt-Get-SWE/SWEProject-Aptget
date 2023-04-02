@@ -2,6 +2,7 @@ import logging
 from flask_restx import Resource, Namespace, fields
 from flask import request, session, url_for
 from ..types.address import Address
+from ..types.user import User
 from ..types.utils import parse_json
 
 api = Namespace("addresses", "Operations related to addresses")
@@ -165,10 +166,12 @@ class Addresses(Resource):
         else:
             return 'Content-Type not supported!', 415
 
-        # TODO: Needs more access control here. Only admins should be able to delete addresses
         cookie_user_id = session.get("user_id")
-
-        if cookie_user_id is None:
+        if cookie_user_id: # check if user is admin
+            user_obj = User.find_one(filters={'uid': cookie_user_id})
+            if user_obj and user_obj['role'] != 'admin':
+                return "User not admin", 401
+        else:
             return "User not logged in", 401
 
         try:
