@@ -23,6 +23,13 @@ A online trading platform for buying and selling items between apartment residen
 3. `make`
 4. `make run`
 
+## How to run frontend only in local environment
+1. You need npm installed
+2. `cd server/frontend`
+3. `npm install`
+4. Set environment variable `REACT_APP_DEV=1`
+5. `npm start`
+
 ## Tech Stack
 
 - Design: Figma

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Home from './Home/Home';
-import NotFound from './NotFound/NotFound';
+import NotFound from './Pages/NotFound';
 import reportWebVitals from './reportWebVitals';
 import Register from './Pages/Register/Register';
 import CreateItem from './Pages/ItemRelated/CreateItem'
