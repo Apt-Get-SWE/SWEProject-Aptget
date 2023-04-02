@@ -2,6 +2,7 @@ import './Home.css';
 import spotlight from "./spotlight.svg"
 import { useContext } from 'react';
 import AuthContext from '../Auth/AuthProvider';
+import { Link } from 'react-router-dom';
 
 function Home() {
   const { loggedIn } = useContext(AuthContext);
@@ -15,7 +16,7 @@ function Home() {
           loggedIn
             ? 
             <div className='LoggedIn'>
-              <span className="login-text">Dashboard</span>
+              <Link to="/dashboard" className="login-text">Dashboard</Link>
             </div>
             :
             <a className="LoginLink" href='/api/login/login'>
