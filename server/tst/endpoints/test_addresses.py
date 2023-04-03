@@ -3,6 +3,7 @@ import os
 from server.app import app
 from server.src.query import query as q
 from ...src.types.address import Address
+from ...src.types.user import User
 
 
 class TestAddr:
@@ -15,6 +16,14 @@ class TestAddr:
             # set client session user_id cookie to 1337
             with client.session_transaction() as sess:
                 sess['user_id'] = '1337'
+
+            # Insert a test user in db
+            User.insert({
+                'uid': '1337',
+                'role': 'admin',
+                'email': 'admin@test.com',
+                'phone': '1234567890'
+            })
 
             yield client
         # Clean up

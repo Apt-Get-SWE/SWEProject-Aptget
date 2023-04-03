@@ -145,7 +145,7 @@ class Post:
                  descr: str = None, image: str = None, condition: str = None,
                  list_dt: str = None, price: str = "0", sold: str = "False"):
         # TODO: run validation on all fields
-        self.is_valid(pid, uid, aid, title, descr, image, condition, list_dt, price, sold) 
+        self.is_valid(pid, uid, aid, title, descr, image, condition, list_dt, price, sold)
         self.pid = pid
         self.uid = uid
         self.aid = aid
@@ -156,7 +156,6 @@ class Post:
         self.list_dt = list_dt
         self.price = str(round(float(price), 2))
         self.sold = sold
-
 
     def to_dict(self):
         """
