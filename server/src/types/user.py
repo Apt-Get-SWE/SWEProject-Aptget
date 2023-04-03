@@ -116,6 +116,21 @@ class User:
         """
         return query.delete_all('users', filters)
 
+    @staticmethod
+    def get_contact_info(uid) -> dict:
+        """
+        Finds a user with the UID provided.
+        Returns the user's phone and email.
+        """
+        user = User.find_one({'uid': uid})
+        info = {"email": user["email"], "phone": ""}
+
+        # If phone is valid, update info dict
+        if "phone" in user and user["phone"] != "None" \
+                and user["phone"] is not None:
+            info["phone"] = user["phone"]
+        return info
+
     # CLASS METHODS
     @classmethod
     def from_json(cls, data: str):
