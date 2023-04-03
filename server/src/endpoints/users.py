@@ -35,10 +35,10 @@ class Users(Resource):
     @api.response(400, 'No User ID provided!')
     def get(self) -> dict:
         """
-        Returns the contact information of users that match the given UIDs
+        Returns the contact information of users that match the given UIDs.
         """
 
-        # TODO Return list of user contact info if multiple users are provided
+        # TODO Support queries with parameters other than UID
         if 'uid' in request.args:
             # Get contact information from UID
             args = request.args.to_dict(flat=False)
