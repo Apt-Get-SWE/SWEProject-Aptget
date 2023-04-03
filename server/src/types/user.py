@@ -40,7 +40,7 @@ class User:
         return True
 
     @staticmethod
-    def insert(data: dict) -> None:
+    def insert(data: dict) -> str or None:
         """
         Inserts new User to database or updates User if
         same UID is found.
@@ -57,6 +57,7 @@ class User:
         else:
             query.insert('users', data)
             logging.info(f'Inserted user {data["uid"]}')
+        return data['uid']
 
     @staticmethod
     def update_one(filters: dict, new_values: dict) -> None:
@@ -123,6 +124,9 @@ class User:
         Returns the user's phone and email.
         """
         user = User.find_one({'uid': uid})
+        if user is None:
+            return {}
+
         info = {"email": user["email"], "phone": ""}
 
         # If phone is valid, update info dict
@@ -167,7 +171,8 @@ class User:
         same UID is found.
         """
         if not User.exists({'uid': self.uid}):
-            self.insert(self.to_dict())
+            data = self.to_dict()
+            return User.insert(data)
         else:
             new_vals_dict = {"$set": {}}
             new_vals_dict["$set"]["aid"] = self.aid
