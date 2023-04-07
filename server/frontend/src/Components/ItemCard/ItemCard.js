@@ -14,6 +14,7 @@ const ItemCard = (props) => {
           props.image ?
           <img className="object-cover w-full h-56 rounded-t-lg" src={props.image} alt="item" />
           :
+          // placeholder image, when no image is provided
           <img className="object-cover w-full h-56 rounded-t-lg" src={`https://picsum.photos/200/300.jpg`} alt="item" />
         }
       </div>
