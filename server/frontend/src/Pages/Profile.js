@@ -2,7 +2,7 @@ import React from 'react'
 import Footer from '../Components/Footer/Footer'
 import Navbar from '../Components/NavBar/Navbar'
 
-const Dashboard = () => {
+const Profile = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -15,4 +15,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Profile

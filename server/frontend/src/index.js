@@ -7,6 +7,8 @@ import reportWebVitals from './reportWebVitals';
 import Register from './Pages/Register/Register';
 import CreateItem from './Pages/ItemRelated/CreateItem'
 import Dashboard from './Pages/Dashboard';
+import Market from './Pages/Market';
+import Profile from './Pages/Profile';
 import { AuthProvider } from './Auth/AuthProvider';
 import RequireAuth from './Auth/RequireAuth';
 
@@ -27,6 +29,8 @@ root.render(
             <Route path="/register" element={<Register />} />
             <Route path="/create" element={<CreateItem />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/market" element={<Market />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
