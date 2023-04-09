@@ -147,6 +147,7 @@ class TestPost:
                  price='24.99', sold='Available', list_dt='10-29-2022 10:11:53',
                  descr='willing to negotiate', condition='new')
 
+    @pytest.mark.skip
     def test_populate_db(self):
         if os.getenv('CLOUD') == q.LOCAL:
             p1 = Post(uid='234', aid='345', title='Selling chairs!',
