@@ -121,10 +121,20 @@ const ItemInfoForm = (props) => {
 				</div>
 				
 			</div>
-			<div className="mt-8">
-				<button className="shadow text-lg bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit">
-					Create Item Listing
-				</button>
+			<div className="mt-8 flex justify-between">
+			<button
+				className="shadow text-lg bg-red-500 hover:bg-red-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+				type="button"
+				onClick={() => props.setTrigger(false)}
+			>
+				Cancel
+			</button>
+			<button
+				className="shadow text-lg bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+				type="submit"
+			>
+				Create Item Listing
+			</button>
 			</div>
 		</form>
 )}
