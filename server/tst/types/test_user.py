@@ -159,3 +159,13 @@ class TestUser:
 
             User.delete_all()
             assert User.count() == 0
+
+    def test_get_contact_info(self, user_instance):
+        if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
+            user_instance.save()
+            info = User.get_contact_info(user_instance.uid)
+            assert info["email"] == "netid@nyu.edu"
+            assert info["phone"] == "1234567890"
+
+            result = User.delete_one({"uid": user_instance.uid})
+            assert result.deleted_count == 1

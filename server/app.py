@@ -10,6 +10,7 @@ from .src.endpoints.login import GoogleLogIn, RestrictedArea, SaveUserLogin, api
 from .src.constants import Constants
 from .src.endpoints.menu import Menu
 from .src.endpoints.posts import Posts, api as posts
+from .src.endpoints.users import Users, api as users
 from .src.endpoints.addresses import Addresses, api as addr
 from .src.endpoints.googleapi import GoogleAPIRequest, api as google
 
@@ -31,6 +32,7 @@ logging.basicConfig(level=logging.INFO,
 
 api.add_namespace(login)
 api.add_namespace(posts)
+api.add_namespace(users)
 api.add_namespace(addr)
 api.add_namespace(google)
 
@@ -39,6 +41,7 @@ login.add_resource(GoogleLogIn, "/login", resource_class_kwargs={})
 login.add_resource(RestrictedArea, "/restricted_area", resource_class_kwargs={})
 login.add_resource(SaveUserLogin, "/callback")
 posts.add_resource(Posts, "/posts")
+users.add_resource(Users, "/users")
 addr.add_resource(Addresses, "/addr")
 google.add_resource(GoogleAPIRequest, "/serialize")
 
