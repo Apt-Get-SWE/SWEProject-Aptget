@@ -20,10 +20,6 @@ POST_JSON = api.model('Post', {
     "sold": fields.Boolean(description="Whether the item has been sold"),
 })
 
-PID_JSON = api.model('PostID', {
-    "pid": fields.String(description="Post ID", required=True),
-})
-
 GET_RESPONSE = api.model('PostGetResponse', {
     "Type": fields.String(description="Type of response"),
     "Title": fields.String(description="Title of response"),
@@ -134,7 +130,7 @@ class Posts(Resource):
         except Exception as e:
             return f'Error updating post: {e}', 500
 
-    @api.expect(PID_JSON)
+    @api.doc(params={'pid': 'The Post ID'})
     @api.response(201, 'Post deleted successfully')
     @api.response(500, 'Error deleting post')
     @api.response(415, 'Content-Type not supported!')
@@ -144,16 +140,15 @@ class Posts(Resource):
         Deletes a post
         """
         # For deleting a new post
-        content_type = request.headers.get('Content-Type')
-        if content_type == 'application/json':
-            json = request.json
-        else:
-            return 'Content-Type not supported!', 415
+        pid = request.args.get('pid')  # Get the aid from URL parameters
+        if not pid:
+            return "pid not provided", 400
+        if not Post.exists({'pid': pid}):
+            return "Post does not exist", 400
 
         # Parse pid, aid, uid, title, descr, condition, price, sold from json
         try:
-
-            post = Post.find_one(filters={'pid': json['pid']})
+            post = Post.find_one(filters={'pid': pid})
             cookie_user_id = session.get("user_id")
 
             if cookie_user_id is None:
@@ -162,7 +157,7 @@ class Posts(Resource):
             if cookie_user_id != post['uid']:
                 return "User does not own post", 401
 
-            Post.delete_one({'pid': json['pid']})
+            Post.delete_one({'pid': pid})
             return "Post deleted successfully", 201
         except Exception as e:
             return f'Error deleting post: {e}', 500

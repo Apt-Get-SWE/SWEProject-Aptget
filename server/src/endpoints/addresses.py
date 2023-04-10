@@ -16,10 +16,6 @@ addresses_field = api.model('Address', {
     "zipcode": fields.String(description="Address zip code"),
 })
 
-aid_field = api.model('Address ID', {
-    "aid": fields.String(description="Address ID", required=True)
-})
-
 GET_RESPONSE = api.model('AddressGetResponse', {
     "Type": fields.String(description="Type of response"),
     "Title": fields.String(description="Title of response"),
@@ -150,7 +146,7 @@ class Addresses(Resource):
         except Exception as e:
             return f'Error saving address: {e}', 500
 
-    @api.expect(aid_field)
+    @api.doc(params={'aid': 'The Address ID'})
     @api.response(200, 'Address deleted successfully')
     @api.response(500, 'Error deleting address')
     @api.response(415, 'Content-Type not supported!')
@@ -159,25 +155,22 @@ class Addresses(Resource):
         """
         Deletes an address
         """
-        # For deleting an existing address
-        content_type = request.headers.get('Content-Type')
-        if content_type == 'application/json':
-            json = request.json
-        else:
-            return 'Content-Type not supported!', 415
+        aid = request.args.get('aid')  # Get the aid from URL parameters
+        if not aid:
+            return "aid not provided", 400
+        if not Address.exists({'aid': aid}):
+            return "Address does not exist", 400
 
         cookie_user_id = session.get("user_id")
-        print(f"cookie_user_id: {cookie_user_id}")
         if cookie_user_id:  # check if user is admin
             user_obj = User.find_one(filters={'uid': cookie_user_id})
-            print(f"user_obj: {user_obj}")
             if not user_obj or user_obj['role'] != 'admin':
                 return "User not admin", 401
         else:
             return "User not logged in", 401
 
         try:
-            Address.delete_one({'aid': json['aid']})
+            Address.delete_one({'aid': aid})
             return "Address deleted successfully", 200
         except Exception as e:
             return f'Error deleting address: {e}', 500

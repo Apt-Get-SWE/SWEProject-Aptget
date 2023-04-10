@@ -47,7 +47,7 @@ class TestPosts:
             assert len(response.json['Data']) == 0
 
             # delete the new post
-            response = client.delete('api/posts/posts', json={'pid': pid})
+            response = client.delete(f'api/posts/posts?pid={pid}')
             assert response.status_code == 201, response.json
 
     def test_post_no_login_fail(self, client):
@@ -121,7 +121,7 @@ class TestPosts:
             assert response.json['Data'][pid]['title'] == 'Local test second post'
 
             # delete the new post
-            response = client.delete('api/posts/posts', json={'pid': pid})
+            response = client.delete(f'api/posts/posts?pid={pid}')
             assert response.status_code == 201, response.json
 
     def test_put_fail(self, client):
@@ -159,13 +159,13 @@ class TestPosts:
             assert response.json['Data'][pid]['title'] == 'Updated local test first post'
 
             # delete the new post
-            response = client.delete('api/posts/posts', json={'pid': pid})
+            response = client.delete(f'api/posts/posts?pid={pid}')
             assert response.status_code == 201, response.json
 
     def test_delete_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            response = client.delete('api/posts/posts', json={'should': 'fail'})
-            assert response.status_code == 500
+            response = client.delete('api/posts/posts?pid=fail')
+            assert response.status_code == 400
 
     def test_delete(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
@@ -173,10 +173,10 @@ class TestPosts:
                            'First test descr', '', 'new', '10/29/2022 10:11:53', '100', 'Available')
             pid = newpost.save()
 
-            response = client.delete('api/posts/posts', json={'should': 'fail'})
-            assert response.status_code == 500
+            response = client.delete('api/posts/posts?pid=fail')
+            assert response.status_code == 400
 
-            response = client.delete('api/posts/posts', json={'pid': pid})
+            response = client.delete(f'api/posts/posts?pid={pid}')
             assert response.status_code == 201, response.json
             assert response.json == 'Post deleted successfully'
 
