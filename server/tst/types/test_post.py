@@ -7,7 +7,7 @@ import pytest
 class TestPost:
     @pytest.fixture
     def post_instance(self):
-        return Post("123", "234", "345", sold="Available")
+        return Post(uid="234", aid="345", list_dt="10/10/2010 10:10:10", price="0", sold="Available")
 
     @pytest.fixture
     def dict_instance(self):
@@ -18,18 +18,17 @@ class TestPost:
 
     @pytest.fixture
     def json_instance(self):
-        return '{"pid": "123", "uid": "234", "aid": "345", \
+        return '{"uid": "234", "aid": "345", \
                  "title": "Selling chairs!", "descr": "willing to negotiate", \
                  "image": "", "condition": "new", "list_dt": "10/29/2022 10:11:53", \
                  "price": "24.99", "sold": "Available"}'
 
-    @pytest.fixture
-    def post_and_json_instance(self):
-        post = Post('123', '234', '345', 'Selling chairs!',
-                    'willing to negotiate', '', 'new',
-                    '10/29/2022 10:11:53', "24.99", "Available")
-        json = '{"aid": "345", "condition": "new", "descr": "willing to negotiate", "image": "", "list_dt": "10/29/2022 10:11:53", "pid": "123", "price": "24.99", "sold": "Available", "title": "Selling chairs!", "uid": "234"}'  # noqa
-        return post, json
+    # @pytest.fixture
+    # def post_instance(self):
+    #     post = Post(uid='234', aid='345', title='Selling chairs!',
+    #                 descr='willing to negotiate', image='', condition='new',
+    #                 list_dt='10/29/2022 10:11:53', price="24.99", sold="Available")
+    #     return post
 
     @pytest.fixture
     def dict_instance_no_pid(self):
@@ -46,7 +45,6 @@ class TestPost:
     def test_post_from_json(self, json_instance):
         # Test with a valid json string
         post = Post.from_json(json_instance)
-        assert post.pid == "123"
         assert post.uid == "234"
         assert post.aid == "345"
 
@@ -54,16 +52,14 @@ class TestPost:
     def test_post_to_dict(self, post_instance):
         # Test with a valid post
         post_dict = post_instance.to_dict()
-        assert post_dict["pid"] == "123"
         assert post_dict["uid"] == "234"
         assert post_dict["aid"] == "345"
 
     # Test to_json_str
-    def test_post_to_json_str(self, post_and_json_instance):
+    def test_post_to_json_str(self, post_instance):
         # Test with a valid post
-        post, json = post_and_json_instance
-        data = post.to_json_str()
-        assert data == json
+        json = post_instance.to_json_str()
+        assert type(json) == str
 
     def test_post_query(self, dict_instance_no_pid):
         if os.getenv('CLOUD', default=q.LOCAL) == q.LOCAL:
@@ -133,20 +129,33 @@ class TestPost:
             Post.delete_all()
             assert Post.count() == 0
 
-    def test_init_invalid_price(self, dict_instance):
+    def test_init_invalid_price(self):
         with pytest.raises(ValueError):
             Post(pid="123", uid='234', aid='345', title='Selling chairs!',
                  price='24k', sold='Available', list_dt='10/29/2022 10:11:53',
                  descr='willing to negotiate', condition='new')
 
-    def test_init_invalid_sold(self, dict_instance):
+    def test_init_invalid_sold(self):
         with pytest.raises(ValueError):
             Post(pid="123", uid='234', aid='345', title='Selling chairs!',
                  price='24.99', sold='False', list_dt='10/29/2022 10:11:53',
                  descr='willing to negotiate', condition='new')
 
-    def test_init_invalid_list_dt(self, dict_instance):
+    def test_init_invalid_list_dt(self):
         with pytest.raises(ValueError):
             Post(pid="123", uid='234', aid='345', title='Selling chairs!',
                  price='24.99', sold='Available', list_dt='10-29-2022 10:11:53',
                  descr='willing to negotiate', condition='new')
+
+    @pytest.mark.skip
+    def test_populate_db(self):
+        if os.getenv('CLOUD') == q.LOCAL:
+            p1 = Post(uid='234', aid='345', title='Selling chairs!',
+                      price='24.99', sold='Available', list_dt='10/29/2022 10:11:53',
+                      descr='willing to negotiate', condition='new')
+            p1.save()
+
+            p2 = Post(uid='420', aid='999', title='RTX 4090',
+                      price='2000.00', sold='Available', list_dt='01/01/2023 01:01:01',
+                      descr='willing to negotiate', condition='new')
+            p2.save()

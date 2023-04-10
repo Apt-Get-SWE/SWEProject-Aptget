@@ -107,23 +107,30 @@ class Post:
     def from_json(cls, data: str):
         """Creates a Post object from the JSON string provided."""
         obj = json_to_object(data)
-        return cls(obj.pid, obj.uid, obj.aid, obj.title, obj.descr,
-                   obj.image, obj.condition, obj.list_dt, obj.price, obj.sold)
+        return cls(**obj.__dict__)
 
-    def is_valid(self, pid, uid, aid, title,
-                 descr, image, condition,
-                 list_dt, price, sold) -> None:
+    def is_valid(self, **kwargs) -> None:
         """
         Checks if the fields in data are present and valid.
         """
         # check if each field is of correct type
-        if type(pid) != str:
+        if 'pid' in kwargs and type(pid := kwargs['pid']) != str:
             raise TypeError(f'pid must be of type str, not {type(pid)}')
-        if type(uid) != str:
+
+        if 'uid' not in kwargs:
+            raise ValueError('Post data does not contain uid!')
+        elif type(uid := kwargs['uid']) != str:
             raise TypeError(f'uid must be of type str, not {type(uid)}')
-        if type(aid) != str:
+
+        if 'aid' not in kwargs:
+            raise ValueError('Post data does not contain aid!')
+        elif type(aid := kwargs['aid']) != str:
             raise TypeError(f'aid must be of type str, not {type(aid)}')
-        if list_dt is not None:
+
+        if 'list_dt' not in kwargs:
+            raise ValueError('Post data does not include a listing date!')
+        else:
+            list_dt = kwargs['list_dt']
             if type(list_dt) != str:
                 raise TypeError(f'list_dt must be of type str, not {type(list_dt)}')
 
@@ -131,31 +138,33 @@ class Post:
                 datetime.strptime(list_dt, "%m/%d/%Y %H:%M:%S")
             except ValueError:
                 raise ValueError('list_dt must be in format %m/%d/%Y %H:%M:%S')
-        if price is not None:
+
+        if 'price' not in kwargs:
+            raise ValueError('Post data must include a price!')
+        elif 'price' in kwargs:
+            price = kwargs['price']
             try:
                 round(float(price), 2)
             except ValueError:
                 raise ValueError('Price must be a valid number')
 
-        if sold is None or sold not in ["Sold", "Available", "Pending"]:
-            raise ValueError('sold must be one of ["Sold", "Available", "Pending"]')
+        if 'sold' not in kwargs or kwargs['sold'] not in ["Sold", "Available", "Pending"]:
+            raise ValueError('Sold must be one of ["Sold", "Available", "Pending"]')
 
     # NON-STATIC METHODS
-    def __init__(self, pid: str, uid: str, aid: str, title: str = None,
-                 descr: str = None, image: str = None, condition: str = None,
-                 list_dt: str = None, price: str = "0", sold: str = "False"):
+    def __init__(self, **kwargs):
         # TODO: run validation on all fields
-        self.is_valid(pid, uid, aid, title, descr, image, condition, list_dt, price, sold)
-        self.pid = pid
-        self.uid = uid
-        self.aid = aid
-        self.title = title
-        self.descr = descr
-        self.image = image
-        self.condition = condition
-        self.list_dt = list_dt
-        self.price = str(round(float(price), 2))
-        self.sold = sold
+        self.is_valid(**kwargs)
+        self.pid = kwargs['pid'] if 'pid' in kwargs else str(uuid4())
+        self.uid = kwargs['uid']
+        self.aid = kwargs['aid']
+        self.title = kwargs['title'] if 'title' in kwargs else None
+        self.descr = kwargs['descr'] if 'descr' in kwargs else None
+        self.image = kwargs['image'] if 'image' in kwargs else None
+        self.condition = kwargs['image'] if 'image' in kwargs else None
+        self.list_dt = kwargs['list_dt']
+        self.price = str(round(float(kwargs['price']), 2))
+        self.sold = kwargs['sold']
 
     def to_dict(self):
         """
