@@ -53,9 +53,7 @@ class TestAddr:
             assert isinstance(response.json['Data'], dict)
             assert len(response.json['Data']) > 0
 
-            response = client.delete('api/addresses/addr', json={
-                "aid": aid
-            })
+            response = client.delete(f'api/addresses/addr?aid={aid}')
             assert response.status_code == 200
 
     def test_put(self, client):
@@ -82,9 +80,7 @@ class TestAddr:
             assert response.json['Data'][aid]['city'] == "altered city"
             assert response.json['Data'][aid]['state'] == "altered state"
 
-            response = client.delete('api/addresses/addr', json={
-                "aid": aid,
-            })
+            response = client.delete(f'api/addresses/addr?aid={aid}')
             assert response.status_code == 200
 
     def test_put_fail(self, client):
@@ -120,9 +116,7 @@ class TestAddr:
             assert isinstance(response.json['Data'], dict)
             assert len(response.json['Data']) == 1
 
-            response = client.delete('api/addresses/addr', json={
-                'aid': '0'
-            })
+            response = client.delete('api/addresses/addr?aid=0')
             assert response.status_code == 200
 
     def test_post_fail(self, client):
@@ -135,7 +129,7 @@ class TestAddr:
 
     def test_delete_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            response = client.delete('api/addresses/addr', json={'should': 'fail'})
+            response = client.delete('api/addresses/addr?aid=fail')
             assert response.status_code == 500
 
     def test_delete(self, client):
@@ -144,7 +138,7 @@ class TestAddr:
             aid = newAddr.save()
             assert aid is not None
 
-            response = client.delete('api/addresses/addr', json={'aid': aid})
+            response = client.delete(f'api/addresses/addr?aid={aid}')
             assert response.status_code == 200
             assert response.json == "Address deleted successfully"
 
