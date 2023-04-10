@@ -158,12 +158,12 @@ class Addresses(Resource):
         aid = request.args.get('aid')  # Get the aid from URL parameters
         if not aid:
             return "aid not provided", 400
+        if not Address.exists({'aid': aid}):
+            return "Address does not exist", 400
 
         cookie_user_id = session.get("user_id")
-        print(f"cookie_user_id: {cookie_user_id}")
         if cookie_user_id:  # check if user is admin
             user_obj = User.find_one(filters={'uid': cookie_user_id})
-            print(f"user_obj: {user_obj}")
             if not user_obj or user_obj['role'] != 'admin':
                 return "User not admin", 401
         else:

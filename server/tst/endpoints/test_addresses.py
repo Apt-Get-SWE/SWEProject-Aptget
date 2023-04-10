@@ -93,7 +93,7 @@ class TestAddr:
     def test_post_and_prefix_query(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             response = client.post('api/addresses/addr', json={
-                "aid": "0",
+                "aid": "will-be-overwritten",
                 "building": "test bldg",
                 "city": "test city",
                 "state": "test state",
@@ -116,7 +116,8 @@ class TestAddr:
             assert isinstance(response.json['Data'], dict)
             assert len(response.json['Data']) == 1
 
-            response = client.delete('api/addresses/addr?aid=0')
+            aid = list(response.json['Data'].keys())[0]
+            response = client.delete(f'api/addresses/addr?aid={aid}')
             assert response.status_code == 200
 
     def test_post_fail(self, client):
@@ -130,7 +131,7 @@ class TestAddr:
     def test_delete_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             response = client.delete('api/addresses/addr?aid=fail')
-            assert response.status_code == 500
+            assert response.status_code == 400
 
     def test_delete(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
