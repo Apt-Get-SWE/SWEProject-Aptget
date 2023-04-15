@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const UserProfile = () => {
   const [newAddress, setNewAddress] = useState({
-    address: '',
+    building: '',
     city: '',
     state: '--',
     zipcode: '00000',
@@ -31,8 +31,9 @@ const UserProfile = () => {
 
   const fetchUserInfo = async () => {
     try {
-      const response = await axios.get('/api/users/get_user_info');
-      setUserInfo(response.data);
+      const response = await axios.get('/api/users/users');
+      console.log(response.data);
+      setUserInfo(response.data.Data);
     } catch (error) {
       console.error(error);
     }
@@ -134,12 +135,7 @@ const UserProfile = () => {
     <div className="p-6">
       <div className="bg-white rounded-lg shadow-md w-full md:w-3/4 lg:w-1/2 mx-auto p-8">
         <div className="flex flex-col items-center mb-6">
-          <img
-            className="w-32 h-32 rounded-full mb-4"
-            src="https://via.placeholder.com/150"
-            alt="User Avatar"
-          />
-          <h2 className="text-2xl font-semibold">{userInfo.name}</h2>
+          <h2 className="text-2xl font-semibold">{userInfo.fname} {userInfo.lname}</h2>
           <p className="text-gray-500">{userInfo.email}</p>
         </div>
 
@@ -148,9 +144,9 @@ const UserProfile = () => {
           <div className="flex flex-wrap -mx-3 mb-2">
             <div className="w-full px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-address">
-                Address
+                Building
               </label>
-              <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" type="text" name="address" placeholder="Street / No. / Apt" value={newAddress.address} onChange={handleChange} required />
+              <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" type="text" name="address" placeholder="Street / No. / Apt" value={newAddress.building} onChange={handleChange} required />
             <p className="text-red-500 text-xs italic">{addressError}</p>
             </div>
           </div>
