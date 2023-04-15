@@ -6,7 +6,7 @@ const UserProfile = () => {
     building: '',
     city: '',
     state: '--',
-    zipcode: '00000',
+    zipcode: '',
   });
   const [createOrAlter, setCreateOrAlter] = useState('create');
   const [userInfo, setUserInfo] = useState({
@@ -45,10 +45,11 @@ const UserProfile = () => {
       const response = await axios.get('/api/users/get_user_address');
 
       // if response.data is empty dictionary, no need to set state
-      if (response.data === {}) {
+      if (Object.keys(response.data).length === 0) {
         setCreateOrAlter('create');
         return;
       } else {
+        console.log(response.data);
         setNewAddress(response.data);
         setCreateOrAlter('alter');
       }
@@ -68,20 +69,27 @@ const UserProfile = () => {
       return;
     }
     try {
-      console.log(newAddress);
       if (createOrAlter === 'create') {
-        const response = await axios.post('/api/users/create_user_address', {
-          newAddress,
+        const response = await axios.post('/api/addresses/addr', {
+            building: newAddress.building,
+            city: newAddress.city,
+            state: newAddress.state,
+            zipcode: newAddress.zipcode,
         });
-        console.log(response);
+        const linkResponse = await axios.post('/api/users/link', {
+          aid: response.data
+        });
       } else {
-        const response = await axios.post('/api/users/alter_user_address', {
-          newAddress,
+        const response = await axios.put('/api/addresses/addr', {
+            aid: newAddress.aid,
+            building: newAddress.building,
+            city: newAddress.city,
+            state: newAddress.state,
+            zipcode: newAddress.zipcode,
         });
-        console.log(response);
       }
     } catch (error) {
-      console.error(error);
+      alert(error);
     }
   };
 
@@ -90,7 +98,7 @@ const UserProfile = () => {
   };
 
   const validateAddress = () => {
-    if (newAddress.address.trim() === '') {
+    if (newAddress.building.trim() === '') {
       setAddressError('Address is required.');
       return false;
     } else {
@@ -143,10 +151,10 @@ const UserProfile = () => {
           <h3 className="text-xl font-semibold mb-4">Address</h3>
           <div className="flex flex-wrap -mx-3 mb-2">
             <div className="w-full px-3">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-address">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-building">
                 Building
               </label>
-              <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" type="text" name="address" placeholder="Street / No. / Apt" value={newAddress.building} onChange={handleChange} required />
+              <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" type="text" name="building" placeholder="Street / No. / Apt" value={newAddress.building} onChange={handleChange} required />
             <p className="text-red-500 text-xs italic">{addressError}</p>
             </div>
           </div>

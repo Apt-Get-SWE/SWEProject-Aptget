@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react"
 
 const ItemInfoForm = (props) => {
@@ -9,11 +10,54 @@ const ItemInfoForm = (props) => {
 		setInputs(values => ({...values, [name]: value}))
 	}
 
-	const handleSubmit = (event) => {
+	const toBase64 = (file) => {
+		return new Promise((resolve, reject) => {
+		  const reader = new FileReader();
+		  reader.readAsDataURL(file);
+		  reader.onload = () => {
+			const base64 = reader.result;
+			const base64Data = base64.substring(base64.indexOf(',') + 1); // Remove prefix
+			resolve(base64Data);
+		  };
+		  reader.onerror = (error) => reject(error);
+		});
+	};
+	   
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		props.setTrigger(true);
-    // todo: add Item to db
-  }
+
+		if (!props.uploaded) {
+			alert("Please upload an image");
+			return;
+		}
+		
+		// Convert the image to a base64 string
+		const imageBase64 = props.uploaded ? await toBase64(props.uploaded) : "";
+		
+		// Create the payload
+		const payload = {
+		  pid: "NOT_USED",
+		  aid: "NOT_USED",
+		  uid: "NOT_USED",
+		  title: inputs.itemName,
+		  descr: inputs.desc,
+		  image: imageBase64,
+		  condition: "new", // dummy
+		  price: inputs.price,
+		  sold: "Available",
+		};
+		
+		// Make the POST request
+		axios.post("api/posts/posts", payload, { responseType: 'text' })
+		  .then((response) => {
+			console.log("Post created successfully", response.data);
+			props.setTrigger(true);
+		  })
+		  .catch((error) => {
+			console.error("Error creating post", error);
+			alert(error.response.data);
+		  });
+	  };	   
 
 	return (
 		<form className="w-full max-w-lg px-3 mx-auto mt-6" onSubmit={handleSubmit}>
@@ -34,93 +78,24 @@ const ItemInfoForm = (props) => {
 
 			<div className="flex flex-wrap -mx-3 mb-2">
 				<div className="w-full px-3">
-					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-address">
-						Address
+					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-price">
+					Price
 					</label>
-					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" type="text" name="address" placeholder="Street / No. / Apt" value={inputs.address} onChange={handleChange} required/>
+					<input
+					className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+					id="grid-price"
+					type="number"
+					min="0"
+					step="0.01"
+					name="price"
+					placeholder="$0.00"
+					value={inputs.price}
+					onChange={handleChange}
+					required
+					/>
 				</div>
 			</div>
-
-			<div className="flex flex-wrap -mx-3">
-				<div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-city">
-						City
-					</label>
-					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="City" name="city" value={inputs.city} onChange={handleChange} required/>
-				</div>
-				<div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-state">
-						State
-					</label>
-					<div className="relative">
-						<select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state" name="state" value={inputs.state} onChange={handleChange}>
-							<option value="--">---</option>
-							<option value="AL">Alabama</option>
-							<option value="AK">Alaska</option>
-							<option value="AZ">Arizona</option>
-							<option value="AR">Arkansas</option>
-							<option value="CA">California</option>
-							<option value="CO">Colorado</option>
-							<option value="CT">Connecticut</option>
-							<option value="DE">Delaware</option>
-							<option value="DC">District Of Columbia</option>
-							<option value="FL">Florida</option>
-							<option value="GA">Georgia</option>
-							<option value="HI">Hawaii</option>
-							<option value="ID">Idaho</option>
-							<option value="IL">Illinois</option>
-							<option value="IN">Indiana</option>
-							<option value="IA">Iowa</option>
-							<option value="KS">Kansas</option>
-							<option value="KY">Kentucky</option>
-							<option value="LA">Louisiana</option>
-							<option value="ME">Maine</option>
-							<option value="MD">Maryland</option>
-							<option value="MA">Massachusetts</option>
-							<option value="MI">Michigan</option>
-							<option value="MN">Minnesota</option>
-							<option value="MS">Mississippi</option>
-							<option value="MO">Missouri</option>
-							<option value="MT">Montana</option>
-							<option value="NE">Nebraska</option>
-							<option value="NV">Nevada</option>
-							<option value="NH">New Hampshire</option>
-							<option value="NJ">New Jersey</option>
-							<option value="NM">New Mexico</option>
-							<option value="NY">New York</option>
-							<option value="NC">North Carolina</option>
-							<option value="ND">North Dakota</option>
-							<option value="OH">Ohio</option>
-							<option value="OK">Oklahoma</option>
-							<option value="OR">Oregon</option>
-							<option value="PA">Pennsylvania</option>
-							<option value="RI">Rhode Island</option>
-							<option value="SC">South Carolina</option>
-							<option value="SD">South Dakota</option>
-							<option value="TN">Tennessee</option>
-							<option value="TX">Texas</option>
-							<option value="UT">Utah</option>
-							<option value="VT">Vermont</option>
-							<option value="VA">Virginia</option>
-							<option value="WA">Washington</option>
-							<option value="WV">West Virginia</option>
-							<option value="WI">Wisconsin</option>
-							<option value="WY">Wyoming</option>
-						</select>
-						<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-							<svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-						</div>
-					</div>
-				</div>
-
-				<div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-					<label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-zip">
-						Zip
-					</label>
-					<input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-zip" type="text" placeholder="00000" name="zipcode" value={inputs.zipcode} onChange={handleChange} required/>
-				</div>
-				
-			</div>
+			
 			<div className="mt-8 flex justify-between">
 			<button
 				className="shadow text-lg bg-red-500 hover:bg-red-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"

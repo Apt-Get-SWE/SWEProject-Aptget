@@ -112,8 +112,8 @@ class Addresses(Resource):
         # Parse aid, building, city, state, zipcode from json
         addr = Address.from_json(json)
         try:
-            addr.save()
-            return "Address created successfully", 201
+            response = addr.save()
+            return response, 201
         except Exception as e:
             return f'Error saving address: {e}', 500
 
