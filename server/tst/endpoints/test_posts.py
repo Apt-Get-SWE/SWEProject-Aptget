@@ -1,4 +1,5 @@
 from ...src.types.post import Post
+from ...src.types.user import User
 from server.src.query import query as q
 import os
 import pytest
@@ -80,6 +81,10 @@ class TestPosts:
 
     def test_post(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
+            user1 = User("1337", "netid1@nyu.edu", "345", "John", "Doe",
+                         "1234567890", "https://www.google.com")
+            user1.save()  # save user to db, so /posts can query it for aid
+
             response = client.post('api/posts/posts', json={
                 'pid': '2',
                 'uid': '1337',
@@ -106,6 +111,8 @@ class TestPosts:
             # delete the new post
             response = client.delete(f'api/posts/posts?pid={pid}')
             assert response.status_code == 201, response.json
+
+            User.delete_all()  # wipe out the user we created
 
     def test_put_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
