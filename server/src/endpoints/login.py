@@ -81,7 +81,7 @@ class SaveUserLogin(Resource):
 
         # check if user exists
         check = User.find_one({'uid': google_id})
-        if check == {}:
+        if check is None:
             # Insert user in DB if not already there
             user = User(google_id, email, fname=fname, lname=lname, pfp=pfp)
             user.save()
