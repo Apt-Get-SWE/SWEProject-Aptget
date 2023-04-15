@@ -10,7 +10,7 @@ from .src.endpoints.login import GoogleLogIn, RestrictedArea, SaveUserLogin, Log
 from .src.constants import Constants
 from .src.endpoints.menu import Menu
 from .src.endpoints.posts import Posts, api as posts
-from .src.endpoints.users import Users, api as users
+from .src.endpoints.users import Users, GetUserAddress, LinkUserAddress, api as users
 from .src.endpoints.addresses import Addresses, api as addr
 from .src.endpoints.googleapi import GoogleAPIRequest, api as google
 
@@ -43,6 +43,8 @@ login.add_resource(SaveUserLogin, "/callback")
 login.add_resource(LogOut, "/logout")
 posts.add_resource(Posts, "/posts")
 users.add_resource(Users, "/users")
+users.add_resource(GetUserAddress, "/get_user_address")
+users.add_resource(LinkUserAddress, "/link")
 addr.add_resource(Addresses, "/addr")
 google.add_resource(GoogleAPIRequest, "/serialize")
 

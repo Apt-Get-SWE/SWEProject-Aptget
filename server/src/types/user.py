@@ -121,18 +121,19 @@ class User:
     def get_contact_info(uid) -> dict:
         """
         Finds a user with the UID provided.
-        Returns the user's phone and email.
+        Returns the user's everything.
         """
         user = User.find_one({'uid': uid})
         if user is None:
             return {}
 
-        info = {"email": user["email"], "phone": ""}
+        info = {}
 
-        # If phone is valid, update info dict
-        if "phone" in user and user["phone"] != "None" \
-                and user["phone"] is not None:
-            info["phone"] = user["phone"]
+        for key in user:
+            if key == '_id':
+                continue
+            info[key] = user[key]
+
         return info
 
     # CLASS METHODS
