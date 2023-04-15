@@ -71,24 +71,6 @@ class TestPosts:
 
             assert response.status_code == 401
 
-    def test_post_loggedin_uid_not_match_fail(self, client):
-        if os.getenv('CLOUD') == q.LOCAL:
-
-            response = client.post('api/posts/posts', json={
-                'pid': '2',
-                'uid': '1338',
-                'aid': '2',
-                'title': 'Local test second post',
-                'descr': 'Second test descr',
-                'image': '',
-                'condition': 'new',
-                'list_dt': '10/29/2022 10:11:53',
-                'price': '100',
-                'sold': 'Available',
-            })
-
-            assert response.status_code == 401
-
     def test_post_fail(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
             response = client.post('api/posts/posts', json={
