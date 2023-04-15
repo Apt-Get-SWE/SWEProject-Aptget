@@ -9,7 +9,14 @@ const UserProfile = () => {
     zipcode: '00000',
   });
   const [createOrAlter, setCreateOrAlter] = useState('create');
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({
+    fname: '',
+    lname: '',
+    phone: '',
+    email: '',
+    pfp: '',
+    aid: ''
+  });
 
   const [addressError, setAddressError] = useState('');
   const [cityError, setCityError] = useState('');
