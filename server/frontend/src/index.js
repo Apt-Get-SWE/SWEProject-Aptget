@@ -4,7 +4,6 @@ import './index.css';
 import Home from './Home/Home';
 import NotFound from './Pages/NotFound';
 import reportWebVitals from './reportWebVitals';
-import Register from './Pages/Register/Register';
 import CreateItem from './Pages/ItemRelated/CreateItem'
 import Dashboard from './Pages/Dashboard';
 import Market from './Pages/Market';
@@ -26,7 +25,6 @@ root.render(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route element={<RequireAuth />}>
-            <Route path="/register" element={<Register />} />
             <Route path="/create" element={<CreateItem />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/market" element={<Market />} />

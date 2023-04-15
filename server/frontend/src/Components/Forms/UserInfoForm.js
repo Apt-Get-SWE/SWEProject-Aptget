@@ -1,4 +1,5 @@
 import { useState } from "react"
+import axios from "axios";
 
 const UserInfoForm = (props) => {
 	const [inputs, setInputs] = useState({ phone : ''});
@@ -12,7 +13,7 @@ const UserInfoForm = (props) => {
 	const handleSubmit = (event) => {
     event.preventDefault();
 		props.setTrigger(true);
-    // todo: add add user info to db
+    
   }
 
 	return (

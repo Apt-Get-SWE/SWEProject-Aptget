@@ -85,10 +85,7 @@ class SaveUserLogin(Resource):
         session['user_id'] = google_id
         # messages = json.dumps
 
-        # TODO: redirect to registration or user page
-        # for now redirecting to register page regardless of data persistence in db.
-        # TODO: detect existence in db
-        return redirect(f"{ROOT_URL}/register")
+        return redirect(f"{ROOT_URL}/dashboard")
 
 
 class RestrictedArea(Resource):
