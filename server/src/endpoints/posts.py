@@ -39,6 +39,7 @@ class Posts(Resource):
         return image_bytes.getvalue()
 
     @api.produces(['application/json'])
+    @api.doc(params={'aid': 'Address ID for filtering', 'uid': 'User ID for filtering'})
     @api.marshal_with(GET_RESPONSE)
     def get(self):
         """
