@@ -9,7 +9,7 @@ api = Namespace("addresses", "Operations related to addresses")
 
 
 addresses_field = api.model('Address', {
-    "aid": fields.String(description="Address ID", required=True),
+    "aid": fields.String(description="Address ID"),
     "building": fields.String(description="Address building name"),
     "city": fields.String(description="Address city name"),
     "state": fields.String(description="Address state name"),

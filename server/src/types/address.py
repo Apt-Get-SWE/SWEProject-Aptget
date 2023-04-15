@@ -123,15 +123,15 @@ class Address:
     def from_json(cls, data: str):
         """Creates an Address object from the JSON string provided."""
         obj = json_to_object(data)
-        return cls(obj.aid, obj.building, obj.city, obj.state, obj.zipcode)
+        return cls(**obj.__dict__)
 
     # NON-STATIC METHODS
-    def __init__(self, aid: str, building: str, city: str, state: str, zipcode: str):  # noqa
-        self.aid = aid
-        self.building = building
-        self.city = city
-        self.state = state
-        self.zipcode = zipcode
+    def __init__(self, **kwargs):  # noqa
+        self.aid = kwargs['aid'] if 'aid' in kwargs else str(uuid4())
+        self.building = kwargs['building']
+        self.city = kwargs['city']
+        self.state = kwargs['state']
+        self.zipcode = kwargs['zipcode']
 
     def to_dict(self):
         """

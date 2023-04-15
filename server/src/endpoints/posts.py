@@ -46,9 +46,14 @@ class Posts(Resource):
         """
         # Get address ID from query string
         filters = {}
+
         aid = request.args.get('aid')
+        uid = request.args.get('uid')
+
         if aid:
             filters['aid'] = aid
+        if uid:
+            filters['uid'] = uid
 
         data = parse_json(Post.find_all(filters=filters))
         formatted_data = {}

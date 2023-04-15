@@ -23,13 +23,6 @@ class TestPost:
                  "image": "", "condition": "new", "list_dt": "10/29/2022 10:11:53", \
                  "price": "24.99", "sold": "Available"}'
 
-    # @pytest.fixture
-    # def post_instance(self):
-    #     post = Post(uid='234', aid='345', title='Selling chairs!',
-    #                 descr='willing to negotiate', image='', condition='new',
-    #                 list_dt='10/29/2022 10:11:53', price="24.99", sold="Available")
-    #     return post
-
     @pytest.fixture
     def dict_instance_no_pid(self):
         return {"uid": "234", "aid": "345", "title": "Selling chairs!",
@@ -146,16 +139,3 @@ class TestPost:
             Post(pid="123", uid='234', aid='345', title='Selling chairs!',
                  price='24.99', sold='Available', list_dt='10-29-2022 10:11:53',
                  descr='willing to negotiate', condition='new')
-
-    @pytest.mark.skip
-    def test_populate_db(self):
-        if os.getenv('CLOUD') == q.LOCAL:
-            p1 = Post(uid='234', aid='345', title='Selling chairs!',
-                      price='24.99', sold='Available', list_dt='10/29/2022 10:11:53',
-                      descr='willing to negotiate', condition='new')
-            p1.save()
-
-            p2 = Post(uid='420', aid='999', title='RTX 4090',
-                      price='2000.00', sold='Available', list_dt='01/01/2023 01:01:01',
-                      descr='willing to negotiate', condition='new')
-            p2.save()
