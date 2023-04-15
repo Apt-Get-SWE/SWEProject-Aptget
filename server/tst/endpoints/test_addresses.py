@@ -38,7 +38,7 @@ class TestAddr:
 
     def test_query(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            newaddr = Address('0', 'test bldg', 'test city', 'test state', '00000')
+            newaddr = Address(building='test bldg', city='test city', state='test state', zipcode='00000')
             aid = newaddr.save()
             assert aid is not None
 
@@ -58,7 +58,7 @@ class TestAddr:
 
     def test_put(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            newAddr = Address('1', 'test bldg', 'test city', 'test state', '00000')
+            newAddr = Address(building='test bldg', city='test city', state='test state', zipcode='00000')
             aid = newAddr.save()
             assert aid is not None
 
@@ -135,7 +135,7 @@ class TestAddr:
 
     def test_delete(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            newAddr = Address('2', 'test bldg', 'test city', 'test state', '00000')
+            newAddr = Address(building='test bldg', city='test city', state='test state', zipcode='00000')
             aid = newAddr.save()
             assert aid is not None
 
