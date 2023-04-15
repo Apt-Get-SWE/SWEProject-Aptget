@@ -104,12 +104,12 @@ class Post:
 
     # CLASS METHODS
     @classmethod
-    def from_json(cls, data: str):
+    def from_json(cls, data: str, isCreate=False):
         """Creates a Post object from the JSON string provided."""
         obj = json_to_object(data)
-        return cls(**obj.__dict__)
+        return cls(isCreate=isCreate, **obj.__dict__)
 
-    def is_valid(self, **kwargs) -> None:
+    def is_valid(self, isCreate=False, **kwargs) -> None:
         """
         Checks if the fields in data are present and valid.
         """
@@ -127,9 +127,9 @@ class Post:
         elif type(aid := kwargs['aid']) != str:
             raise TypeError(f'aid must be of type str, not {type(aid)}')
 
-        if 'list_dt' not in kwargs:
+        if not isCreate and 'list_dt' not in kwargs:  # If not creating a post, list_dt must be provided
             raise ValueError('Post data does not include a listing date!')
-        else:
+        elif not isCreate and 'list_dt' in kwargs:
             list_dt = kwargs['list_dt']
             if type(list_dt) != str:
                 raise TypeError(f'list_dt must be of type str, not {type(list_dt)}')
@@ -152,17 +152,17 @@ class Post:
             raise ValueError('Sold must be one of ["Sold", "Available", "Pending"]')
 
     # NON-STATIC METHODS
-    def __init__(self, **kwargs):
+    def __init__(self, isCreate=False, **kwargs,):
         # TODO: run validation on all fields
-        self.is_valid(**kwargs)
+        self.is_valid(**kwargs, isCreate=isCreate)
         self.pid = kwargs['pid'] if 'pid' in kwargs else str(uuid4())
         self.uid = kwargs['uid']
         self.aid = kwargs['aid']
         self.title = kwargs['title'] if 'title' in kwargs else None
         self.descr = kwargs['descr'] if 'descr' in kwargs else None
         self.image = kwargs['image'] if 'image' in kwargs else None
-        self.condition = kwargs['image'] if 'image' in kwargs else None
-        self.list_dt = kwargs['list_dt']
+        self.condition = kwargs['condition'] if 'condition' in kwargs else None
+        self.list_dt = kwargs['list_dt'] if 'list_dt' in kwargs else datetime.now().strftime("%m/%d/%Y %H:%M:%S")
         self.price = str(round(float(kwargs['price']), 2))
         self.sold = kwargs['sold']
 

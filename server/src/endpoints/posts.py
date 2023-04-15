@@ -1,5 +1,7 @@
+import traceback
 from flask_restx import Resource, Namespace, fields
 from flask import request, session
+from base64 import b64decode
 from PIL import Image
 from io import BytesIO
 from ..types.post import Post
@@ -13,11 +15,10 @@ POST_JSON = api.model('Post', {
     "uid": fields.String(description="User ID"),
     "title": fields.String(description="Title of the post"),
     "descr": fields.String(description="Description of the post"),
-    "image": fields.Raw(description="Image of the item"),
+    "image": fields.String(description="Base64 encoded image of the item"),
     "condition": fields.String(description="Condition of the item", enum=['new', 'like new', 'good', 'fair', 'poor']),
-    "list_dt": fields.DateTime(description="Date the item was listed"),
     "price": fields.Float(description="Price of the item", min=0),
-    "sold": fields.Boolean(description="Whether the item has been sold"),
+    "sold": fields.String(description="Whether the item has been sold"),
 })
 
 GET_RESPONSE = api.model('PostGetResponse', {
@@ -32,10 +33,11 @@ class Posts(Resource):
         super().__init__(api, *args, **kwargs)
 
     @staticmethod
-    def _post_img_to_bytes(source):
-        img = Image.open(source)  # source is user-uploaded image from POST
+    def _post_img_to_bytes(base64_img):
+        img_data = b64decode(base64_img)
+        img = Image.open(BytesIO(img_data))
         image_bytes = BytesIO()
-        img.save(image_bytes, format='JPEG')
+        img.save(image_bytes, format=img.format)
         return image_bytes.getvalue()
 
     @api.produces(['application/json'])
@@ -85,14 +87,13 @@ class Posts(Resource):
 
         # Parse pid, aid, uid, title, descr, condition, price, sold from json
         try:
-            post = Post.from_json(json)
+            post = Post.from_json(json, isCreate=True)
             cookie_user_id = session.get("user_id")
 
             if cookie_user_id is None:
                 return "User not logged in", 401
-
-            if cookie_user_id != post.uid:
-                return "User does not own post", 401
+            
+            post.uid = cookie_user_id # User that creates post is the owner
 
             img = post.image
             if img:
@@ -102,7 +103,10 @@ class Posts(Resource):
             post.save()
             return "Post created successfully", 201
         except Exception as e:
-            return f'Error saving post: {e}', 500
+            # format the exception traceback as a string
+            error_traceback = traceback.format_exc()
+            # return the error message and traceback in the response
+            return f"Error saving post: {e}\n{error_traceback}", 500
 
     @api.expect(POST_JSON)
     @api.response(201, 'Post updated successfully')
