@@ -79,6 +79,8 @@ const UserProfile = () => {
         const linkResponse = await axios.post('/api/users/link', {
           aid: response.data
         });
+        setCreateOrAlter('alter');
+        alert("Address added successfully!")
       } else {
         const response = await axios.put('/api/addresses/addr', {
             aid: newAddress.aid,
@@ -87,6 +89,7 @@ const UserProfile = () => {
             state: newAddress.state,
             zipcode: newAddress.zipcode,
         });
+        alert("Address updated successfully!")
       }
     } catch (error) {
       alert(error);
