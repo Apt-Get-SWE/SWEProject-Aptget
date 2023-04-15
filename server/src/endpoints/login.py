@@ -78,7 +78,7 @@ class SaveUserLogin(Resource):
         email = id_info.get("email")
         fname, lname = id_info.get("given_name"), id_info.get("family_name")
         pfp = id_info.get("picture")
-
+        print(google_id)
         # Insert user in DB if not already there
         user = User(google_id, email, fname=fname, lname=lname, pfp=pfp)
         user.save()
