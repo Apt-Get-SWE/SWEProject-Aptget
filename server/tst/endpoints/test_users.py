@@ -47,7 +47,7 @@ class TestUsers:
 
             assert response.status_code == 200
 
-            assert response.json == None # no associated address
+            assert response.json is None # no associated address
 
             result = User.delete_one({'uid': '42069'})
             assert result.deleted_count == 1
