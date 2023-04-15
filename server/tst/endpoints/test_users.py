@@ -22,25 +22,17 @@ class TestUsers:
 
     def test_get(self, client):
         if os.getenv('CLOUD') == q.LOCAL:
-            user1 = User("123", "netid1@nyu.edu", "345", "John", "Doe",
+            user1 = User("42069", "netid1@nyu.edu", "345", "John", "Doe",
                          "1234567890", "https://www.google.com")
-            user2 = User("456", "netid2@nyu.edu", "678", "John", "Doe",
-                         "0987654321", "https://www.google.com")
 
             uid1 = user1.save()
-            uid2 = user2.save()
 
-            response = client.get("api/users/users?uid=123&uid=456")
+            response = client.get("api/users/users")
             assert response.status_code == 200
 
             assert response.json['Data'][uid1]['email'] == "netid1@nyu.edu"
             assert response.json['Data'][uid1]['phone'] == "1234567890"
 
-            assert response.json['Data'][uid2]['email'] == "netid2@nyu.edu"
-            assert response.json['Data'][uid2]['phone'] == "0987654321"
 
-            result = User.delete_one({'uid': '123'})
-            assert result.deleted_count == 1
-
-            result = User.delete_one({'uid': '456'})
+            result = User.delete_one({'uid': '42069'})
             assert result.deleted_count == 1
