@@ -50,3 +50,15 @@ class TestUsers:
 
             result = User.delete_one({'uid': '42069'})
             assert result.deleted_count == 1
+
+    def test_link_user_address(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            user = User(uid="123", email="johndoe@exmaple.com", fname="john", lname="doe")
+            user.save()
+
+            response = client.post("api/users/link", json={'aid': '123456789'})
+
+            assert response.status_code == 200
+
+            result = User.delete_one({'uid': '123'})
+            assert result.deleted_count == 1

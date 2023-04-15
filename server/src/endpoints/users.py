@@ -1,5 +1,5 @@
 from flask_restx import Resource, Namespace, fields
-from flask import session
+from flask import session, request
 from ..types.user import User
 from ..types.address import Address
 
@@ -24,6 +24,14 @@ GET_RESPONSE = api.model('UserGetResponse', {
     "Title": fields.String(description="Title of response"),
     "Data": fields.Raw(description="Data of response"),
 })
+
+LINK = api.model('LinkUserAddress', {
+    "aid": fields.String(description="aid to link to current user", required=True)
+})
+
+# link_user_address_field = api.model('LinkUserAddress', {
+#     "aid", fields.String(description="AIDS of saved address"),
+# })
 
 
 class Users(Resource):
@@ -65,6 +73,7 @@ class GetUserAddress(Resource):
         user_id = session.get('user_id')
         if user_id is not None:
             userInfo = User.find_one(filters={'uid': user_id})
+            print(userInfo)
             user_aid = userInfo['aid']
             if user_aid is None:
                 return {}, 200
@@ -75,3 +84,23 @@ class GetUserAddress(Resource):
                 return address, 200
         else:
             return "User must log in first", 401
+
+
+class LinkUserAddress(Resource):
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
+
+    @api.expect(LINK)
+    @api.produces(['application/json'])
+    def post(self):
+        """
+        Updates the aid field in user
+        """
+        if (uid := session.get('user_id')) is None:
+            return {}, 401
+        if (aid := request.json.get('aid')) is None:
+            return {}, 400
+
+        User.update_one(filters={'uid': uid}, new_values={"$set": {'aid': aid}})
+
+        return {}, 200
