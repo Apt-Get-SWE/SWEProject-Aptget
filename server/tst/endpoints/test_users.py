@@ -41,7 +41,7 @@ class TestUsers:
         if os.getenv('CLOUD') == q.LOCAL:
             user = User("42069", "netid1@nyu.edu", "345", "John", "Doe",
                          "1234567890", "https://www.google.com")
-            uid1 = user.save()
+            user.save()
 
             response = client.get("api/users/get_user_address")
 
