@@ -1,5 +1,5 @@
 from flask_restx import Resource, Namespace, fields
-from flask import request, session
+from flask import session
 from ..types.user import User
 
 api = Namespace("users", "Operations related to users")
