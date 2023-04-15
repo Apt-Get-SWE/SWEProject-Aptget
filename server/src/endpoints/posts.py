@@ -6,6 +6,7 @@ from base64 import b64decode
 from PIL import Image
 from io import BytesIO
 from ..types.post import Post
+from ..types.address import Address
 from ..types.user import User
 from ..types.utils import parse_json
 
@@ -181,3 +182,27 @@ class Posts(Resource):
             return "Post deleted successfully", 201
         except Exception as e:
             return f'Error deleting post: {e}', 500
+
+
+class MarketPosts(Resource):
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
+
+    @api.doc(params={'zipcode': 'zipcode of the desired search range'})
+    @api.produces(['application/json'])
+    def get(self):
+        """
+        This endpoint retrieves all posts associated with a certain zip code. 
+        """
+        # use zip code to return all associated address, and use the aid's of those address to fetch all posts
+        zipcode = request.args.get('zipcode')
+        addresses = Address.find_all(filters={'zipcode': zipcode})
+        print(addresses)
+        all_posts = []
+
+        for addr in addresses:
+            post_ = Post.find_one(filters={'aid': addr['aid']})
+            print(post_)
+            all_posts.append(post_)
+
+        return {"posts": all_posts}, 200
