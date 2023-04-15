@@ -112,6 +112,7 @@ class RestrictedArea(Resource):
                 'Status': 'Failed'
             }
 
+
 class LogOut(Resource):
     def __init__(self, api=None, *args, **kwargs):
         super().__init__(api, *args, **kwargs)
