@@ -1,6 +1,7 @@
 from flask_restx import Resource, Namespace, fields
-from flask import request
+from flask import session
 from ..types.user import User
+from ..types.address import Address
 
 api = Namespace("users", "Operations related to users")
 
@@ -30,21 +31,18 @@ class Users(Resource):
         super().__init__(api, *args, **kwargs)
 
     @api.produces(['application/json'])
-    @api.marshal_with(GET_RESPONSE)
     @api.response(200, 'User found successfully')
-    @api.response(400, 'No User ID provided!')
     def get(self) -> dict:
         """
         Returns the contact information of users that match the given UIDs.
         """
 
         # TODO Support queries with parameters other than UID
-        if 'uid' in request.args:
+        uid = session.get('user_id')
+        if uid is not None:
             # Get contact information from UID
-            args = request.args.to_dict(flat=False)
             formatted_data = {}
-            for uid in args['uid']:
-                formatted_data[uid] = User.get_contact_info(uid)
+            formatted_data[uid] = User.get_contact_info(uid)
 
             return {
                 'Type': 'Data',
@@ -53,3 +51,28 @@ class Users(Resource):
             }, 200
 
         return "No User ID provided!", 400
+
+
+class GetUserAddress(Resource):
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
+
+    @api.produces(['application/json'])
+    def get(self):
+        """
+        This is a developer only endpoint. It takes no paramter and uses user's uid stored inside
+        the cookies session to retrieve address from database
+        """
+        user_id = session.get('user_id')
+        if user_id is not None:
+            userInfo = User.find_one(filters={'uid': user_id})
+            user_aid = userInfo['aid']
+            if user_aid is None:
+                return {}, 200
+            else:
+                address = Address.find_one(filters={'aid': user_aid})
+                if address is not None:
+                    del address['_id']  # remove useless field
+                return address, 200
+        else:
+            return "User must log in first", 401
