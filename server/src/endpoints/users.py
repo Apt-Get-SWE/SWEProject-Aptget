@@ -34,15 +34,14 @@ class Users(Resource):
     @api.response(200, 'User found successfully')
     def get(self) -> dict:
         """
-        Returns the contact information of users that match the given UIDs.
+        Returns the information of users that match the given UIDs.
         """
 
         # TODO Support queries with parameters other than UID
         uid = session.get('user_id')
         if uid is not None:
             # Get contact information from UID
-            formatted_data = {}
-            formatted_data[uid] = User.get_contact_info(uid)
+            formatted_data = User.get_contact_info(uid)
 
             return {
                 'Type': 'Data',

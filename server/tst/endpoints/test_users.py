@@ -25,13 +25,13 @@ class TestUsers:
             user1 = User("42069", "netid1@nyu.edu", "345", "John", "Doe",
                          "1234567890", "https://www.google.com")
 
-            uid1 = user1.save()
+            user1.save()
 
             response = client.get("api/users/users")
             assert response.status_code == 200
 
-            assert response.json['Data'][uid1]['email'] == "netid1@nyu.edu"
-            assert response.json['Data'][uid1]['phone'] == "1234567890"
+            assert response.json['Data']['email'] == "netid1@nyu.edu"
+            assert response.json['Data']['phone'] == "1234567890"
 
             result = User.delete_one({'uid': '42069'})
             assert result.deleted_count == 1
