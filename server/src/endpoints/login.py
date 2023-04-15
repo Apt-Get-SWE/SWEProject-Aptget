@@ -82,10 +82,10 @@ class SaveUserLogin(Resource):
         # check if user exists
         check = User.find_one({'uid': google_id})
         if check == {}:
-        # Insert user in DB if not already there
+            # Insert user in DB if not already there
             user = User(google_id, email, fname=fname, lname=lname, pfp=pfp)
             user.save()
-    
+
         session['user_id'] = google_id
         # messages = json.dumps
 
@@ -115,6 +115,7 @@ class RestrictedArea(Resource):
                 'Data': {'Login Status': {'Login Status': 'Not logged in!'}},
                 'Status': 'Failed'
             }
+
 
 class LogOut(Resource):
     def __init__(self, api=None, *args, **kwargs):

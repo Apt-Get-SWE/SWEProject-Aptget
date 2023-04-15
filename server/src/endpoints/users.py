@@ -52,25 +52,27 @@ class Users(Resource):
 
         return "No User ID provided!", 400
 
+
 class GetUserAddress(Resource):
     def __init__(self, api=None, *args, **kwargs):
         super().__init__(api, *args, **kwargs)
-    
+
     @api.produces(['application/json'])
     def get(self):
         """
-        This is a developer only endpoint. It takes no paramter and uses user's uid stored inside the cookies session to retrieve address from database
+        This is a developer only endpoint. It takes no paramter and uses user's uid stored inside
+        the cookies session to retrieve address from database
         """
         user_id = session.get('user_id')
         if user_id is not None:
-            userInfo = User.find_one(filters={'uid':user_id})
+            userInfo = User.find_one(filters={'uid': user_id})
             user_aid = userInfo['aid']
             if user_aid is None:
                 return {}, 200
             else:
-                address = Address.find_one(filters={'aid':user_aid})
+                address = Address.find_one(filters={'aid': user_aid})
                 if address is not None:
-                    del address['_id'] # remove useless field
+                    del address['_id']  # remove useless field
                 return address, 200
         else:
             return "User must log in first", 401
