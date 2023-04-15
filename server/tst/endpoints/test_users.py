@@ -36,3 +36,18 @@ class TestUsers:
 
             result = User.delete_one({'uid': '42069'})
             assert result.deleted_count == 1
+
+    def test_get_user_address(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            user = User("42069", "netid1@nyu.edu", "345", "John", "Doe",
+                         "1234567890", "https://www.google.com")
+            uid1 = user.save()
+
+            response = client.get("api/users/get_user_address")
+
+            assert response.status_code == 200
+
+            assert response.json == None # no associated address
+
+            result = User.delete_one({'uid': '42069'})
+            assert result.deleted_count == 1
