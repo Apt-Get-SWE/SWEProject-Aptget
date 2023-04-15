@@ -111,3 +111,14 @@ class RestrictedArea(Resource):
                 'Data': {'Login Status': {'Login Status': 'Not logged in!'}},
                 'Status': 'Failed'
             }
+
+class LogOut(Resource):
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
+
+    def get(self):
+        """
+        Log out user
+        """
+        session.clear()
+        return redirect(ROOT_URL)
