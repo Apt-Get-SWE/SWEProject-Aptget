@@ -40,6 +40,7 @@ class Users(Resource):
 
     @api.produces(['application/json'])
     @api.response(200, 'User found successfully')
+    @api.response(400, 'Not logged in!')
     def get(self) -> dict:
         """
         Returns the information of users that match the given UIDs.
@@ -57,7 +58,7 @@ class Users(Resource):
                 'Data': formatted_data
             }, 200
 
-        return "No User ID provided!", 400
+        return "Not logged in!", 400
 
 
 class GetUserAddress(Resource):

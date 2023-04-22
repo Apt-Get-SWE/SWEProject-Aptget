@@ -16,6 +16,7 @@ const ItemInfoForm = (props) => {
 		  reader.readAsDataURL(file);
 		  reader.onload = () => {
 			const base64 = reader.result;
+			console.log(base64.substring(0, base64.indexOf(',') + 1));
 			const base64Data = base64.substring(base64.indexOf(',') + 1); // Remove prefix
 			resolve(base64Data);
 		  };
