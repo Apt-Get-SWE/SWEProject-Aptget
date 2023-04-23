@@ -202,6 +202,7 @@ class MarketPosts(Resource):
 
         for addr in addresses:
             post_ = Post.find_one(filters={'aid': addr['aid']})
+            del post_['_id']
             print(post_)
             all_posts.append(post_)
 
