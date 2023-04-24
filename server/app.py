@@ -1,8 +1,11 @@
-"""
-This is the file containing all of the endpoints for our flask app.
-The endpoint called `endpoints` will return all available endpoints.
-"""
+# -----------------------------------------------------------------------------
+# AptGet API
+# -----------------------------------------------------------------------------
+# This is the file containing all of the endpoints for our Flask app.
+# The endpoint called `endpoints` will return all available endpoints.
+# -----------------------------------------------------------------------------
 
+# Importing required libraries and modules
 from flask import Flask, Blueprint
 from flask_restx import Api
 import logging
@@ -14,28 +17,38 @@ from .src.endpoints.users import Users, GetUserAddress, LinkUserAddress, api as 
 from .src.endpoints.addresses import Addresses, api as addr
 from .src.endpoints.googleapi import GoogleAPIRequest, api as google
 
+# Initializing Flask app and Blueprint
 app = Flask(__name__, static_folder=Constants.STATIC_FOLDER)
 blueprint = Blueprint('api', __name__, url_prefix='/api')
+
+# Initializing Api with the Flask app and Blueprint
 api = Api(blueprint,
           title='AptGet API',
           version='v0.1',
           doc='/docs',
           base_url='/api'
           )
-app.register_blueprint(blueprint)
-app.secret_key = "some_random_key"  # This secret key is to support the use of session. TODO: make this a env variable
 
+# Registering Blueprint with the app
+app.register_blueprint(blueprint)
+
+# Adding a secret key for session support
+app.secret_key = "some_random_key"  # TODO: make this a env variable
+
+# Setting up logging
 logging.basicConfig(level=logging.INFO,
                     format='[%(levelname)s] %(asctime)s - '
                     '%(filename)s:%(lineno)s - %(message)s',
                     datefmt='%d-%b-%y %H:%M:%S')
 
+# Adding namespaces to the API
 api.add_namespace(login)
 api.add_namespace(posts)
 api.add_namespace(users)
 api.add_namespace(addr)
 api.add_namespace(google)
 
+# Adding resources to the namespaces
 api.add_resource(Menu, "/main_menu")
 login.add_resource(GoogleLogIn, "/login", resource_class_kwargs={})
 login.add_resource(RestrictedArea, "/restricted_area", resource_class_kwargs={})
@@ -49,6 +62,6 @@ users.add_resource(LinkUserAddress, "/link")
 addr.add_resource(Addresses, "/addr")
 google.add_resource(GoogleAPIRequest, "/serialize")
 
-
+# Running the Flask app
 if __name__ == "__main__":
     app.run(debug=True)
