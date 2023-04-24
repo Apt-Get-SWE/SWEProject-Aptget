@@ -197,13 +197,15 @@ class MarketPosts(Resource):
         # use zip code to return all associated address, and use the aid's of those address to fetch all posts
         zipcode = request.args.get('zipcode')
         addresses = Address.find_all(filters={'zipcode': zipcode})
-        print(addresses)
+        print("address: ", addresses)
         all_posts = []
 
         for addr in addresses:
+            print("looking for posts with aid: ", addr['aid'])
             post_ = Post.find_one(filters={'aid': addr['aid']})
-            del post_['_id']
-            print(post_)
-            all_posts.append(post_)
+            if post_ is not None:
+                del post_['_id']
+                print(post_)
+                all_posts.append(post_)
 
         return {"posts": all_posts}, 200
