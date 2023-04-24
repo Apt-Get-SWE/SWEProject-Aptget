@@ -56,10 +56,11 @@ class Addresses(Resource):
             if zipcode and addr['zipcode'] != zipcode:
                 continue
 
+            url = url_for('api.addresses_addresses', _external=True)
             addr["links"] = {
-                "self": url_for('api.addresses_addresses', _external=True, _method='GET'),
-                "update": {"url": url_for('api.addresses_addresses', _external=True, _method='PUT'), "aid": addr['aid']},
-                "delete": {"url": url_for('api.addresses_addresses', _external=True, _method='DELETE'), "aid": addr['aid']}
+                "self": f"{url}?aid={addr['aid']}",
+                "update": {"url": f"{url}?aid={addr['aid']}", "aid": addr['aid']},
+                "delete": {"url": f"{url}?aid={addr['aid']}", "aid": addr['aid']}
             }
             formatted_data[addr['aid']] = addr
 
@@ -108,7 +109,6 @@ class Addresses(Resource):
         except Exception as e:
             return f'Error saving address: {e}', 500
 
-
     @api.expect(addresses_field)
     @api.response(200, 'Address updated successfully')
     @api.response(500, 'Error saving address')
@@ -134,7 +134,6 @@ class Addresses(Resource):
         except Exception as e:
             return f'Error modifying address: {e}', 500
 
-
     @api.doc(params={'aid': 'The Address ID'})
     @api.response(200, 'Address deleted successfully')
     @api.response(500, 'Error deleting address')
@@ -154,11 +153,16 @@ class Addresses(Resource):
         aid = request.args.get('aid')
         if not aid:
             return 'aid not provided', 400
+        if not Address.exists({'aid': aid}):
+            return 'Address does not exist', 400
+        user_id = session.get('user_id')
+        if not user_id:
+            return 'User not logged in', 401
+        user_obj = User.find_one(filters={'uid': user_id})
+        if not user_obj or user_obj['role'] != 'admin':
+            return 'User not admin', 401
         try:
             Address.delete_one({'aid': aid})
             return 'Address deleted successfully', 200
-        except Address.DoesNotExist:
-            return 'Address does not exist', 400
         except Exception as e:
             return f'Error deleting address: {e}', 500
-
