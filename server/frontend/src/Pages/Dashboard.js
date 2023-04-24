@@ -10,12 +10,13 @@ const Dashboard = () => {
   const [posts, setPosts] = useState([]);
 
   const geUserPosts = async () => {
-    const post_res = await axios.get('/api/posts/posts?user=True');
+    const post_res = await axios.get('/api/posts/posts?loadUser=True');
 
     let data = [];
-    for (const [_, value] of Object.entries(post_res.data.Data)) {
-      const user_res = await axios.get(`/api/users/users?uid=${value.uid}`);
+    for (let [_, value] of Object.entries(post_res.data.Data)) {
+      value.image = value.image ? "data:image/png;base64," + value.image.$binary.base64 : null;
 
+      const user_res = await axios.get(`/api/users/users?uid=${value.uid}`);
       let user = user_res.data.Data
       value.email = user.email
       value.phone = user.phone
@@ -51,7 +52,7 @@ const Dashboard = () => {
           {
             posts.map((item, index) => (
               <div>
-                <ItemCard key={index} email={item.email} phone={item.phone} itemName={item.title} price={item.price} />
+                <ItemCard key={index} image={item.image} email={item.email} phone={item.phone} itemName={item.title} price={item.price} />
               </div>
             ))
           }
