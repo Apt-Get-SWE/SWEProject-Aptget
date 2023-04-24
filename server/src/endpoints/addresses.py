@@ -31,45 +31,37 @@ class Addresses(Resource):
     @api.produces(['application/json'])
     @api.marshal_with(GET_RESPONSE)
     def get(self):
-        '''
-        Returns a list of all existing addresses, or a list of addresses that match the address prefix
-        '''
+        """
+        Returns a list of all existing addresses, or a list of addresses that match the address prefix.
+        If a `zip` parameter is provided, the addresses will be filtered by zip code.
+
+        Returns:
+            A dictionary with the following keys:
+                - 'Type': A string indicating the type of data returned.
+                - 'Title': A string indicating the title of the data returned.
+                - 'Data': A dictionary containing the formatted address data.
+                - 'links': A dictionary containing links for creating, updating, and deleting addresses.
+        """
         prefix = request.args.get('addressPrefix')
         logging.info(f'addressPrefix: {prefix}')
 
-        if prefix:
-            filters = {
-                'building': {
-                    '$regex': f'^{prefix}'
-                }
-            }
-            data = parse_json(Address.find_all(filters))
-            logging.info(f'Found {len(data)} addresses')
-        else:
-            data = parse_json(Address.find_all())
-            logging.info(f'No prefix Found {len(data)} addresses')
+        filters = {'building': {'$regex': f'^{prefix}'}} if prefix else {}
+        data = parse_json(Address.find_all(filters))
+        logging.info(f'{"No" if not prefix else ""} prefix Found {len(data)} addresses')
 
-        # If zip code url param is provided, filter by zip code
         zipcode = request.args.get('zip')
-
         formatted_data = {}
+
         for addr in data:
             if zipcode and addr['zipcode'] != zipcode:
                 continue
 
-            addr_id = addr['aid']
             addr["links"] = {
                 "self": url_for('api.addresses_addresses', _external=True, _method='GET'),
-                "update": {
-                    "url": url_for('api.addresses_addresses', _external=True, _method='PUT'),
-                    "aid": addr_id
-                },
-                "delete": {
-                    "url": url_for('api.addresses_addresses', _external=True, _method='DELETE'),
-                    "aid": addr_id
-                }
+                "update": {"url": url_for('api.addresses_addresses', _external=True, _method='PUT'), "aid": addr['aid']},
+                "delete": {"url": url_for('api.addresses_addresses', _external=True, _method='DELETE'), "aid": addr['aid']}
             }
-            formatted_data[addr_id] = addr
+            formatted_data[addr['aid']] = addr
 
         return {
             'Type': 'Data',
@@ -95,27 +87,27 @@ class Addresses(Resource):
     @api.response(415, 'Content-Type not supported!')
     @api.produces(['text/plain'])
     def post(self):
-        '''
-        Add a new address
-        '''
-        content_type = request.headers.get('Content-Type')
-        if content_type == 'application/json':
-            json = request.json
-        else:
-            return 'Content-Type not supported!', 415
+        """Add a new address.
 
-        cookie_user_id = session.get("user_id")
+        Parses JSON data from the request and creates a new Address object from it.
+        The Address object is then saved to the database. If the save is successful,
+        the function returns a response with a HTTP status code of 201. If there is an
+        error, the function returns an error message and a HTTP status code of 500.
 
-        if cookie_user_id is None:
-            return "User not logged in", 401
-
-        # Parse aid, building, city, state, zipcode from json
-        addr = Address.from_json(json)
+        Returns:
+            A tuple containing a response message and a HTTP status code.
+        """
+        json_data = request.get_json(force=True)
+        user_id = session.get('user_id')
+        if not user_id:
+            return 'User not logged in', 401
         try:
+            addr = Address.from_json(json_data)
             response = addr.save()
             return response, 201
         except Exception as e:
             return f'Error saving address: {e}', 500
+
 
     @api.expect(addresses_field)
     @api.response(200, 'Address updated successfully')
@@ -123,27 +115,25 @@ class Addresses(Resource):
     @api.response(415, 'Content-Type not supported!')
     @api.produces(['text/plain'])
     def put(self):
-        '''
-        Modify an existing address
-        '''
-        content_type = request.headers.get('Content-Type')
-        if content_type == 'application/json':
-            json = request.json
-        else:
-            return 'Content-Type not supported!', 415
+        """Modify an existing address.
 
-        cookie_user_id = session.get("user_id")
+        Parses JSON data from the request and updates the corresponding Address object in the database.
+        If the update is successful, the function returns a response with a HTTP status code of 200.
+        If there is an error, the function returns an error message and a HTTP status code of 500.
 
-        if cookie_user_id is None:
-            return "User not logged in", 401
-
-        # Parse aid, building, city, state, zipcode from json
+        Returns:
+            A tuple containing a response message and a HTTP status code.
+        """
+        json_data = request.get_json(force=True)
+        user_id = session.get('user_id')
+        if not user_id:
+            return 'User not logged in', 401
         try:
-            addr = Address.from_json(json)
-            addr.save()
-            return "Address modified successfully", 200
+            Address.from_json(json_data).save()
+            return 'Address modified successfully', 200
         except Exception as e:
-            return f'Error saving address: {e}', 500
+            return f'Error modifying address: {e}', 500
+
 
     @api.doc(params={'aid': 'The Address ID'})
     @api.response(200, 'Address deleted successfully')
@@ -151,25 +141,24 @@ class Addresses(Resource):
     @api.response(415, 'Content-Type not supported!')
     @api.produces(['text/plain'])
     def delete(self):
+        """Deletes an address.
+
+        Deletes the corresponding Address object in the database based on the provided aid.
+        If the delete is successful, the function returns a response with a HTTP status code of 200.
+        If the address does not exist or there is an error during deletion, the function returns
+        an error message and a HTTP status code of 400 or 500 respectively.
+
+        Returns:
+            A tuple containing a response message and a HTTP status code.
         """
-        Deletes an address
-        """
-        aid = request.args.get('aid')  # Get the aid from URL parameters
+        aid = request.args.get('aid')
         if not aid:
-            return "aid not provided", 400
-        if not Address.exists({'aid': aid}):
-            return "Address does not exist", 400
-
-        cookie_user_id = session.get("user_id")
-        if cookie_user_id:  # check if user is admin
-            user_obj = User.find_one(filters={'uid': cookie_user_id})
-            if not user_obj or user_obj['role'] != 'admin':
-                return "User not admin", 401
-        else:
-            return "User not logged in", 401
-
+            return 'aid not provided', 400
         try:
             Address.delete_one({'aid': aid})
-            return "Address deleted successfully", 200
+            return 'Address deleted successfully', 200
+        except Address.DoesNotExist:
+            return 'Address does not exist', 400
         except Exception as e:
             return f'Error deleting address: {e}', 500
+
