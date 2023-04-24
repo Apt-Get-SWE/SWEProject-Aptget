@@ -2,7 +2,6 @@ from ...src.types.address import Address
 from ...src.types.post import Post
 from ...src.types.user import User
 from server.src.query import query as q
-from unittest.mock import patch
 import os
 import pytest
 from server.app import app
@@ -205,7 +204,7 @@ class TestMarketPosts:
                         list_dt='10/29/2022 10:11:53', price='100', sold='Available')
             pid = post.save()
 
-            response = client.get(f'api/posts/market_posts?zipcode=10001')
+            response = client.get('api/posts/market_posts?zipcode=10001')
             assert response.status_code == 200
             assert len(response.json['posts']) == 1
             assert response.json['posts'][0]['title'] == 'Post in 10001 zipcode'
