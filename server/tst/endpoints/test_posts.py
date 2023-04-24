@@ -1,3 +1,4 @@
+from ...src.types.address import Address
 from ...src.types.post import Post
 from ...src.types.user import User
 from server.src.query import query as q
@@ -176,3 +177,38 @@ class TestPosts:
 
             assert response.status_code == 200
             assert len(response.json['Data']) == 0
+
+
+class TestMarketPosts:
+    @pytest.fixture
+    def client(self):
+        app.config['TESTING'] = True
+        if os.getenv('CLOUD') == q.LOCAL:
+            q.delete_all('posts', {})
+            q.delete_all('addresses', {})
+        with app.test_client() as client:
+            yield client
+        if os.getenv('CLOUD') == q.LOCAL:
+            q.delete_all('posts', {})
+            q.delete_all('addresses', {})
+
+    def test_get_market_posts(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            # Add address with zipcode
+            addr = Address(aid='1', building='123 Main St', city='New York', state='NY', zipcode='10001')
+            aid = addr.save()
+
+            # Add a post with the corresponding aid
+            post = Post(uid='1339', aid=aid, title='Post in 10001 zipcode',
+                        descr='Test post', image='', condition='new',
+                        list_dt='10/29/2022 10:11:53', price='100', sold='Available')
+            pid = post.save()
+
+            response = client.get('api/posts/market_posts?zipcode=10001')
+            assert response.status_code == 200
+            assert len(response.json['posts']) == 1
+            assert response.json['posts'][0]['title'] == 'Post in 10001 zipcode'
+
+            # Clean up
+            Address.delete_one(filters = {'aid':aid})
+            Post.delete_one(filters = {'pid':pid})
