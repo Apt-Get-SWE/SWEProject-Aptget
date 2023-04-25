@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 const ItemInfoForm = (props) => {
 	const [inputs, setInputs] = useState({ itemName: '', desc: '', address: '', city: '', state: '', zipcode: ''});
+	const navigate = useNavigate();
 
 	const handleChange = (event) =>{
 		const name = event.target.name;
@@ -101,7 +103,7 @@ const ItemInfoForm = (props) => {
 			<button
 				className="shadow text-lg bg-red-500 hover:bg-red-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
 				type="button"
-				onClick={() => props.setTrigger(false)}
+				onClick={() => navigate("/Dashboard")}
 			>
 				Cancel
 			</button>

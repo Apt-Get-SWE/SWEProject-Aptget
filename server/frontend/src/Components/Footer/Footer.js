@@ -12,7 +12,7 @@ const Footer = () => (
                             <li>
                                 <a
                                     className="text-gray-900 transition hover:text-gray-900/75"
-                                    href="/"
+                                    href="https://github.com/Apt-Get-SWE/SWEProject-Aptget"
                                     target="_blank"
                                     rel="noreferrer"
                                 >
@@ -23,7 +23,7 @@ const Footer = () => (
                             <li>
                                 <a
                                     className="text-gray-900 transition hover:text-gray-900/75"
-                                    href="/"
+                                    href="https://github.com/Apt-Get-SWE/SWEProject-Aptget/issues"
                                     target="_blank"
                                     rel="noreferrer"
                                 >
@@ -34,7 +34,7 @@ const Footer = () => (
                             <li>
                                 <a
                                     className="text-gray-900 transition hover:text-gray-900/75"
-                                    href="/"
+                                    href="https://github.com/Apt-Get-SWE/SWEProject-Aptget"
                                     target="_blank"
                                     rel="noreferrer"
                                 >
