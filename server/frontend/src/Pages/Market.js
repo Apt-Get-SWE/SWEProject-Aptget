@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Footer from '../Components/Footer/Footer';
 import Navbar from '../Components/NavBar/Navbar';
 import ItemCard from '../Components/ItemCard/ItemCard';
+import axios from 'axios';
 
 const SearchBar = ({ onSearch }) => {
   const [zipcode, setZipcode] = useState('');
@@ -49,19 +50,33 @@ const FilterBar = ({ onFilter }) => {
 };
 
 const Market = () => {
-  const [items, setItems] = useState([{ itemName: 'TestItem' }, { itemName: 'AnotherItem' }]);
+  const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState(items);
   const [searchPerformed, setSearchPerformed] = useState(false);
 
-  const handleSearch = (zipcode) => {
+  const handleSearch = async (zipcode) => {
     console.log('Searching for zipcode:', zipcode);
-    // Implement your search logic here and update the items state
+    try {
+      const res = await axios.get(`/api/posts/market_posts`, {
+        params: {
+          zipcode: zipcode,
+        },
+      });
+      console.log(res);
+      for (let [_, value] of Object.entries(res.data.posts)) {
+        value.image = value.image ? "data:image/png;base64," + value.image.$binary.base64 : null;
+      }
+      setItems(res.data.posts);
+      setFilteredItems(res.data.posts);
+    } catch (err) {
+      console.log(err);
+    }
     setSearchPerformed(true);
   };
 
   const handleFilter = (filterText) => {
     const regex = new RegExp(filterText, 'i');
-    const newFilteredItems = items.filter((item) => regex.test(item.itemName));
+    const newFilteredItems = items.filter((item) => regex.test(item.title));
     setFilteredItems(newFilteredItems);
   };
 
@@ -77,7 +92,7 @@ const Market = () => {
       <div className="grid grid-cols-3 gap-4 w-5/6 mx-auto">
         {filteredItems.map((item, index) => (
           <div key={index} className="p-4">
-            <ItemCard itemName={item.itemName} />
+            <ItemCard image={item.image} email={item.email} phone={item.phone} itemName={item.title} price={item.price} />
           </div>
         ))}
       </div>

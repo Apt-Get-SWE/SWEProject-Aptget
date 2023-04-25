@@ -210,5 +210,5 @@ class TestMarketPosts:
             assert response.json['posts'][0]['title'] == 'Post in 10001 zipcode'
 
             # Clean up
-            Address.delete_one(filters = {'aid':aid})
-            Post.delete_one(filters = {'pid':pid})
+            Address.delete_one(filters={'aid': aid})
+            Post.delete_one(filters={'pid': pid})
