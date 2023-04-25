@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Components/Footer/Footer';
 import Navbar from '../Components/NavBar/Navbar';
-import ItemCard from '../Components/ItemCard/ItemCard'
+import MyItemCard from '../Components/ItemCard/MyItemCard'
 import axios from 'axios';
 
 const Dashboard = () => {
@@ -52,7 +52,7 @@ const Dashboard = () => {
           {
             posts.map((item, index) => (
               <div>
-                <ItemCard key={index} image={item.image} email={item.email} phone={item.phone} itemName={item.title} price={item.price} />
+                <MyItemCard key={index} image={item.image} email={item.email} phone={item.phone} itemName={item.title} price={item.price} pid={item.pid} />
               </div>
             ))
           }
