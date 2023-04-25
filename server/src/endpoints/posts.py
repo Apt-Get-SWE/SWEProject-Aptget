@@ -210,7 +210,9 @@ class MarketPosts(Resource):
         # Find user associated with each post
         for post in posts_cursor:
             user = User.find_one({'uid': post['uid']})
+            if user is None:
+                continue
             post['email'] = user['email']
             post['phone'] = user['phone']
-        
+
         return {"posts": posts_cursor}, 200
