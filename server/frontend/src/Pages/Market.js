@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Footer from '../Components/Footer/Footer';
 import Navbar from '../Components/NavBar/Navbar';
 import ItemCard from '../Components/ItemCard/ItemCard';
+import axios from 'axios';
 
 const SearchBar = ({ onSearch }) => {
   const [zipcode, setZipcode] = useState('');
@@ -49,13 +50,24 @@ const FilterBar = ({ onFilter }) => {
 };
 
 const Market = () => {
-  const [items, setItems] = useState([{ itemName: 'TestItem' }, { itemName: 'AnotherItem' }]);
+  const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState(items);
   const [searchPerformed, setSearchPerformed] = useState(false);
 
   const handleSearch = (zipcode) => {
     console.log('Searching for zipcode:', zipcode);
-    // Implement your search logic here and update the items state
+    try {
+      const res = axios.get(`/api/posts/market_posts`, {
+        params: {
+          zipcode: zipcode,
+        },
+      });
+      console.log(res);
+      setItems(res.data.posts);
+      setFilteredItems(res.data.posts);
+    } catch (err) {
+      console.log(err);
+    }
     setSearchPerformed(true);
   };
 
