@@ -206,4 +206,11 @@ class MarketPosts(Resource):
 
         # Use the '$in' operator to find all posts with matching 'aid' values
         posts_cursor = parse_json(Post.find_all({'aid': {'$in': aid_list}}))
+
+        # Find user associated with each post
+        for post in posts_cursor:
+            user = User.find_one({'uid': post['uid']})
+            post['email'] = user['email']
+            post['phone'] = user['phone']
+        
         return {"posts": posts_cursor}, 200

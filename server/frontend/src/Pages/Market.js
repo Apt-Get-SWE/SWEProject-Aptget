@@ -54,15 +54,18 @@ const Market = () => {
   const [filteredItems, setFilteredItems] = useState(items);
   const [searchPerformed, setSearchPerformed] = useState(false);
 
-  const handleSearch = (zipcode) => {
+  const handleSearch = async (zipcode) => {
     console.log('Searching for zipcode:', zipcode);
     try {
-      const res = axios.get(`/api/posts/market_posts`, {
+      const res = await axios.get(`/api/posts/market_posts`, {
         params: {
           zipcode: zipcode,
         },
       });
       console.log(res);
+      for (let [_, value] of Object.entries(res.data.posts)) {
+        value.image = value.image ? "data:image/png;base64," + value.image.$binary.base64 : null;
+      }
       setItems(res.data.posts);
       setFilteredItems(res.data.posts);
     } catch (err) {
@@ -73,7 +76,7 @@ const Market = () => {
 
   const handleFilter = (filterText) => {
     const regex = new RegExp(filterText, 'i');
-    const newFilteredItems = items.filter((item) => regex.test(item.itemName));
+    const newFilteredItems = items.filter((item) => regex.test(item.title));
     setFilteredItems(newFilteredItems);
   };
 
@@ -89,7 +92,7 @@ const Market = () => {
       <div className="grid grid-cols-3 gap-4 w-5/6 mx-auto">
         {filteredItems.map((item, index) => (
           <div key={index} className="p-4">
-            <ItemCard itemName={item.itemName} />
+            <ItemCard image={item.image} email={item.email} phone={item.phone} itemName={item.title} price={item.price} />
           </div>
         ))}
       </div>
