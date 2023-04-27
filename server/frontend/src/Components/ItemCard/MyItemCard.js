@@ -9,6 +9,9 @@ const MyItemCard = (props) => {
     axios.delete(`/api/posts/posts?pid=${pid}`)
     navigate(0)
   };
+  const displayPrice = () => {
+    return props.price ? `$${props.price}` : '$0.00';
+  };
 
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -26,7 +29,7 @@ const MyItemCard = (props) => {
           <h5 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">{props.itemName}</h5>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-gray-900 dark:text-white">{() => { return props.price ? `$${props.price}` : '$0.00'}}</span>
+          <span className="text-xl font-bold text-gray-900 dark:text-white">{displayPrice()}</span>
           <button onClick={() =>deletePost(props.pid)}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{
             "delete"}</button>
         </div>
