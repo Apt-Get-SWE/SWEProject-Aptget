@@ -1,8 +1,10 @@
 import json
+import pytest
 from ...app import app
 
 
 class TestGoogleAPI:
+    @pytest.mark.skip()
     def testPost(self):
         testapp = app.test_client()
         payload = json.dumps({
@@ -16,6 +18,7 @@ class TestGoogleAPI:
         assert 200 == response.status_code
         assert b'{"Validate": "false"}\n' == response.data
 
+    @pytest.mark.skip()
     def testPostFailDueToIncorrectType(self):
         testapp = app.test_client()
         payload = json.dumps({

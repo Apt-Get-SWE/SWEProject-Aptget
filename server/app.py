@@ -15,7 +15,6 @@ from .src.endpoints.menu import Menu
 from .src.endpoints.posts import Posts, MarketPosts, api as posts
 from .src.endpoints.users import Users, GetUserAddress, LinkUserAddress, api as users
 from .src.endpoints.addresses import Addresses, api as addr
-from .src.endpoints.googleapi import GoogleAPIRequest, api as google
 
 # Initializing Flask app and Blueprint
 app = Flask(__name__, static_folder=Constants.STATIC_FOLDER)
@@ -46,7 +45,6 @@ api.add_namespace(login)
 api.add_namespace(posts)
 api.add_namespace(users)
 api.add_namespace(addr)
-api.add_namespace(google)
 
 # Adding resources to the namespaces
 api.add_resource(Menu, "/main_menu")
@@ -60,7 +58,7 @@ users.add_resource(Users, "/users")
 users.add_resource(GetUserAddress, "/get_user_address")
 users.add_resource(LinkUserAddress, "/link")
 addr.add_resource(Addresses, "/addr")
-google.add_resource(GoogleAPIRequest, "/serialize")
+
 
 # Running the Flask app
 if __name__ == "__main__":
