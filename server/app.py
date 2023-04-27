@@ -60,7 +60,6 @@ users.add_resource(Users, "/users")
 users.add_resource(GetUserAddress, "/get_user_address")
 users.add_resource(LinkUserAddress, "/link")
 addr.add_resource(Addresses, "/addr")
-google.add_resource(GoogleAPIRequest, "/serialize")
 
 # Running the Flask app
 if __name__ == "__main__":
