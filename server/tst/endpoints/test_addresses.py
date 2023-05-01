@@ -146,3 +146,30 @@ class TestAddr:
             response = client.get('api/addresses/addr')
             assert response.status_code == 200
             assert len(response.json['Data']) == 0
+
+    def test_put_no_changes(self, client):
+        if os.getenv('CLOUD') == q.LOCAL:
+            newAddr = Address(building='test bldg', city='test city', state='test state', zipcode='00000')
+            aid = newAddr.save()
+            assert aid is not None
+
+            response = client.put('api/addresses/addr', json={
+                "aid": aid,
+                "building": "test bldg",
+                "city": "test city",
+                "state": "test state",
+                "zipcode": "00000"
+            })
+            assert response.status_code == 200
+            assert response.json == "Address modified successfully"
+
+            response = client.get('api/addresses/addr')
+
+            assert response.status_code == 200
+            assert len(response.json['Data']) == 1
+            assert response.json['Data'][aid]['building'] == "test bldg"
+            assert response.json['Data'][aid]['city'] == "test city"
+            assert response.json['Data'][aid]['state'] == "test state"
+
+            response = client.delete(f'api/addresses/addr?aid={aid}')
+            assert response.status_code == 200
