@@ -70,3 +70,8 @@ def delete_one(collection_name: str, filters={}) -> results.DeleteResult:
 def delete_all(collection_name: str, filters={}) -> results.DeleteResult:
     collection = get_collection(collection_name)
     return collection.delete_many(filters)
+
+
+def create_index(collection_name: str, primary_key: list, unique=True):
+    collection = get_collection(collection_name)
+    return collection.create_index(primary_key, unique=unique)

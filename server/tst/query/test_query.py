@@ -1,5 +1,5 @@
 from server.src.query import query as q
-from pymongo import collection, results
+from pymongo import collection, results, ASCENDING, errors
 import pytest
 import os
 # import logging
@@ -67,3 +67,22 @@ class TestClass:
                 self.test_insert(TEST_USER)
             result = q.delete_all(COLLECTION, {'test': 'user'})
             assert type(result) == results.DeleteResult
+
+    def test_create_index_all(self):
+        if os.getenv('CLOUD') == q.LOCAL:
+            q.create_index(COLLECTION, [('uid', ASCENDING)], unique=True)
+
+            user1 = {"uid": 123, "fname": "Tom", "lname": "Zhang"}
+            user2 = {"uid": 123, "fname": "Phil", "lname": "Jackson"}
+
+            before = q.count(COLLECTION)
+            with pytest.raises(errors.DuplicateKeyError):
+                q.insert(COLLECTION, user1)
+                q.insert(COLLECTION, user2)
+
+            user2["uid"] = 456
+            q.insert(COLLECTION, user2)
+
+            assert q.count(COLLECTION) - before == 2
+            q.delete_one(COLLECTION, {"uid": 123})
+            q.delete_one(COLLECTION, {"uid": 456})
