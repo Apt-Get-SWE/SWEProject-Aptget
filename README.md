@@ -2,6 +2,14 @@
 
 Team members: Oliver Li, Leo Li, Alex Yan, Tom Zhang
 
+## Endpoints
+All endpoints can be found in the [directory](./server/src/endpoints) under server/src/ednpoints.
+ - [login.py](./server/src/endpoints/login.py) contains all the endpoints used for user login. We use googleOAuth to manage user login, and use the google id as user id.
+ - [posts.py](./server/src/ednpoints/posts.py) contains all the endpoints used for item posts. We make use of the Post data type defined in [post.py](./server/src/types/post.py). There are 2 classes defined in it. One is the standard Post Class that contain get, post, delete, put methods, and another MarketPost Class that is specifically used in our market page to retrieve all posts associated with a certain zipcode.
+ - [addresses.py](./server/src/endpoints/addresses.py) contains all endpoints used for addresses. We make use of the Post data type defined in [post.py](./server/src/types/address.py). We have standard get, post, delete, and put methods.
+ - [users.py](./server/src/endpoints/users.py) contains all the endpoints associated with user specific interations. We make use of User data type defined in [user.py](./server/src/types/user.py).  We have three classes defined in users.py: Users, GetUserAddress, and LinkUserAddress. The Users and GetUserAddress both only have GET methods, one returns the former simply returns a user's contact information and the later finds and returns the address of the user. The LinkUserAddress has a POST method, which links saves an address(aid) to an User data type as users are not required to provide an address when they first log in. 
+
+
 ## Website URL
 <https://www.aptget.nyc/>
 

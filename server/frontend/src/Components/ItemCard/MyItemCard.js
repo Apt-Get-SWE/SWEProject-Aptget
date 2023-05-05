@@ -13,6 +13,11 @@ const MyItemCard = (props) => {
     return props.price ? `$${props.price}` : '$0.00';
   };
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+  const closeFormIfClickedOutside = (event) => {
+    if (event.target === event.currentTarget) {
+      setIsUpdateOpen(false);
+    }
+  };
 
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -38,6 +43,22 @@ const MyItemCard = (props) => {
             </button>
         </div>
         </div>
+        {isUpdateOpen && (
+        <div 
+          className="fixed inset-0 z-10 bg-black bg-opacity-50 flex items-center justify-center"
+          onClick={closeFormIfClickedOutside}
+          >
+          <div className="bg-white w-5/6 md:w-1/2 lg:w-1/3 p-6 rounded-lg">
+            <button
+              onClick={() => setIsUpdateOpen(false)}
+              className="absolute right-4 top-4 text-gray-500 hover:text-gray-800"
+            >
+              &times;
+            </button>
+            {/* <ItemInfoForm postData={props} /> NEED TO FIX SOME BACKEND LOGIC*/}
+          </div>
+        </div>
+      )}
         </div>
     );
 };
