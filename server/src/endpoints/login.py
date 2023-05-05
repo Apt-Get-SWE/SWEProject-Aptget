@@ -101,7 +101,6 @@ class RestrictedArea(Resource):
     def get(self):
         """
         Restricted area for logged in users.
-        TODO: implement frontend page for logged in users
         """
         user_id = session.get("user_id")
         if user_id is not None:
