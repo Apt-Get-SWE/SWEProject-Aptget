@@ -33,7 +33,7 @@ class GoogleLogIn(Resource):
         self.session = {'users': []}
         self.flow = flow
     """
-    Calls google auth api to authenticate google user log in
+    Calls google auth api to authenticate google user log in.
     """
 
     def get(self):
