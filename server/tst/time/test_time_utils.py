@@ -40,3 +40,9 @@ class TestTimeUtils:
         timestampEpoch = get_current_epoch()
         assert timestampEpoch == 1620290400
 
+    @patch('time.time', side_effect=[1620290400, 1620290410])
+    def test_get_current_epoch_mocked_time_passing(self, _):
+        timestampEpoch1 = get_current_epoch()
+        timestampEpoch2 = get_current_epoch()
+        assert timestampEpoch1 < timestampEpoch2
+        assert timestampEpoch2 - timestampEpoch1 == 10
