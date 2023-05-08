@@ -75,3 +75,13 @@ def delete_all(collection_name: str, filters={}) -> results.DeleteResult:
 def create_index(collection_name: str, primary_key: list, unique=True):
     collection = get_collection(collection_name)
     return collection.create_index(primary_key, unique=unique)
+
+
+def index_info(collection_name: str) -> dict:
+    collection = get_collection(collection_name)
+    return collection.index_information()
+
+
+def drop_index(collection_name: str, index_id: str):
+    collection = get_collection(collection_name)
+    collection.drop_index(index_id)
