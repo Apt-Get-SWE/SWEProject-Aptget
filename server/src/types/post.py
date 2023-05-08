@@ -127,18 +127,6 @@ class Post:
         elif type(aid := kwargs['aid']) != str:
             raise TypeError(f'aid must be of type str, not {type(aid)}')
 
-        if not isCreate and 'list_dt' not in kwargs:  # If not creating a post, list_dt must be provided
-            raise ValueError('Post data does not include a listing date!')
-        elif not isCreate and 'list_dt' in kwargs:
-            list_dt = kwargs['list_dt']
-            if type(list_dt) != str:
-                raise TypeError(f'list_dt must be of type str, not {type(list_dt)}')
-
-            try:
-                datetime.strptime(list_dt, "%m/%d/%Y %H:%M:%S")
-            except ValueError:
-                raise ValueError('list_dt must be in format %m/%d/%Y %H:%M:%S')
-
         if 'price' not in kwargs:
             raise ValueError('Post data must include a price!')
         elif 'price' in kwargs:

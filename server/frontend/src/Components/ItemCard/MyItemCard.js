@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ItemInfoForm from '../Forms/ItemInfoForm';
 
 const MyItemCard = (props) => {
   const navigate  = useNavigate()
@@ -55,7 +56,7 @@ const MyItemCard = (props) => {
             >
               &times;
             </button>
-            {/* <ItemInfoForm postData={props} /> NEED TO FIX SOME BACKEND LOGIC*/}
+            <ItemInfoForm postData={props} setTrigger={props.setTrigger}/> 
           </div>
         </div>
       )}
