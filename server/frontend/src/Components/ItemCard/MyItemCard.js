@@ -56,7 +56,7 @@ const MyItemCard = (props) => {
             >
               &times;
             </button>
-            <ItemInfoForm postData={props} /> 
+            <ItemInfoForm postData={props} setTrigger={props.setTrigger}/> 
           </div>
         </div>
       )}
