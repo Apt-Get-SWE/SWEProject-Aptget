@@ -11,4 +11,6 @@ def get_current_epoch():
 
 
 def epoch_to_datetime(timestampEpoch):
+    if timestampEpoch < 0:
+        raise ValueError("Invalid timestamp epoch value")
     return datetime.datetime.utcfromtimestamp(timestampEpoch)
