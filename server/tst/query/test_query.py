@@ -71,6 +71,8 @@ class TestClass:
     def test_create_index_all(self):
         if os.getenv('CLOUD') == q.LOCAL:
             q.create_index(COLLECTION, [('uid', ASCENDING)], unique=True)
+            indexes = q.index_info(COLLECTION)
+            num_indexes_before = len(indexes)
 
             user1 = {"uid": 123, "fname": "Tom", "lname": "Zhang"}
             user2 = {"uid": 123, "fname": "Phil", "lname": "Jackson"}
@@ -86,3 +88,9 @@ class TestClass:
             assert q.count(COLLECTION) - before == 2
             q.delete_one(COLLECTION, {"uid": 123})
             q.delete_one(COLLECTION, {"uid": 456})
+
+            _id = list(indexes.keys())[1]
+            q.drop_index(COLLECTION, _id)
+
+            num_indexes_after = len(q.index_info(COLLECTION))
+            assert num_indexes_before == num_indexes_after + 1
